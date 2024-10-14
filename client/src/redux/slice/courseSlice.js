@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export const fetchCategory = createAsyncThunk(
-  "category/fetchCategory",
+export const fetchCourse = createAsyncThunk(
+  "category/fetchCourse",
   async () => {
     try {
       const res = await axios.get("http://localhost:8500/api/category");
@@ -14,13 +14,13 @@ export const fetchCategory = createAsyncThunk(
   }
 );
 
-export const addCategory = createAsyncThunk(
-  "category/addCategory",
-  async (categoryData) => {
+export const addCourse = createAsyncThunk(
+  "category/addCourse",
+  async (courseData) => {
     try {
       const res = await axios.post(
         "http://localhost:8500/api/category/",
-        categoryData,
+        courseData,
         { withCredentials: true } 
       );
       console.log(res)
@@ -32,10 +32,10 @@ export const addCategory = createAsyncThunk(
   }
 );
 
-const categorySlice = createSlice({
-  name: "category",
+const courseSlice = createSlice({
+  name: "course",
   initialState: {
-    categories: [],
+    course: [],
     loading: false,
     error: null,
     successMessage: null, 
@@ -47,38 +47,38 @@ const categorySlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchCategory.pending, (state) => {
+    builder.addCase(fetchCourse.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(fetchCategory.fulfilled, (state, action) => {
+    builder.addCase(fetchCourse.fulfilled, (state, action) => {
       state.loading = false;
       state.categories = action.payload;
     });
-    builder.addCase(fetchCategory.rejected, (state, action) => {
+    builder.addCase(fetchCourse.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });
 
-    builder.addCase(addCategory.pending, (state) => {
+    builder.addCase(addCourse.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(addCategory.fulfilled, (state, action) => {
+    builder.addCase(addCourse.fulfilled, (state, action) => {
       state.loading = false;
       state.successMessage = "Category added successfully!";
-      state.categories.push(action.payload); 
+      state.course.push(action.payload); 
     });
-    builder.addCase(addCategory.rejected, (state, action) => {
+    builder.addCase(addCourse.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });
   },
 });
 
-export const categoryData = (state) => state.category.categories;
-export const loadingStatus = (state) => state.category.loading;
-export const errorMessage = (state) => state.category.error;
-export const successMessage = (state) => state.category.successMessage;
+export const courseData = (state) => state.course.course;
+export const loadingStatus = (state) => state.course.loading;
+export const errorMessage = (state) => state.course.error;
+export const successMessage = (state) => state.course.successMessage;
 
-export const { clearMessages } = categorySlice.actions;
+export const { clearMessages } = courseSlice.actions;
 
-export default categorySlice.reducer;
+export default courseSlice.reducer;

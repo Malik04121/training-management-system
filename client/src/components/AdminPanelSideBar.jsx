@@ -62,6 +62,31 @@ const Sidebar = ({ setActiveSection }) => {
           )}
         </div>
 
+        <div>
+          <button
+            onClick={() => toggleSection("module")}
+            className="block text-gray-600 hover:text-blue-600 w-full text-left"
+          >
+            <i className="fas fa-layer-group mr-2"></i>Training Module
+          </button>
+          {openSections.module && (
+            <div className="ml-4 space-y-2">
+              <button
+                onClick={() => setActiveSection("showModule")}
+                className="block text-gray-600 hover:text-blue-600 w-full text-left"
+              >
+                Show Training Module
+              </button>
+              <button
+                onClick={() => setActiveSection("addModule")}
+                className="block text-gray-600 hover:text-blue-600 w-full text-left"
+              >
+                Add Training Module
+              </button>
+            </div>
+          )}
+        </div>
+
 
         <div>
           <button

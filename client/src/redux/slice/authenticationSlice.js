@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// Register user action
+
 export const registerUser = createAsyncThunk(
   "user/registerUser",
   async (userData, { rejectWithValue }) => {
@@ -98,7 +98,6 @@ const userSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // Register user cases
     builder.addCase(registerUser.pending, (state) => {
       state.loading = true;
       state.error = null;
@@ -110,8 +109,8 @@ const userSlice = createSlice({
     });
     builder.addCase(registerUser.rejected, (state, action) => {
       state.loading = false;
-      state.error = action.payload; // Handles 400 or 500 error messages
-    });
+      state.error = action.payload; 
+    })
 
 
     builder.addCase(loginUser.pending, (state) => {
@@ -125,7 +124,7 @@ const userSlice = createSlice({
     });
     builder.addCase(loginUser.rejected, (state, action) => {
       state.loading = false;
-      state.error = action.payload; // Handles 400 or 500 error messages
+      state.error = action.payload; 
     });
 
 
@@ -152,7 +151,7 @@ const userSlice = createSlice({
       state.loading = false;
       
       state.userList = action.payload;
-      console.log(action.payload,"payload");
+      console.log(action.payload,"payload",state.userList);
     });
     builder.addCase(fetchUsersByRole.rejected, (state, action) => {
       state.loading = false;
@@ -161,16 +160,14 @@ const userSlice = createSlice({
   },
 });
 
-// Selector for success messages
 export const userSuccessMessage = (state) => state.user?.successMessage || null;
 
 
-// Selector for fetching user list
-export const userList = (state) => state?.user?.userList || [];
 
-export const selectLoading = (state) => state?.user?.loading ?? false;
-export const selectError = (state) => state?.user?.error ?? null;
+export const userLists = (state) => state.user.userList;
 
-// Export actions and reducer
+export const selectLoading = (state) => state.user.loading ;
+export const selectError = (state) => state.user.error ;
+
 export const { clearUserState } = userSlice.actions;
 export default userSlice.reducer;

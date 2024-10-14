@@ -13,6 +13,9 @@ const courseSchema=new mongoose.Schema({
    duration:{
     type:Number
    },
+   rating:{
+      type:Number
+   },
    trainers:[
     {
        type:mongoose.Types.ObjectId,
@@ -22,7 +25,11 @@ const courseSchema=new mongoose.Schema({
    category:{
     type:mongoose.Types.ObjectId,
     ref:"Category"
-   }
+   },
+   modules: [{  
+      type: mongoose.Types.ObjectId,
+      ref: "CourseModule"
+  }]
 },{ timestamps: true })
 
 const Course = mongoose.model("Course", courseSchema);

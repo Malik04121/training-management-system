@@ -27,7 +27,7 @@ const getIndividualCourse = async (req, res) => {
 
 const addCourse = async (req, res) => {
   try {
-    const { name, description, duration, trainers, category } = req.body;
+    const { name, description, duration,rating, trainers, category } = req.body;
 
     if (!name || !category) {
       return res.status(400).json({ message: "Name and category are required." });
@@ -37,6 +37,7 @@ const addCourse = async (req, res) => {
       name,
       description,
       duration,
+      rating,
       trainers, 
       category, 
     });

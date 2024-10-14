@@ -8,8 +8,8 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate(); 
 
-  const loading = useSelector((state) => state.authentication.loading);
-  const errorMessage = useSelector((state) => state.authentication.error);
+  const loading = useSelector((state) => state.user.loading);
+  const errorMessage = useSelector((state) => state.user.error);
 
   const [formData, setFormData] = useState({
     email: "",

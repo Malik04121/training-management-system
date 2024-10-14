@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+//below schema is for single chapter
 const courseModuleSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -28,9 +29,10 @@ const courseModuleSchema = new mongoose.Schema({
             }
         }
     ],
-    course:{
-        type:mongoose.Types.ObjectId,
-        ref:"Course"
+    category: {
+        type: mongoose.Types.ObjectId,
+        ref: "Category", 
+        required: true
     }
 },{ timestamps: true });
 
