@@ -2,12 +2,12 @@
 
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { errorMessage, loadingStatus, moduleData } from '../../redux/slice/moduleSlice'
+import {  moduleData, moduleError, moduleLoading } from '../../redux/slice/moduleSlice'
 
 const TrainingModuleList = () => {
 
-    const moduleLoading=useSelector(loadingStatus)
-    const moduleError=useSelector(errorMessage)
+    const moduleLoader=useSelector(moduleLoading)
+    const moduleErrorMessage=useSelector(moduleError)
     const moduleList=useSelector(moduleData)
   return (
     <div>

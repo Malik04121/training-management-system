@@ -5,7 +5,9 @@ export const fetchCourse = createAsyncThunk(
   "category/fetchCourse",
   async () => {
     try {
-      const res = await axios.get("http://localhost:8500/api/category");
+      const res = await axios.get("http://localhost:8500/api/course",);
+      console.log("res of all course",res);
+      
       return res.data;
     } catch (error) {
       console.log(error, "error");
@@ -19,11 +21,16 @@ export const addCourse = createAsyncThunk(
   async (courseData) => {
     try {
       const res = await axios.post(
-        "http://localhost:8500/api/category/",
+        "http://localhost:8500/api/course/addCourse",
         courseData,
-        { withCredentials: true } 
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "multipart/form-data", 
+          },
+        }
       );
-      console.log(res)
+      console.log(res,"rescourse")
       return res.data;
     } catch (error) {
       console.log(error, "error");
@@ -52,7 +59,7 @@ const courseSlice = createSlice({
     });
     builder.addCase(fetchCourse.fulfilled, (state, action) => {
       state.loading = false;
-      state.categories = action.payload;
+      state.course = action.payload;
     });
     builder.addCase(fetchCourse.rejected, (state, action) => {
       state.loading = false;

@@ -16,6 +16,9 @@ const courseSchema=new mongoose.Schema({
    rating:{
       type:Number
    },
+   bannerUrl:{
+      type:String
+   },
    trainers:[
     {
        type:mongoose.Types.ObjectId,

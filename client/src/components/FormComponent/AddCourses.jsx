@@ -10,12 +10,15 @@ import {
   selectLoading,
   userLists,
 } from "../../redux/slice/authenticationSlice";
-import { moduleData } from "../../redux/slice/moduleSlice";
+import { moduleData, moduleError, moduleLoading } from "../../redux/slice/moduleSlice";
+import { addCourse, courseData } from "../../redux/slice/courseSlice";
 
 const AddCourses = () => {
   const categories = useSelector(categoryData);
   const trainerList = useSelector(userLists);
   const trainerLoading = useSelector(selectLoading);
+  const moduleLoader = useSelector(moduleLoading);
+  const moduleErrorMessage = useSelector(moduleError);
   //todo:
   const trainerError = useSelector(selectError);
   const moduleList = useSelector(moduleData);
@@ -29,6 +32,7 @@ const AddCourses = () => {
     trainers: [],
     category: "",
     modules: [],
+    banner:null
   });
 
   const handleCourseChange = (e) => {
@@ -41,9 +45,11 @@ const AddCourses = () => {
          console.log(values,"values")
          
     } 
-    if(name==="module"){
+    if(name==="modules"){
         const options=[...e.target.selectedOptions]
         values = options.map(option => option.value);
+        console.log(values,"values inside module");
+        
         
     }
 
@@ -53,9 +59,35 @@ const AddCourses = () => {
       }));
     
   };
+  const handleBannerChange = (e) => {
+    const file = e.target.files[0];
+    setCourseDetail((prevState) => ({
+      ...prevState,
+      banner: file, 
+    }));
+  };
   const handleCourse = (e) => {
     e.preventDefault();
     console.log(courseDetail, "courseDetail");
+    const formData = new FormData();
+  formData.append("name", courseDetail.name);
+  formData.append("description", courseDetail.description);
+  formData.append("duration", courseDetail.duration);
+  formData.append("category", courseDetail.category);
+
+  courseDetail.trainers.forEach((trainer) => {
+    formData.append("trainers[]", trainer); 
+  });
+  courseDetail.modules.forEach((module) => {
+    formData.append("modules[]", module); 
+  });
+  // formData.append("trainers", JSON.stringify(courseDetail.trainers)); 
+  // formData.append("modules", JSON.stringify(courseDetail.modules)); 
+  if (courseDetail.banner) {
+    formData.append("banner", courseDetail.banner); 
+  }
+
+    dispatch(addCourse(formData))
   };
 
   return (
@@ -149,14 +181,22 @@ const AddCourses = () => {
             multiple={true}
           >
             <option value="">Select Trainer</option>
-            {trainerLoading && <p>Loading...</p>}
-            {trainerError && <p className="text-red-500">{trainerError}</p>}
+            {moduleLoader && <p>Loading...</p>}
+            {moduleErrorMessage && <p className="text-red-500">{moduleErrorMessage}</p>}
             {moduleList?.map((module) => (
               <option key={module._id} value={module._id}>
                 {module.name}
               </option>
             ))}
           </select>
+        </div>
+        <div>
+          <label className="block text-gray-700">Upload Course Banner</label>
+          <input
+            type="file"
+            className="w-full px-4 py-2 border rounded-lg"
+            onChange={handleBannerChange}
+          />
         </div>
         <button
           className="bg-blue-500 text-white px-4 py-2 rounded-lg"

@@ -77,8 +77,8 @@ const moduleSlice = createSlice({
 });
 
 export const moduleData = (state) => state.module.module;
-export const loadingStatus = (state) => state.module.loading;
-export const errorMessage = (state) => state.module.error;
+export const moduleLoading = (state) => state.module.loading;
+export const moduleError = (state) => state.module.error;
 export const successMessage = (state) => state.module.successMessage;
 
 export const { clearMessages } = moduleSlice.actions;

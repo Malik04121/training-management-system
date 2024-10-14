@@ -24,6 +24,8 @@ import TrainingModuleList from "./FormComponent/TrainingModuleList";
 import AddModule from "./FormComponent/AddModule";
 import AddTrainer from "./FormComponent/AddTrainer";
 import AddCourses from "./FormComponent/AddCourses";
+import CourseList from "./FormComponent/CourseList";
+import { fetchCourse } from "../redux/slice/courseSlice";
 
 const FormSection = ({ activeSection }) => {
   const dispatch = useDispatch();
@@ -48,6 +50,10 @@ const FormSection = ({ activeSection }) => {
     if(activeSection==="addCourses"){
       dispatch(fetchUsersByRole("Trainer"))
       dispatch(fetchCategory())
+      dispatch(fetchModule())
+    }
+    if(activeSection==="showCourses"){
+      dispatch(fetchCourse())
     }
   }, [activeSection, dispatch]);
 
@@ -75,12 +81,6 @@ const FormSection = ({ activeSection }) => {
   //     }, 3000);
   //   }
   // }, [categorySuccess, error, dispatch]);
-
-
- 
-
-
-
 
  
 
@@ -125,20 +125,7 @@ const FormSection = ({ activeSection }) => {
 
       case "showCourses":
           return(
-            <div>
-               <h1 className="text-2xl font-semibold mb-4">
-              Showing all Courses
-            </h1>
-            {categoryLoading && <p>Loading...</p>}
-            {categoryError && <p className="text-red-500">{categoryError}</p>}
-            <ul className="space-y-2">
-              {categories?.map((category) => (
-                <li key={category._id} className="border-b py-2">
-                  {category.name}
-                </li>
-              ))}
-            </ul>
-            </div>
+        <CourseList/>
           )
        case "addCourses":
         return (<AddCourses/>)
