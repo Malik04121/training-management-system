@@ -47,7 +47,7 @@ const loginUser = async (req, res) => {
         const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1d' });
 
         res.cookie('token', token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
-
+ req.user=user
         res.status(200).json({ message: "Logged in successfully", user: { id: user._id, role: user.role, name: user.name, email: user.email } });
     } catch (err) {
         console.log(err, "err");
@@ -101,12 +101,14 @@ const logoutUser = async (req, res) => {
 const getUserDetails = async (req, res) => {
     try {
         const userId = req.user.userId;
+        console.log(userId,"userId")
         const user = await User.findById(userId).select('-password');
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
         res.json(user);
     } catch (err) {
+        console.log(err,"err")
         res.status(500).json({ error: err.message });
     }
 };
@@ -115,6 +117,8 @@ const getUserDetails = async (req, res) => {
 const getUsers = async (req, res) => {
     try {
         const { role } = req.query;  
+        const user=req.user
+        console.log(user,"user detail ")
 
         if (!role) {
             return res.status(400).json({ message: "Role parameter is required" });

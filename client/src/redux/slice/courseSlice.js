@@ -3,9 +3,30 @@ import axios from "axios";
 
 export const fetchCourse = createAsyncThunk(
   "category/fetchCourse",
-  async () => {
+  async (categoryId) => {
     try {
-      const res = await axios.get("http://localhost:8500/api/course",);
+      const url = categoryId 
+      ? `http://localhost:8500/api/course?categoryId=${categoryId}`
+      : "http://localhost:8500/api/course";
+      const res = await axios.get(url);
+      console.log("res of all course",res);
+      
+      return res.data;
+    } catch (error) {
+      console.log(error, "error");
+      throw new Error(error.response?.data?.message || error.message);
+    }
+  }
+);
+
+export const fetchSingleCourse = createAsyncThunk(
+  "category/fetchSingleCourse",
+  async (courseId) => {
+    try {
+      const url = `http://localhost:8500/api/course/${courseId}`;
+      const res = await axios.get(url,{
+        withCredentials:true
+      });
       console.log("res of all course",res);
       
       return res.data;
@@ -44,6 +65,7 @@ const courseSlice = createSlice({
   initialState: {
     course: [],
     loading: false,
+    individualCourse:{},
     error: null,
     successMessage: null, 
   },
@@ -78,10 +100,23 @@ const courseSlice = createSlice({
       state.loading = false;
       state.error = action.error.message;
     });
+
+    builder.addCase(fetchSingleCourse.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchSingleCourse.fulfilled, (state, action) => {
+      state.loading = false;
+      state.individualCourse=action.payload
+    });
+    builder.addCase(fetchSingleCourse.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
   },
 });
 
 export const courseData = (state) => state.course.course;
+export const singleCourseData = (state) => state.course.individualCourse;
 export const loadingStatus = (state) => state.course.loading;
 export const errorMessage = (state) => state.course.error;
 export const successMessage = (state) => state.course.successMessage;

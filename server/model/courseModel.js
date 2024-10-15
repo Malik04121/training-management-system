@@ -32,7 +32,13 @@ const courseSchema=new mongoose.Schema({
    modules: [{  
       type: mongoose.Types.ObjectId,
       ref: "CourseModule"
-  }]
+  }],
+  enrolled_people:[
+   {
+      type:mongoose.Types.ObjectId,
+      ref:"User"
+   }
+  ]
 },{ timestamps: true })
 
 const Course = mongoose.model("Course", courseSchema);

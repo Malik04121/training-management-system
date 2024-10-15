@@ -37,7 +37,8 @@ const Login = () => {
 
     dispatch(loginUser(formData)).then((response) => {
       if (response.payload) {
-        navigate("/dashboard"); 
+        console.log(response.payload,"payload")
+        navigate("/"); 
       }
     });
   };

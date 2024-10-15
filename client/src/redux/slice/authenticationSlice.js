@@ -10,8 +10,10 @@ export const registerUser = createAsyncThunk(
         "http://localhost:8500/api/users/signup",
         userData
       );
+      console.log(response,"response")
       return response.data;
     } catch (error) {
+      console.log(error,"error");
       if (error.response && error.response.status === 400) {
         return rejectWithValue(error.response.data.message);
       } else {

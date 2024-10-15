@@ -1,10 +1,14 @@
-import React from 'react'
-import Curriculum from '../components/Curiculum'
+import React, { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 
 const Courses = () => {
+  const dispatch=useDispatch()
+
+ 
   return (
     <div>
-      <Curriculum/>
+      courses
+      {/* <Curriculum/> */}
     </div>
   )
 }

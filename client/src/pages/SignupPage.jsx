@@ -6,14 +6,14 @@ import { useNavigate } from "react-router-dom";
 const Register = () => {
   const dispatch = useDispatch();
   const successMessage = useSelector(userSuccessMessage);
-  const loading = useSelector((state) => state.authentication.loading);
-  const error = useSelector((state) => state.authentication.error);
+  const loading = useSelector((state) => state.user.loading);
+  const error = useSelector((state) => state.user.error);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
-    role: "user", 
+    role: "User", 
     perHourRate: "",
   });
   const navigate = useNavigate();

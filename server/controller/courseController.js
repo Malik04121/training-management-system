@@ -14,7 +14,11 @@ cloudinary.config({
 
 const getCourse = async (req, res) => {
   try {
-    const courses = await Course.find(); 
+
+    const { categoryId } = req.query;
+
+    const filter = categoryId ? { category: categoryId } : {};
+    const courses = await Course.find(filter).populate("category").populate("modules").populate("trainers"); 
     res.status(200).json(courses); 
   } catch (err) {
     res.status(500).json({ error: err.message }); 
@@ -24,7 +28,7 @@ const getCourse = async (req, res) => {
 const getIndividualCourse = async (req, res) => {
   try {
     const courseId = req.params.id; 
-    const course = await Course.findById(courseId); 
+    const course = await Course.findById(courseId).populate("category").populate("modules").populate("trainers"); 
 
     if (!course) {
       return res.status(404).json({ message: "Course not found" }); 

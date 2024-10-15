@@ -3,6 +3,8 @@ import React, { useState } from "react";
 const Sidebar = ({ setActiveSection }) => {
   const [openSections, setOpenSections] = useState({});
 
+  
+
   const toggleSection = (section) => {
     setOpenSections((prevState) => ({
       ...prevState,
@@ -16,7 +18,7 @@ const Sidebar = ({ setActiveSection }) => {
       <div className="flex items-center mb-10">
         <img
           className="w-12 h-12 rounded-full"
-          src="https://via.placeholder.com/40"
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRH87TKQrWcl19xly2VNs0CjBzy8eaKNM-ZpA&s"
           alt="admin avatar"
         />
         <div className="ml-3">

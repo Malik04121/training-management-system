@@ -25,6 +25,8 @@ const AddCourses = () => {
   const dispatch = useDispatch();
   const categoryError = useSelector(errorMessage);
   const categoryLoading = useSelector(loadingStatus);
+
+  const [module,setModule]=useState(moduleList)
   const [courseDetail, setCourseDetail] = useState({
     name: "",
     description: "",
@@ -51,6 +53,12 @@ const AddCourses = () => {
         console.log(values,"values inside module");
         
         
+    }
+    if(name==="category"){
+      console.log(moduleList,"moduleList")
+      const filteredList=moduleList.filter((ele)=>ele.category==e.target.value)
+      console.log(filteredList,"filteredList");
+      setModule(filteredList)
     }
 
       setCourseDetail((prevState) => ({
@@ -81,8 +89,7 @@ const AddCourses = () => {
   courseDetail.modules.forEach((module) => {
     formData.append("modules[]", module); 
   });
-  // formData.append("trainers", JSON.stringify(courseDetail.trainers)); 
-  // formData.append("modules", JSON.stringify(courseDetail.modules)); 
+ 
   if (courseDetail.banner) {
     formData.append("banner", courseDetail.banner); 
   }
@@ -141,7 +148,6 @@ const AddCourses = () => {
             required
             multiple={true}
           >
-            <option value="">Select Trainer</option>
             {trainerLoading && <p>Loading...</p>}
             {trainerError && <p className="text-red-500">{trainerError}</p>}
             {trainerList?.map((trainer) => (
@@ -180,10 +186,9 @@ const AddCourses = () => {
             required
             multiple={true}
           >
-            <option value="">Select Trainer</option>
             {moduleLoader && <p>Loading...</p>}
             {moduleErrorMessage && <p className="text-red-500">{moduleErrorMessage}</p>}
-            {moduleList?.map((module) => (
+            {module?.map((module) => (
               <option key={module._id} value={module._id}>
                 {module.name}
               </option>
