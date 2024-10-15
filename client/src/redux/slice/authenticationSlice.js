@@ -81,6 +81,40 @@ export const fetchUsersByRole = createAsyncThunk(
     }
   }
 );
+export const verifyToken = createAsyncThunk(
+  "user/verifyToken",
+  async (_,{ rejectWithValue }) => {
+    try {
+      const response = await axios.get("http://localhost:8500/api/users/verify", {
+        withCredentials: true,
+      });
+
+      const { role, name } = response.data.user;
+
+
+      localStorage.setItem("role", role);
+      localStorage.setItem("username", name);
+console.log(response.data);
+
+      return response.data.user;
+    } catch (error) {
+      return rejectWithValue("Failed to verify token or fetch user details.");
+    }
+  }
+);
+export const logoutUser = createAsyncThunk(
+  "user/logoutUser",
+  async () => {
+    try {
+      const response = await axios.get(`http://localhost:8500/api/users/logout`);
+      console.log(response,"response")
+      return response.data;
+    } catch (error) {
+      throw new Error(error.message);
+      
+    }
+  }
+);
 
 
 const userSlice = createSlice({
@@ -159,6 +193,35 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     });
+
+    builder.addCase(verifyToken.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+      state.successMessage = null;
+    });
+    builder.addCase(verifyToken.fulfilled, (state, action) => {
+      state.loading = false;
+      state.user = action.payload.data;
+    });
+    builder.addCase(verifyToken.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload; 
+    });
+
+    builder.addCase(logoutUser.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+      state.successMessage = null;
+    });
+    builder.addCase(logoutUser.fulfilled, (state, action) => {
+      state.loading = false;
+      state.user={}
+      state.successMessage=action.payload
+    });
+    builder.addCase(logoutUser.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload; 
+    });
   },
 });
 
@@ -167,6 +230,7 @@ export const userSuccessMessage = (state) => state.user?.successMessage || null;
 
 
 export const userLists = (state) => state.user.userList;
+export const singleUser = (state) => state.user.user;
 
 export const selectLoading = (state) => state.user.loading ;
 export const selectError = (state) => state.user.error ;

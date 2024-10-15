@@ -33,7 +33,7 @@ const FormSection = ({ activeSection }) => {
   // const categorySuccess = useSelector(successMessage);
 
   const users = useSelector(userLists);
-  console.log(users,"users");
+
   
   const loading = useSelector(selectLoading);
   const error = useSelector(selectError);

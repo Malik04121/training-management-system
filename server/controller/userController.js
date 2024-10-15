@@ -44,7 +44,7 @@ const loginUser = async (req, res) => {
             return res.status(400).json({ message: "Invalid email or password" });
         }
 
-        const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1d' });
+        const token = jwt.sign({ userId: user._id, role: user.role,user:user }, process.env.JWT_SECRET, { expiresIn: '1d' });
 
         res.cookie('token', token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
  req.user=user
@@ -58,24 +58,24 @@ const addTrainerByAdmin = async (req, res) => {
     try {
         const { name, email, password, trainerDescription, averagePricePerHour, trainerRating } = req.body;
 
-        // Check if the user with the same email already exists
+        
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ message: "User with this email already exists" });
         }
 
-        // Hash the password
+        
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Create a new trainer
+        
         const newTrainer = new User({
             name,
             email,
             password: hashedPassword,
-            role: "Trainer", // Set the role to Trainer
-            trainerDescription,  // Description of the trainer
-            averagePricePerHour,  // Per hour rate
-            trainerRating         // Rating for the trainer
+            role: "Trainer", 
+            trainerDescription,  
+            averagePricePerHour,  
+            trainerRating         
         });
 
         // Save the new trainer
@@ -137,7 +137,7 @@ const getUsers = async (req, res) => {
     }
 };
 
-const verifyTokenAndRole = (req, res) => {
+const verifyTokenAndRole = async(req, res) => {
     const token = req.cookies.token;
   
     if (!token) {
@@ -145,16 +145,15 @@ const verifyTokenAndRole = (req, res) => {
     }
   
     try {
-      // Verify the token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
   
-      // Check if the role is admin
+
       if (decoded.role !== 'Admin') {
         return res.status(403).json({ message: 'Access denied: Not an admin' });
       }
   
-      // If everything is good, send success response
-      res.status(200).json({ message: 'Admin access granted' });
+
+      res.status(200).json({ message: 'Admin access granted',data:decoded });
     } catch (err) {
       return res.status(403).json({ message: 'Invalid token' });
     }

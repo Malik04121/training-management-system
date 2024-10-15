@@ -22,7 +22,7 @@ const AddModule = () => {
 
     const handleModuleChange=(e)=>{
         const {name,value}=e.target
-        console.log(name,value)
+
         setModuleData({
           ...moduleData,
           [name]:value

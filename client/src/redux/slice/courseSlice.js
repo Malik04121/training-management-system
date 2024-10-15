@@ -9,11 +9,11 @@ export const fetchCourse = createAsyncThunk(
       ? `http://localhost:8500/api/course?categoryId=${categoryId}`
       : "http://localhost:8500/api/course";
       const res = await axios.get(url);
-      console.log("res of all course",res);
+
       
       return res.data;
     } catch (error) {
-      console.log(error, "error");
+
       throw new Error(error.response?.data?.message || error.message);
     }
   }
@@ -27,11 +27,11 @@ export const fetchSingleCourse = createAsyncThunk(
       const res = await axios.get(url,{
         withCredentials:true
       });
-      console.log("res of all course",res);
+
       
       return res.data;
     } catch (error) {
-      console.log(error, "error");
+
       throw new Error(error.response?.data?.message || error.message);
     }
   }
@@ -51,10 +51,10 @@ export const addCourse = createAsyncThunk(
           },
         }
       );
-      console.log(res,"rescourse")
+
       return res.data;
     } catch (error) {
-      console.log(error, "error");
+
       throw new Error(error.response?.data?.message || error.message);
     }
   }

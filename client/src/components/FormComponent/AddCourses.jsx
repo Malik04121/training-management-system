@@ -39,25 +39,25 @@ const AddCourses = () => {
 
   const handleCourseChange = (e) => {
     const { name, value } = e.target;
-    console.log(e.target.value,"inside funcitn")
+
     let values=e.target.value
     if (name === "trainers") {
         const options = [...e.target.selectedOptions];
          values = options.map(option => option.value);
-         console.log(values,"values")
+
          
     } 
     if(name==="modules"){
         const options=[...e.target.selectedOptions]
         values = options.map(option => option.value);
-        console.log(values,"values inside module");
+
         
         
     }
     if(name==="category"){
-      console.log(moduleList,"moduleList")
+
       const filteredList=moduleList.filter((ele)=>ele.category==e.target.value)
-      console.log(filteredList,"filteredList");
+
       setModule(filteredList)
     }
 
@@ -76,7 +76,7 @@ const AddCourses = () => {
   };
   const handleCourse = (e) => {
     e.preventDefault();
-    console.log(courseDetail, "courseDetail");
+
     const formData = new FormData();
   formData.append("name", courseDetail.name);
   formData.append("description", courseDetail.description);

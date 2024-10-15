@@ -10,7 +10,7 @@ const userRoutes=require("./routes/userRoute")
 const categoryRoute=require("./routes/categoryRoute")
 const courseRoute=require("./routes/coursesRoute")
 const courseModuleRoute=require("./routes/courseModuleRoute")
-const { verifyTokenAndRole } = require("./controller/userController")
+const  verifyTokenAndRole  = require("./controller/userController")
 
 
 dotenv.config()
@@ -32,7 +32,6 @@ app.use("/api/category",categoryRoute)
 app.use("/api/course",courseRoute)
 app.use("/api/module",courseModuleRoute)
 
-app.get('/auth/verify', verifyTokenAndRole);
 
 
 

@@ -8,7 +8,7 @@ export const fetchCategory = createAsyncThunk(
       const res = await axios.get("http://localhost:8500/api/category");
       return res.data;
     } catch (error) {
-      console.log(error, "error");
+
       throw new Error(error.response?.data?.message || error.message);
     }
   }
@@ -23,10 +23,10 @@ export const addCategory = createAsyncThunk(
         categoryData,
         { withCredentials: true } 
       );
-      console.log(res)
+
       return res.data;
     } catch (error) {
-      console.log(error, "error");
+
       throw new Error(error.response?.data?.message || error.message);
     }
   }
