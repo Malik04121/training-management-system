@@ -31,6 +31,22 @@ export const addCategory = createAsyncThunk(
     }
   }
 );
+export const deleteCategory=createAsyncThunk(
+  "category/deleteCategory",
+  async (id) => {
+    try {
+      const res = await axios.delete(
+        `http://localhost:8500/api/category/${id}`,
+        { withCredentials: true } 
+      );
+    console.log(res,"res in delte thunk ")
+      return res.message;
+    } catch (error) {
+
+      throw new Error(error.response?.data?.message || error.message);
+    }
+  }
+)
 
 const categorySlice = createSlice({
   name: "category",
@@ -45,6 +61,9 @@ const categorySlice = createSlice({
       state.error = null;
       state.successMessage = null;
     },
+    deleteSingleCategory:(state,action)=>{
+      state.categories = state.categories.filter(category => category._id !== action.payload);
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(fetchCategory.pending, (state) => {
@@ -71,7 +90,20 @@ const categorySlice = createSlice({
       state.loading = false;
       state.error = action.error.message;
     });
-  },
+  
+
+  builder.addCase(deleteCategory.pending, (state) => {
+    state.loading = true;
+  });
+  builder.addCase(deleteCategory.fulfilled, (state, action) => {
+    state.loading = false;
+    state.successMessage = action.message;
+  });
+  builder.addCase(deleteCategory.rejected, (state, action) => {
+    state.loading = false;
+    state.error = action.error.message;
+  });
+  }
 });
 
 export const categoryData = (state) => state.category.categories;
@@ -79,6 +111,6 @@ export const loadingStatus = (state) => state.category.loading;
 export const errorMessage = (state) => state.category.error;
 export const successMessage = (state) => state.category.successMessage;
 
-export const { clearMessages } = categorySlice.actions;
+export const { clearMessages,deleteSingleCategory } = categorySlice.actions;
 
 export default categorySlice.reducer;

@@ -2,27 +2,28 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { useNavigate } from "react-router-dom";
-import { clearUserState, loginUser } from "../redux/slice/authenticationSlice";
+import { clearUserState, loginUser, singleUser } from "../redux/slice/authenticationSlice";
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate(); 
-
+  const  user=useSelector(singleUser)
+  const role=localStorage.getItem("role")
   const loading = useSelector((state) => state.user.loading);
   const errorMessage = useSelector((state) => state.user.error);
-
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
-  useEffect(() => {
-    if (errorMessage) {
-      setTimeout(() => {
-        dispatch(clearUserState());
-      }, 3000);
-    }
-  }, [errorMessage, dispatch]);
+  // useEffect(() => {
+  //   console.log(errorMessage,"errorMessage")
+  //   if (errorMessage) {
+  //     setTimeout(() => {
+  //       dispatch(clearUserState());
+  //     }, 3000);
+  //   }
+  // }, [errorMessage, dispatch]);
 
   const handleChange = (e) => {
     setFormData({
@@ -33,15 +34,27 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    dispatch(loginUser(formData))
+    localStorage.setItem("isLogin",true)
+    console.log(user,"userlist")
 
-
-    dispatch(loginUser(formData)).then((response) => {
-      if (response.payload) {
-        console.log(response.payload,"payload")
-        navigate("/"); 
-      }
-    });
+    // .then((response) => {
+    //   if (response.payload) {
+    //     console.log(response.payload,"payload")
+    //     navigate("/"); 
+    //   }
+    // });
   };
+  useEffect(()=>{
+     console.log(user,"user")
+     if(user && user.role==="Admin"){
+             navigate("/dashboard")
+          }
+          if(user && (user.role==="User" || user.role==="Trainer")){
+            navigate("/")
+          }
+  },[user])
+  
 
   return (
     <div className="min-h-screen bg-gray-100 flex justify-center items-center">
@@ -88,6 +101,7 @@ const Login = () => {
           </div>
         </form>
       </div>
+      
     </div>
   );
 };

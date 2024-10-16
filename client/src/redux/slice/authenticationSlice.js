@@ -33,9 +33,17 @@ export const loginUser = createAsyncThunk(
         userData,
         { withCredentials: true }
       );
+      console.log(response.data,"datea ")
+      const { role, name } = response.data.user;
+
+
+      localStorage.setItem("role", role);
+      localStorage.setItem("username", name);
+      
       return response.data;
     } catch (error) {
-      if (error.response && error.response.status === 400) {
+      if (error.response && error.response.status === 401) {
+        console.log(error,"error inside if ")
         return rejectWithValue(error.response.data.message);
       } else {
         return rejectWithValue("An unexpected error occurred. Please try again.");
@@ -71,8 +79,8 @@ export const fetchUsersByRole = createAsyncThunk(
   async (role, { rejectWithValue }) => {
     try {
       const response = await axios.get(`http://localhost:8500/api/users?role=${role}`);
-      console.log(response,"response")
-      return response.data;
+      console.log(response,"response from user",role)
+      return {data:response.data,role};
     } catch (error) {
       if (error.response && error.response.data.message) {
         return rejectWithValue(error.response.data.message);
@@ -106,7 +114,7 @@ export const logoutUser = createAsyncThunk(
   "user/logoutUser",
   async () => {
     try {
-      const response = await axios.get(`http://localhost:8500/api/users/logout`);
+      const response = await axios.get(`http://localhost:8500/api/users/logout`, { withCredentials: true });
       console.log(response,"response")
       return response.data;
     } catch (error) {
@@ -122,6 +130,9 @@ const userSlice = createSlice({
   initialState: {
     user: null,
     userList: [],
+    trainerList:[],
+    userName:localStorage.getItem("username")||"",
+    role:localStorage.getItem("role")||"",
     loading: false,
     error: null,
     successMessage: null,
@@ -131,6 +142,8 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = null;
       state.successMessage = null;
+      state.userName=""
+      state.role=""
     },
   },
   extraReducers: (builder) => {
@@ -185,9 +198,13 @@ const userSlice = createSlice({
     });
     builder.addCase(fetchUsersByRole.fulfilled, (state, action) => {
       state.loading = false;
-      
-      state.userList = action.payload;
-      console.log(action.payload,"payload",state.userList);
+      if(action.payload.role==="Trainer"){
+        state.trainerList=action.payload.data
+      }
+      else{
+        state.userList = action.payload.data;
+      }
+      console.log(action.payload.role,"payload");
     });
     builder.addCase(fetchUsersByRole.rejected, (state, action) => {
       state.loading = false;
@@ -229,8 +246,13 @@ export const userSuccessMessage = (state) => state.user?.successMessage || null;
 
 
 
+
 export const userLists = (state) => state.user.userList;
+export const trainerLists = (state) => state.user.trainerList;
 export const singleUser = (state) => state.user.user;
+
+export const username=(state)=>state.user.userName;
+export const role=(state)=>state.user.role;
 
 export const selectLoading = (state) => state.user.loading ;
 export const selectError = (state) => state.user.error ;

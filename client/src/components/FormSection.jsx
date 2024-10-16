@@ -26,6 +26,8 @@ import AddTrainer from "./FormComponent/AddTrainer";
 import AddCourses from "./FormComponent/AddCourses";
 import CourseList from "./FormComponent/CourseList";
 import { fetchCourse } from "../redux/slice/courseSlice";
+import Dashboard from "./FormComponent/Dashboard";
+import TrainerList from "./FormComponent/TrainerList";
 
 const FormSection = ({ activeSection }) => {
   const dispatch = useDispatch();
@@ -105,7 +107,9 @@ const FormSection = ({ activeSection }) => {
   const renderContent = () => {
     switch (activeSection) {
       case "dashboard":
-        return <h1 className="text-2xl font-semibold">Dashboard Overview</h1>;
+        return (
+          <Dashboard/>
+        );
       case "showCategory":
         return (
          <CategoryList/>
@@ -132,11 +136,12 @@ const FormSection = ({ activeSection }) => {
       case "showUsers":
         return (renderUserList("User"));
       case "showTrainers":
-        return renderUserList("Trainer");
+        return (<TrainerList/>);
       case "addTrainers":
         return (
          <AddTrainer/>
         );
+        
       default:
         return <h1 className="text-2xl font-semibold">Select an Option</h1>;
     }

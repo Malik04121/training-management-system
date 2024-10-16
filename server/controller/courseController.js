@@ -75,4 +75,15 @@ const addCourse = async (req, res) => {
   }
 };
 
-module.exports = { getCourse, getIndividualCourse,addCourse };
+const deleteCourse=async(req,res)=>{
+  try {
+   
+    const id=req.params.id
+    const deletedCourse=await Course.findByIdAndDelete(id)
+    return res.status(200).json({message:"Category Deleted Successfully"})
+  } catch (error) {
+    res.status(500).json({error:error.message})
+  }
+}
+
+module.exports = { getCourse, getIndividualCourse,addCourse,deleteCourse };

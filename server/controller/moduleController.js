@@ -6,7 +6,7 @@ const CourseModule = require("../model/courseModuleModel");
 
 const getModule=async(req,res)=>{
   try {
-      const module=await CourseModule.find()
+      const module=await CourseModule.find().populate("category")
       res.status(200).json(module);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -30,6 +30,18 @@ const addModule=async(req,res)=>{
         res.status(500).json({ error: error.message });
         
     }
-}
+  }
 
-module.exports={getModule,addModule}
+    const deleteCourseModule=async(req,res)=>{
+      try {
+       
+        const id=req.params.id
+        const deletedModule=await CourseModule.findByIdAndDelete(id)
+        return res.status(200).json({message:"Module Deleted Successfully"})
+      } catch (error) {
+        res.status(500).json({error:error.message})
+      }
+    }
+
+
+module.exports={getModule,addModule,deleteCourseModule}

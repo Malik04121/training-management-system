@@ -1,20 +1,18 @@
 import React, { useState } from "react";
+import { MdDashboard, MdCategory, MdRunCircle } from "react-icons/md";
+import { GiTeacher } from "react-icons/gi";
+import { FaBook } from "react-icons/fa";
 
 const Sidebar = ({ setActiveSection }) => {
-  const [openSections, setOpenSections] = useState({});
-
-  
+  const [openSection, setOpenSection] = useState(null);
+  const userName = localStorage.getItem("username");
 
   const toggleSection = (section) => {
-    setOpenSections((prevState) => ({
-      ...prevState,
-      [section]: !prevState[section],
-    }));
+    setOpenSection((prev) => (prev === section ? null : section));
   };
 
   return (
-    <div className="w-64 h-screen bg-gray-100 p-4">
-
+    <div className="w-64 h-screen bg-gray-200 shadow-md p-4">
       <div className="flex items-center mb-10">
         <img
           className="w-12 h-12 rounded-full"
@@ -22,41 +20,36 @@ const Sidebar = ({ setActiveSection }) => {
           alt="admin avatar"
         />
         <div className="ml-3">
-          <p className="font-semibold text-gray-700">admin admin</p>
+          <p className="font-semibold text-gray-800">{userName}</p>
         </div>
       </div>
 
-
-      <nav className="space-y-4">
-
-        <div>
-          <button
-            onClick={() => setActiveSection("dashboard")}
-            className="block text-gray-600 hover:text-blue-600 w-full text-left"
-          >
-            <i className="fas fa-th-large mr-2"></i>Dashboard
-          </button>
-        </div>
-
+      <nav className="space-y-2">
+        <button
+          onClick={() => setActiveSection("dashboard")}
+          className="flex items-center text-gray-700 hover:bg-blue-100 p-2 rounded w-full"
+        >
+          <MdDashboard className="mr-2" /> Dashboard
+        </button>
 
         <div>
           <button
             onClick={() => toggleSection("category")}
-            className="block text-gray-600 hover:text-blue-600 w-full text-left"
+            className="flex items-center text-gray-700 hover:bg-blue-100 p-2 rounded w-full"
           >
-            <i className="fas fa-layer-group mr-2"></i>Categories
+            <MdCategory className="mr-2" /> Categories
           </button>
-          {openSections.category && (
-            <div className="ml-4 space-y-2">
+          {openSection === "category" && (
+            <div className="ml-8 space-y-2">
               <button
                 onClick={() => setActiveSection("showCategory")}
-                className="block text-gray-600 hover:text-blue-600 w-full text-left"
+                className="text-gray-600 hover:text-blue-600 w-full text-left"
               >
                 Show Category
               </button>
               <button
                 onClick={() => setActiveSection("addCategory")}
-                className="block text-gray-600 hover:text-blue-600 w-full text-left"
+                className="text-gray-600 hover:text-blue-600 w-full text-left"
               >
                 Add Category
               </button>
@@ -67,21 +60,21 @@ const Sidebar = ({ setActiveSection }) => {
         <div>
           <button
             onClick={() => toggleSection("module")}
-            className="block text-gray-600 hover:text-blue-600 w-full text-left"
+            className="flex items-center text-gray-700 hover:bg-blue-100 p-2 rounded w-full"
           >
-            <i className="fas fa-layer-group mr-2"></i>Training Module
+            <MdRunCircle className="mr-2" /> Training Module
           </button>
-          {openSections.module && (
-            <div className="ml-4 space-y-2">
+          {openSection === "module" && (
+            <div className="ml-8 space-y-2">
               <button
                 onClick={() => setActiveSection("showModule")}
-                className="block text-gray-600 hover:text-blue-600 w-full text-left"
+                className="text-gray-600 hover:text-blue-600 w-full text-left"
               >
                 Show Training Module
               </button>
               <button
                 onClick={() => setActiveSection("addModule")}
-                className="block text-gray-600 hover:text-blue-600 w-full text-left"
+                className="text-gray-600 hover:text-blue-600 w-full text-left"
               >
                 Add Training Module
               </button>
@@ -89,25 +82,24 @@ const Sidebar = ({ setActiveSection }) => {
           )}
         </div>
 
-
         <div>
           <button
             onClick={() => toggleSection("courses")}
-            className="block text-gray-600 hover:text-blue-600 w-full text-left"
+            className="flex items-center text-gray-700 hover:bg-blue-100 p-2 rounded w-full"
           >
-            <i className="fas fa-book mr-2"></i>Courses
+            <FaBook className="mr-2" /> Courses
           </button>
-          {openSections.courses && (
-            <div className="ml-4 space-y-2">
+          {openSection === "courses" && (
+            <div className="ml-8 space-y-2">
               <button
                 onClick={() => setActiveSection("showCourses")}
-                className="block text-gray-600 hover:text-blue-600 w-full text-left"
+                className="text-gray-600 hover:text-blue-600 w-full text-left"
               >
                 Show Courses
               </button>
               <button
                 onClick={() => setActiveSection("addCourses")}
-                className="block text-gray-600 hover:text-blue-600 w-full text-left"
+                className="text-gray-600 hover:text-blue-600 w-full text-left"
               >
                 Add Courses
               </button>
@@ -115,25 +107,24 @@ const Sidebar = ({ setActiveSection }) => {
           )}
         </div>
 
-
         <div>
           <button
             onClick={() => toggleSection("trainer")}
-            className="block text-gray-600 hover:text-blue-600 w-full text-left"
+            className="flex items-center text-gray-700 hover:bg-blue-100 p-2 rounded w-full"
           >
-            <i className="fas fa-chalkboard-teacher mr-2"></i>Trainers
+            <GiTeacher className="mr-2" /> Trainers
           </button>
-          {openSections.trainer && (
-            <div className="ml-4 space-y-2">
+          {openSection === "trainer" && (
+            <div className="ml-8 space-y-2">
               <button
                 onClick={() => setActiveSection("showTrainers")}
-                className="block text-gray-600 hover:text-blue-600 w-full text-left"
+                className="text-gray-600 hover:text-blue-600 w-full text-left"
               >
                 Show Trainers
               </button>
               <button
                 onClick={() => setActiveSection("addTrainers")}
-                className="block text-gray-600 hover:text-blue-600 w-full text-left"
+                className="text-gray-600 hover:text-blue-600 w-full text-left"
               >
                 Add Trainers
               </button>

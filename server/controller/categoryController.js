@@ -29,5 +29,15 @@ const addCategory=async(req,res)=>{
         
     }
 }
+const deleteCategory=async(req,res)=>{
+  try {
+   
+    const id=req.params.id
+    const deletedCategory=await Category.findByIdAndDelete(id)
+    return res.status(200).json({message:"Category Deleted Successfully"})
+  } catch (error) {
+    res.status(500).json({error:error.message})
+  }
+}
 
-module.exports={getCategory,addCategory}
+module.exports={getCategory,addCategory,deleteCategory}

@@ -36,12 +36,12 @@ const loginUser = async (req, res) => {
 
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(400).json({ message: "Invalid email or password" });
+            return res.status(401).json({ message: "Invalid email or password" });
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.status(400).json({ message: "Invalid email or password" });
+            return res.status(401).json({ message: "Invalid email or password" });
         }
 
         const token = jwt.sign({ userId: user._id, role: user.role,user:user }, process.env.JWT_SECRET, { expiresIn: '1d' });
@@ -87,7 +87,7 @@ const addTrainerByAdmin = async (req, res) => {
     }
 };
 
-// User logout
+
 const logoutUser = async (req, res) => {
     try {
         res.clearCookie("token");
@@ -97,7 +97,7 @@ const logoutUser = async (req, res) => {
     }
 };
 
-// Get user details
+
 const getUserDetails = async (req, res) => {
     try {
         const userId = req.user.userId;

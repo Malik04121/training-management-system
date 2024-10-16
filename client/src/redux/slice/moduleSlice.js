@@ -32,6 +32,22 @@ export const addModule = createAsyncThunk(
     }
   }
 );
+export const deleteCourseModule=createAsyncThunk(
+  "category/deleteCourseModule",
+  async (id) => {
+    try {
+      const res = await axios.delete(
+        `http://localhost:8500/api/module/${id}`,
+        { withCredentials: true } 
+      );
+    console.log(res,"res in delte thunk ")
+      return res.message;
+    } catch (error) {
+
+      throw new Error(error.response?.data?.message || error.message);
+    }
+  }
+)
 
 const moduleSlice = createSlice({
   name: "module",
@@ -46,6 +62,9 @@ const moduleSlice = createSlice({
       state.error = null;
       state.successMessage = null;
     },
+    deleteModule:(state,action)=>{
+      state.module = state.module.filter(module => module._id !== action.payload);
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(fetchModule.pending, (state) => {
@@ -73,6 +92,20 @@ const moduleSlice = createSlice({
       state.loading = false;
       state.error = action.error.message;
     });
+
+
+    builder.addCase(deleteCourseModule.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(deleteCourseModule.fulfilled, (state, action) => {
+      state.loading = false;
+      state.successMessage = action.message;
+      console.log(action.payload,"payload")
+    });
+    builder.addCase(deleteCourseModule.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
   },
 });
 
@@ -81,6 +114,6 @@ export const moduleLoading = (state) => state.module.loading;
 export const moduleError = (state) => state.module.error;
 export const successMessage = (state) => state.module.successMessage;
 
-export const { clearMessages } = moduleSlice.actions;
+export const { clearMessages,deleteModule } = moduleSlice.actions;
 
 export default moduleSlice.reducer;

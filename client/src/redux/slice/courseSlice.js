@@ -59,6 +59,22 @@ export const addCourse = createAsyncThunk(
     }
   }
 );
+export const deleteCourse=createAsyncThunk(
+  "category/deleteCourse",
+  async (id) => {
+    try {
+      const res = await axios.delete(
+        `http://localhost:8500/api/course/${id}`,
+        { withCredentials: true } 
+      );
+    console.log(res,"res in delte thunk ")
+      return res.message;
+    } catch (error) {
+
+      throw new Error(error.response?.data?.message || error.message);
+    }
+  }
+)
 
 const courseSlice = createSlice({
   name: "course",
@@ -74,6 +90,9 @@ const courseSlice = createSlice({
       state.error = null;
       state.successMessage = null;
     },
+    deleteSingleCourse:(state,action)=>{
+      state.course = state.course.filter(course => course._id !== action.payload);
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(fetchCourse.pending, (state) => {
@@ -112,6 +131,18 @@ const courseSlice = createSlice({
       state.loading = false;
       state.error = action.error.message;
     });
+
+    builder.addCase(deleteCourse.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(deleteCourse.fulfilled, (state, action) => {
+      state.loading = false;
+      // state.successMessage=action.payload
+    });
+    builder.addCase(deleteCourse.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
   },
 });
 
@@ -121,6 +152,6 @@ export const loadingStatus = (state) => state.course.loading;
 export const errorMessage = (state) => state.course.error;
 export const successMessage = (state) => state.course.successMessage;
 
-export const { clearMessages } = courseSlice.actions;
+export const { clearMessages ,deleteSingleCourse} = courseSlice.actions;
 
 export default courseSlice.reducer;
