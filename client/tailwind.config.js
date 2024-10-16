@@ -7,8 +7,11 @@ export default {
       current: "currentColor",
       white: "#ffffff", // White
       black: "#000000", // Black,
-      primary: "#000000", // black
-      secondary: "#4299e1", //blue
+      primary: "#FF6D2C", // Orange from the banner
+      secondary: "#333333", // Dark grey for headers, footer, text
+      beige: "#E6C9A8", // Light beige for subtle backgrounds and highlights
+      lightGrey: "#F5F5F5", // Light grey for clean background sections
+      darkGrey: "#2B2B2B", // Secondary dark grey for navbar or text
       blue: {
         100: "#ebf8ff",
         200: "#bee3f8",
@@ -20,24 +23,13 @@ export default {
         800: "#2c5282",
         900: "#2a4365",
       },
-      purple: {
-        100: "#faf5ff",
-        200: "#e9d8fd",
-        300: "#d6bcfa",
-        400: "#b794f4",
-        500: "#9f7aea", // Primary purple
-        600: "#805ad5",
-        700: "#6b46c1",
-        800: "#553c9a",
-        900: "#44337a",
-      },
       orange: {
         100: "#fff7ed",
         200: "#ffedd5",
         300: "#fed7aa",
         400: "#fdba74",
-        500: "#fb923c", // Default orange
-        600: "#f97316", // Darker orange
+        500: "#FF6D2C", // Updated primary orange for CTA
+        600: "#f97316", // Slightly darker orange
         700: "#ea580c",
         800: "#c2410c",
         900: "#9a3412",
@@ -50,15 +42,15 @@ export default {
         700: "#374151",
         900: "#111827",
       },
-        red: {
-          500: "#ef4444",
-          600: "#dc2626",
-        },
-      randomColor:{
-        100:"#10130c",
-        200:"#2b2e23",
-        300:"#3a4036"
-      }
+      red: {
+        500: "#ef4444", // Red for warnings/errors
+        600: "#dc2626",
+      },
+      beige: {
+        100: "#f9ede7",
+        200: "#e6c9a8",
+        300: "#d4a680",
+      },
     },
     extend: {
       keyframes: {

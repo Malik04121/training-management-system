@@ -19,7 +19,6 @@ const Home = () => {
     {/* <Header/> */}
     <HeaderBanner/>
     <div className='w-[70%] m-auto'>
-
       <Categories/>
       <CourseCard/>
     </div>

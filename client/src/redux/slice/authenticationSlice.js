@@ -102,7 +102,7 @@ export const verifyToken = createAsyncThunk(
 
       localStorage.setItem("role", role);
       localStorage.setItem("username", name);
-console.log(response.data);
+console.log(response.data,"data inside verify token");
 
       return response.data.user;
     } catch (error) {
@@ -116,6 +116,9 @@ export const logoutUser = createAsyncThunk(
     try {
       const response = await axios.get(`http://localhost:8500/api/users/logout`, { withCredentials: true });
       console.log(response,"response")
+      localStorage.removeItem("isLogin")
+      localStorage.removeItem("username")
+      localStorage.removeItem("role")
       return response.data;
     } catch (error) {
       throw new Error(error.message);
@@ -173,6 +176,7 @@ const userSlice = createSlice({
     });
     builder.addCase(loginUser.rejected, (state, action) => {
       state.loading = false;
+      console.log(action.payload,"payload error")
       state.error = action.payload; 
     });
 

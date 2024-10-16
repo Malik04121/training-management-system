@@ -27,7 +27,7 @@ export const fetchSingleCourse = createAsyncThunk(
       const res = await axios.get(url,{
         withCredentials:true
       });
-
+     
       
       return res.data;
     } catch (error) {
