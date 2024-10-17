@@ -15,3 +15,7 @@ router.get("/:id",auth,getIndividualCourse)
 router.delete("/:id",adminAuth,deleteCourse)
 
 module.exports=router
+
+//todo: update dummmy data because on fetching courses i got 0 module populated in that 
+
+//todo: show course list in home page as per category selection only ref:udemy .below that show recently added course based on created at after clicking on view more course redirect to course page which show list of all course for that category
