@@ -97,16 +97,23 @@ export const verifyToken = createAsyncThunk(
         withCredentials: true,
       });
 
-      const { role, name } = response.data.user;
+      console.log(response.data,"data inside verify token");
+      console.log(response.data.user)
+      // const { role, name } = response.data.user;
 
 
-      localStorage.setItem("role", role);
-      localStorage.setItem("username", name);
-console.log(response.data,"data inside verify token");
+      // localStorage.setItem("role", response.data.user?.role);
+      // localStorage.setItem("username", response.data.user?.name);
 
-      return response.data.user;
+      return response.data;
     } catch (error) {
-      return rejectWithValue("Failed to verify token or fetch user details.");
+      if (error.response && error.response.status === 400) {
+        console.log(error,"error inside if ")
+        return rejectWithValue(error.response.data.message);
+      } else {
+        return rejectWithValue("An unexpected error occurred. Please try again.");
+      }
+      
     }
   }
 );
@@ -123,6 +130,36 @@ export const logoutUser = createAsyncThunk(
     } catch (error) {
       throw new Error(error.message);
       
+    }
+  }
+);
+
+export const addCourseToUser = createAsyncThunk(
+  'user/addCourse',
+  async ({ userId, courseId, trainerId }, { rejectWithValue }) => {
+    try {
+      console.log(userId,courseId,trainerId,"id")
+      const response = await axios.patch(`http://localhost:8500/api/users/${userId}/courses`, { courseId, trainerId }, { withCredentials: true });
+      console.log(response,"response")
+      return response.data;
+    } catch (error) {
+      console.log(error,"error")
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const fetchUserDetails = createAsyncThunk(
+  "user/fetchUserDetails",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get("http://localhost:8500/api/users/loginUserData", {
+        withCredentials: true,
+      });
+      console.log(response.data,"inside fetchuser")
+      return response.data;
+    } catch (error) {
+      return rejectWithValue("Failed to fetch user details.");
     }
   }
 );
@@ -215,6 +252,7 @@ const userSlice = createSlice({
       state.error = action.payload;
     });
 
+
     builder.addCase(verifyToken.pending, (state) => {
       state.loading = true;
       state.error = null;
@@ -222,7 +260,8 @@ const userSlice = createSlice({
     });
     builder.addCase(verifyToken.fulfilled, (state, action) => {
       state.loading = false;
-      state.user = action.payload.data;
+      console.log(action.payload.data.user,"payload")
+      state.user = action.payload.data.user;
     });
     builder.addCase(verifyToken.rejected, (state, action) => {
       state.loading = false;
@@ -243,6 +282,37 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = action.payload; 
     });
+
+
+    builder.addCase(addCourseToUser.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(addCourseToUser.fulfilled, (state, action) => {
+      state.loading = false;
+        state.userList = action.payload.data;
+    });
+    builder.addCase(addCourseToUser.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+
+
+    builder.addCase(fetchUserDetails.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    
+    builder.addCase(fetchUserDetails.fulfilled, (state, action) => {
+      state.loading = false;
+      state.user = action.payload.data; 
+    });
+    
+    builder.addCase(fetchUserDetails.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+
   },
 });
 

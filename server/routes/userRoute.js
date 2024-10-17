@@ -2,7 +2,7 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../model/userModel");
-const { registerUser, loginUser, getUserDetails, getUsers, addTrainerByAdmin, verifyTokenAndRole, logoutUser } = require("../controller/userController");
+const { registerUser, loginUser, getUserDetails, getUsers, addTrainerByAdmin, verifyTokenAndRole, logoutUser, addCourseToUser, loginUserDetail } = require("../controller/userController");
 const { auth, adminAuth } = require("../middleware/auth");
 
 const router = express.Router();
@@ -20,6 +20,8 @@ router.get("/", getUsers);
 router.get("/logout",logoutUser)
 router.post("/addTrainer",adminAuth,addTrainerByAdmin)
 router.get("/verify",verifyTokenAndRole)
+router.get("/loginUserData",loginUserDetail)
+router.patch("/:id/courses",auth,addCourseToUser)
 
 
 

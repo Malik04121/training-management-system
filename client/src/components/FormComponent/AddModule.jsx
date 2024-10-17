@@ -120,7 +120,7 @@ const AddModule = () => {
          <button
           type="button"
           onClick={addModuleContent}
-          className="bg-blue-700 text-primary px-4 py-2 rounded-lg"
+          className="text-primary bg-white hover:bg-primary hover:text-white border border-primary px-4 py-2 rounded-lg"
         >
           Add Content
         </button> 
@@ -145,7 +145,7 @@ const AddModule = () => {
         </select>
       </div>
       <button
-        className="bg-blue-500 text-white px-4 py-2 rounded-lg"
+        className="text-primary bg-white hover:bg-primary hover:text-white border border-primary px-4 py-2 rounded-lg"
         type="submit"
 
       >

@@ -46,13 +46,8 @@ const ProtectedRoute = ({ children }) => {
   // const [loading]
 
   useEffect(() => {
-
-    
     dispatch(verifyToken());
-
   }, [dispatch]);
-
-  
 
   if (user && user.role !== "Admin") {
     return <Navigate to="/login" />;

@@ -2,11 +2,18 @@
 
 import React, { useState } from 'react'
 import { MdSearch } from 'react-icons/md'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { fetchCourse, fetchFillterCourse } from '../../redux/slice/courseSlice'
 
 const SearchFunctionality = () => {
   const [searchInput,setSearchInput]=useState("")
-  const searchCourse=()=>{
-    
+  const navigate=useNavigate()
+  const dispatch=useDispatch()
+
+  const searchCourse=async()=>{
+    await dispatch(fetchFillterCourse({search:searchInput}))
+    navigate("/courses")  
   }
   return (
     
@@ -18,10 +25,9 @@ const SearchFunctionality = () => {
                 onChange={(e)=>setSearchInput(e.target.value)}
               />
               <button className="text-gray-600 hover:text-blue-500" onClick={searchCourse}>
-              <MdSearch className="text-4xl text-orange-800" />
+              <MdSearch className="text-4xl text-primary" />
               </button>
             </div>
-
     
   )
 }

@@ -15,9 +15,20 @@ cloudinary.config({
 const getCourse = async (req, res) => {
   try {
 
-    const { categoryId } = req.query;
+    
+    const { categoryId, search } = req.query; 
 
-    const filter = categoryId ? { category: categoryId } : {};
+    const filter = {};
+    
+    if (categoryId) {
+      filter.category = categoryId;
+    }
+
+    if (search) {
+      filter.name = { $regex: search, $options: "i" };
+    }
+
+  
     const courses = await Course.find(filter).populate("category").populate("modules").populate("trainers"); 
     res.status(200).json(courses); 
   } catch (err) {

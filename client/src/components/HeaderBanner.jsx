@@ -1,7 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import banner from "../assets/bannerImage.jpg";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { fetchFillterCourse } from "../redux/slice/courseSlice";
 
 const HeaderBanner = () => {
+  const [searchInput,setSearchInput]=useState("")
+  const navigate=useNavigate()
+  const dispatch=useDispatch()
+
+  const searchCourse=async()=>{
+    await dispatch(fetchFillterCourse({search:searchInput}))
+    navigate("/courses")  
+  }
   return (
     <div className="relative bg-black w-full h-screen flex items-center">
        <div className="absolute h-full top-0  flex justify-center w-full ">
@@ -30,9 +41,10 @@ const HeaderBanner = () => {
             <input
               type="text"
               placeholder="Search our 4000+ courses"
-              className="px-4 py-2 w-full max-w-md rounded shadow-lg focus:outline-none focus:ring-2 focus:ring-orange-600"
+              className="px-4 py-2 w-full max-w-md rounded shadow-lg focus:outline-none focus:ring-2 focus:ring-orange-600 text-black"
+              onChange={(e)=>setSearchInput(e.target.value)}
             />
-            <button className="bg-orange-600 text-white px-6 py-2 rounded shadow-lg hover:bg-orange-700 transition">
+            <button className="bg-orange-600 text-white px-6 py-2 rounded shadow-lg hover:bg-orange-700 transition" onClick={searchCourse}>
               Search
             </button>
           </div>

@@ -21,17 +21,22 @@ const Categories = () => {
     };
 
     return (
-      <div className="flex flex-wrap justify-center gap-4 py-8">
+      <div className="py-8">
+
+        <h2 className="mb-5 font-bold text-primary text-4xl">Most Popular Courses</h2>
+      <div className="flex flex-wrap justify-center gap-4 ">
+        {/* <button>All</button> */}
         {categories.map((category, index) => (
           <button
-            key={index}
-            className="px-4 py-2 bg-lightGrey hover:bg-primary text-darkGrey hover:text-white rounded-lg font-medium transition-all duration-200"
-            onClick={() => filterCategory(category._id)}
+          key={index}
+          className="px-4 py-2 bg-lightGrey hover:bg-primary text-darkGrey hover:text-white rounded-lg font-medium transition-all duration-200"
+          onClick={() => filterCategory(category._id)}
           >
             {category.name}
           </button>
         ))}
       </div>
+        </div>
     );
 };
 

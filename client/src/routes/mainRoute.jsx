@@ -8,6 +8,9 @@ import ProtectedRoute from "../utills/AdminProtectedRoutes"
 import Header from "../components/Headers"
 import Trainer from "../pages/Trainer"
 import SingleCourse from "../pages/SingleCourse"
+import UserDetailPage from "../pages/UserDetail"
+import About from "../pages/About"
+import Footer from "../components/Footer"
 
 
 export const AllRoute=()=>{
@@ -23,7 +26,12 @@ export const AllRoute=()=>{
             <Route path="/dashboard" element={<ProtectedRoute><Admin/></ProtectedRoute>}/>
             <Route path="/register" element={<Register/>}/>
             <Route path="/login" element={<Login/>}/>
+            {/* <Route path="/course" element={<Login/>}/> */}
+            <Route path="/userInfo" element={<UserDetailPage/>}/>
+            <Route path="/about" element={<About/>}/>
          </Routes>
+         <Footer/>
         </BrowserRouter>
+
     )
 }

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { clearUserState, registerUser, userSuccessMessage } from "../redux/slice/authenticationSlice";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Register = () => {
   const dispatch = useDispatch();
@@ -40,12 +41,15 @@ const Register = () => {
     e.preventDefault();
     try {
       if (formData.password !== formData.confirmPassword) {
-        alert("Passwords do not match!");
+        // alert("Passwords do not match!");
+        toast.error("Passwords do not match!")
         return;
       }
       
       await dispatch(registerUser(formData)).unwrap();
+      toast.success("Registered Successfully")
     } catch (error) {
+      toast.error(error)
       console.log(error);
     }
   };
@@ -136,14 +140,17 @@ const Register = () => {
             </div>
           )}
 
-          {loading && <p>Registering...</p>}
-          {error && <p className="text-red-500">{error}</p>}
-          {successMessage && <p className="text-green-500">{successMessage}</p>}
+          {/* {loading && <p>Registering...</p>} */}
+          {/* {error && <p className="text-red-500">{error}</p>} */}
+          {/* {successMessage && <p className="text-green-500">{successMessage}</p>} */}
           
           <div>
             <button
               type="submit"
-              className={`w-full bg-primary text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              // className={`w-full bg-primary text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`w-full hover:bg-primary hover:text-white px-4 py-2 rounded-lg bg-white text-primary border border-primary font-bold transition-colors ${
+                loading ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
               disabled={loading}
             >
               {loading ? "Registering..." : "Register"}

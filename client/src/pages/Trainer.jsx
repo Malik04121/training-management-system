@@ -11,18 +11,16 @@ const Trainer = () => {
   const { id } = useParams();
 
   const STEP = 1;
-  const MIN = 10;  // Minimum rate
-  const MAX = 10000; // Maximum rate
+  const MIN = 10;  
+  const MAX = 10000; 
 
-  // State for the range filter
-  const [values, setValues] = useState([MIN, MAX]); // Min and max range state
-  const [rating, setRating] = useState(0); // Start with minimum rating 0
+  const [values, setValues] = useState([MIN, MAX]); 
+  const [rating, setRating] = useState(0); 
 
   useEffect(() => {
     dispatch(fetchSingleCourse(id));
   }, [dispatch, id]);
 
-  // Filter trainers based on the filter criteria
   const filteredTrainers = singleCourse.trainers?.filter(trainer => {
     const meetsRateCriteria = (trainer.averagePricePerHour >= values[0]) && 
                               (trainer.averagePricePerHour <= values[1]);
@@ -32,14 +30,12 @@ const Trainer = () => {
 
   return (
     <div className='flex'>
-      <div className='w-[30%] p-4 bg-lightGrey'>
-        {/* Filter Section */}
+      <div className='w-[25%] p-4 bg-lightGrey h-screen'>
         <h2 className='text-lg font-semibold mb-4 text-darkGrey'>Filter Trainers</h2>
         
         <div className='mb-4'>
           <label className='block text-sm font-medium text-darkGrey'>Hourly Rate: ${values[0]} - ${values[1]}</label>
           
-          {/* Range Slider */}
           <Range
             values={values}
             step={STEP}
@@ -55,7 +51,7 @@ const Trainer = () => {
                   width: '100%',
                   background: getTrackBackground({
                     values,
-                    colors: ['#ccc', '#FF6D2C', '#ccc'],  // Primary orange for the active track
+                    colors: ['#ccc', '#FF6D2C', '#ccc'],  
                     min: MIN,
                     max: MAX
                   })
@@ -73,7 +69,7 @@ const Trainer = () => {
                   width: '20px',
                   borderRadius: '50%',
                   backgroundColor: '#FFF',
-                  border: '1px solid #FF6D2C',  // Primary orange border
+                  border: '1px solid #FF6D2C',  
                   boxShadow: '0px 2px 6px #AAA'
                 }}
               />
@@ -100,7 +96,7 @@ const Trainer = () => {
         </div>
       </div>
 
-      <div className='w-[70%] p-4'>
+      <div className='w-[75%] p-4'>
         <TrainerCard trainers={filteredTrainers} />
       </div>
     </div>

@@ -18,6 +18,28 @@ export const fetchCourse = createAsyncThunk(
     }
   }
 );
+export const fetchFillterCourse = createAsyncThunk(
+  "category/fetchFillterCourse",
+  async ({ categoryId, search }) => { 
+    try {
+      const params = new URLSearchParams();
+
+      if (categoryId) {
+        params.append('categoryId', categoryId);
+      }
+      if (search) {
+        params.append('search', search);
+      }
+console.log(params.toString(),"params")
+      const url = `http://localhost:8500/api/course?${params.toString()}`; // Build the URL with query parameters
+      const res = await axios.get(url);
+
+      return res.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || error.message);
+    }
+  }
+);
 
 export const fetchSingleCourse = createAsyncThunk(
   "category/fetchSingleCourse",
@@ -103,6 +125,18 @@ const courseSlice = createSlice({
       state.course = action.payload;
     });
     builder.addCase(fetchCourse.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    });
+
+    builder.addCase(fetchFillterCourse.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchFillterCourse.fulfilled, (state, action) => {
+      state.loading = false;
+      state.course = action.payload;
+    });
+    builder.addCase(fetchFillterCourse.rejected, (state, action) => {
       state.loading = false;
       state.error = action.error.message;
     });

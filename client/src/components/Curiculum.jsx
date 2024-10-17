@@ -1,111 +1,67 @@
-// import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { fetchSingleCourse, singleCourseData } from "../redux/slice/courseSlice";
 
-// const modules = [
-//   {
-//     title: "Module 1: Review of Endpoint Configuration Manager Concepts",
-//     content: "Content for Module 1: Review of Endpoint Configuration Manager Concepts."
-//   },
-//   {
-//     title: "Module 2: Managing Resources",
-//     content: "Content for Module 2: Managing Resources."
-//   },
-//   {
-//     title: "Module 3: Working with Clients",
-//     content: "Content for Module 3: Working with Clients."
-//   },
-//   {
-//     title: "Module 4: Distributing Software",
-//     content: "Content for Module 4: Distributing Software."
-//   },
-//   {
-//     title: "Module 5: Updating Systems with WSUS and ECM",
-//     content: `
-//       This module explains how to use the PowerShell commands to create and configure 
-//       the integration of ECM and WSUS using a Software Update Point. It also describes 
-//       how to create and modify Software Update Groups and Automatic Deployment Rules. 
-//       Cmdlets are also used to manage Deployment Packages and their associated Deployments.
-      
-//       • Integrating Configuration Manager and WSUS
-//       • Managing Updates through Software Update Groups
-//       • Creating and Deploying Update Packages
-//       • Working with Automatic Deployment Rules
-
-//       Lab: Using Configuration Manager Commands to Manage Software Updates
-      
-//       After completing this module, students will be able to:
-//       • Prepare the Environment for Software Updates
-//       • Deploy Updates
-//       • Create an Automatic Deployment Rule
-//     `
-//   }
-// ];
-
-// const Curriculum = () => {
-//   const [openModule, setOpenModule] = useState(null);
-
-//   const toggleModule = (index) => {
-//     setOpenModule(openModule === index ? null : index);
-//   };
-
-//   return (
-//     <div className="max-w-2xl mx-auto p-6">
-//       <h1 className="text-2xl font-bold mb-6">Curriculum</h1>
-//       <div className="space-y-4">
-//         {modules.map((module, index) => (
-//           <div key={index}>
-//             <button
-//               onClick={() => toggleModule(index)}
-//               className="w-full text-left bg-gray-100 p-4 rounded-lg shadow-md font-semibold text-lg 
-//                          flex justify-between items-center focus:outline-none"
-//             >
-//               {module.title}
-//               <span>{openModule === index ? "-" : "+"}</span>
-//             </button>
-//             {openModule === index && (
-//               <div className="bg-white p-4 mt-2 rounded-lg shadow-md text-gray-700">
-//                 <p>{module.content}</p>
-//               </div>
-//             )}
-//           </div>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Curriculum;
-
-
-import React, { useState } from "react";
-
-const Curriculum = ({ modules }) => {
+const Curriculum = () => {
   const [openModule, setOpenModule] = useState(null);
+  const dispatch = useDispatch();
+  const { id } = useParams();
+  const course = useSelector(singleCourseData);
+
+  useEffect(() => {
+    dispatch(fetchSingleCourse(id));
+  }, [dispatch, id]);
 
   const toggleModule = (index) => {
     setOpenModule(openModule === index ? null : index);
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold mb-6 text-darkGrey">Curriculum</h2>
-      <div className="space-y-4">
-        {modules?.map((module, index) => (
-          <div key={index}>
-            <button
-              onClick={() => toggleModule(index)}
-              className="w-full text-left bg-lightGrey p-4 rounded-lg shadow-md font-semibold text-lg 
-                         flex justify-between items-center focus:outline-none hover:bg-primary hover:text-white transition-all duration-300"
-            >
-              {module.title}
-              <span>{openModule === index ? "-" : "+"}</span>
-            </button>
-            {openModule === index && (
-              <div className="bg-white p-4 mt-2 rounded-lg shadow-md text-gray-700">
-                <p>{module.content}</p>
-              </div>
-            )}
-          </div>
-        ))}
+    <div className="flex bg-white p-6 rounded-lg shadow-lg">
+      <div className="w-1/3 p-4 border-r">
+        <h2 className="text-2xl font-bold mb-4 text-darkGrey">{course.name}</h2>
+        <img src={course.bannerUrl} alt="Course Banner" className="mb-4 rounded-lg" />
+        <p className="mb-2"><strong>Description:</strong> {course.description}</p>
+        <p className="mb-2"><strong>Duration:</strong> {course.duration} minutes</p>
+        <p className="mb-2"><strong>Category:</strong> {course.category?.name}</p>
+        {/* <p className="mb-2"><strong>Enrolled Students:</strong> {course.enrolled_people.length}</p> */}
+        <h3 className="font-semibold">Trainers:</h3>
+        <ul>
+          {course.trainers?.map(trainer => (
+            <li key={trainer._id}>{trainer.name} - {trainer.trainerRating} ★</li>
+          ))}
+        </ul>
+      </div>
+      <div className="w-2/3 p-4">
+        <h2 className="text-2xl font-bold mb-6 text-darkGrey">Curriculum</h2>
+        <div className="space-y-4">
+          {course.modules?.map((module, moduleIndex) => (
+            <div key={module._id}>
+              <button
+                onClick={() => toggleModule(moduleIndex)}
+                className="w-full text-left bg-lightGrey p-4 rounded-lg shadow-md font-semibold text-lg 
+                           flex justify-between items-center focus:outline-none hover:bg-primary hover:text-white transition-all duration-300"
+              >
+                {module.name}
+                <span>{openModule === moduleIndex ? "-" : "+"}</span>
+              </button>
+              {openModule === moduleIndex && (
+                <div className="bg-white p-4 mt-2 rounded-lg shadow-md text-gray-700">
+                  <p>{module.description}</p>
+                  <div className="mt-2">
+                    <h3 className="font-semibold">Contents:</h3>
+                    {module.moduleContent?.map((content) => (
+                      <div key={content._id} className="p-2 border-b">
+                        <strong>{content.name}</strong> - {content.duration} min
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

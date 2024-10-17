@@ -21,8 +21,14 @@ const userSchema = new mongoose.Schema({
         default: "User"
     },
     courses: [{
-        type: mongoose.Schema.Types.ObjectId,  
-        ref: "Course"
+        courseId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Course"
+        },
+        trainerId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User" 
+        }
     }],
     averagePricePerHour: {
         type: Number,

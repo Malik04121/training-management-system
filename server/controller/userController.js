@@ -1,6 +1,7 @@
 const User = require("../model/userModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const Course=require("../model/courseModel")
 
 // User registration
 const registerUser = async (req, res) => {
@@ -137,6 +138,23 @@ const getUsers = async (req, res) => {
     }
 };
 
+const loginUserDetail=async(req,res)=>{
+    const token=req.cookies.token;
+    if (!token) {
+        return res.status(401).json({ message: 'No token provided' });
+      }
+      try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const user = await User.findById(decoded.userId).populate('courses.courseId').populate('courses.trainerId');
+        console.log(user,"user")
+        res.status(200).json({ message: 'Login User Detail Fetched Successfully',data:user });
+      } catch (error) {
+        console.log(error,"error")
+      return res.status(403).json({ message: 'Invalid token' });
+        
+      }
+}
+
 const verifyTokenAndRole = async(req, res) => {
     const token = req.cookies.token;
   
@@ -159,6 +177,36 @@ const verifyTokenAndRole = async(req, res) => {
     }
   };
 
+  const addCourseToUser = async (req, res) => {
+    try {
+        const userId = req.user.userId; 
+        const { courseId, trainerId } = req.body;
+
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+    console.log(user,"user list ")
+        
+        const existingCourse = user.courses.find(course => course.courseId.toString() === courseId);
+       console.log(existingCourse,"existingCourse")
+        if (existingCourse) {
+            return res.status(400).json({ message: "You had already enrolled in this course." });
+        }
+
+        user.courses.push({ courseId, trainerId });
+        await user.save();
+        await Course.findByIdAndUpdate(
+            courseId,
+            { $addToSet: { enrolledPeople: userId } }, 
+            { new: true }
+        );
+        res.status(200).json({ message: "Course and trainer added successfully", user });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
 module.exports = {
     registerUser,
     loginUser,
@@ -166,5 +214,7 @@ module.exports = {
     logoutUser,
     getUserDetails,
     getUsers ,
-    verifyTokenAndRole 
+    verifyTokenAndRole ,
+    addCourseToUser,
+    loginUserDetail
 };

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { clearUserState, loginUser, singleUser } from "../redux/slice/authenticationSlice";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -36,8 +37,10 @@ const Login = () => {
     try {
       await dispatch(loginUser(formData)).unwrap();
       localStorage.setItem("isLogin", true);
+      toast.success("Login successful! Welcome back!")
       navigate("/"); 
     } catch (error) {
+      toast.error(error)
       console.error("Login failed:", error);
     }
   };
@@ -74,12 +77,12 @@ const Login = () => {
             />
           </div>
 
-          {errorMessage && <p className="text-red-500">{errorMessage}</p>}
+          {/* {errorMessage && <p className="text-red-500">{errorMessage}</p>} */}
 
           <div>
             <button
               type="submit"
-              className={`w-full bg-primary text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors ${
+              className={`w-full hover:bg-primary hover:text-white px-4 py-2 rounded-lg bg-white text-primary border border-primary font-bold transition-colors ${
                 loading ? 'opacity-50 cursor-not-allowed' : ''
               }`}
               disabled={loading}
