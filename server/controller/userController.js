@@ -7,7 +7,10 @@ const Course=require("../model/courseModel")
 const registerUser = async (req, res) => {
     try {
         const { name, email, password, role } = req.body;
-
+        if (role === "Admin" || role === "Trainer") {
+            return res.status(400).json({ message: `${role} cannot create himself` });
+        }
+        
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ message: "User already exists" });
