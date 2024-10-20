@@ -10,7 +10,7 @@ const Sidebar = ({ setActiveSection }) => {
   const toggleSection = (section) => {
     setOpenSection((prev) => (prev === section ? null : section));
   };
-
+//todo: sidebar active state
   return (
     <div className="w-64 h-screen bg-gray-200 shadow-md p-4">
       <div className="flex items-center mb-10">
@@ -43,13 +43,13 @@ const Sidebar = ({ setActiveSection }) => {
             <div className="ml-8 space-y-2">
               <button
                 onClick={() => setActiveSection("showCategory")}
-                className="text-gray-600 hover:text-primary w-full text-left"
+                className="text-gray-700 hover:text-primary w-full text-left"
               >
                 Show Category
               </button>
               <button
                 onClick={() => setActiveSection("addCategory")}
-                className="text-gray-600 hover:text-primary w-full text-left"
+                className="text-gray-700 hover:text-primary w-full text-left"
               >
                 Add Category
               </button>

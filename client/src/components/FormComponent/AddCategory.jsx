@@ -18,7 +18,7 @@ const AddCategory = () => {
       };
   return (
     <div>
-    <h1 className="text-2xl font-semibold mb-4">Add Category</h1>
+    <h2 className="text-2xl font-semibold mb-4">Add Category</h2>
     <form className="space-y-4" onSubmit={handleCategory}>
       <div>
         <label className="block text-gray-700">Category Name</label>
@@ -44,7 +44,7 @@ const AddCategory = () => {
         ></textarea>
       </div>
       <button
-        className="bg-blue-500 text-white px-4 py-2 rounded-lg"
+        className="bg-primary text-white px-4 py-2 rounded-lg"
         type="submit"
       >
         Save Category

@@ -14,16 +14,16 @@ const HeaderBanner = () => {
     navigate("/courses")  
   }
   return (
-    <div className="relative bg-black w-full h-screen flex items-center">
-       <div className="absolute h-full top-0  flex justify-center w-full ">
+    <div className="relative bg-opacity-50 w-full h-screen flex items-center">
+       <div className="absolute h-full bg-black top-0  flex justify-center w-full ">
           <img
             src={banner}
             alt="Person"
             className="w-full h-full object-cover rounded"
           />
       </div>
-{/* 
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-900 to-transparent" /> */}
+
+      <div className="absolute inset-0 bg-black bg-opacity-30" /> 
 
       <div className="relative z-10 container mx-auto flex flex-col lg:flex-row items-center px-4 lg:px-8">
         <div className="lg:w-1/2 text-white">

@@ -1,7 +1,7 @@
 
 
 const mongoose= require("mongoose")
-
+//todo: schema validation for course
 const courseSchema=new mongoose.Schema({
    name:{
     type:String,

@@ -34,6 +34,9 @@ const deleteCategory=async(req,res)=>{
    
     const id=req.params.id
     const deletedCategory=await Category.findByIdAndDelete(id)
+    if (!deletedCategory) {
+      return res.status(404).json({ message: "Category not found" });
+    }
     return res.status(200).json({message:"Category Deleted Successfully"})
   } catch (error) {
     res.status(500).json({error:error.message})

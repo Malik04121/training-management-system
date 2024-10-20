@@ -13,12 +13,17 @@ const auth = (req, res, next) => {
         if (!verified) {
             return res.status(401).json({ message: "Token verification failed, access denied" });
         }
-        console.log(verified,"verified") 
+        // console.log(verified,"verified") 
         req.user = verified;
         next();
     } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
+        if (err.name === 'JsonWebTokenError') {
+            return res.status(403).json({ message: "Invalid token" });
+          }
+          res.status(500).json({ error: err.message });
+        }
+
+    
 };
 
 const adminAuth=(req,res,next)=>{

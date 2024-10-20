@@ -17,11 +17,11 @@ const PaymentModal = ({ isOpen, onRequestClose, amount, onConfirm }) => {
       <div className="p-4">
         <h2 className="text-lg font-semibold">Payment Confirmation</h2>
         <p className="mt-2">You have to pay ₹ {amount} (trainer per hour rate).</p>
-        <div className="mt-4">
-          <button onClick={onConfirm} className="bg-primary text-white py-2 px-4 rounded">
+        <div className="mt-4 flex justify-between item-center gap-4">
+          <button onClick={onConfirm} className="bg-primary w-full text-white py-2 px-4 rounded hover:bg-white hover:text-primary border hover:border-primary">
             Confirm Payment
           </button>
-          <button onClick={onRequestClose} className="ml-2 bg-gray-300 py-2 px-4 rounded">
+          <button onClick={onRequestClose} className="w-full bg-gray-300 py-2 px-4 rounded hover:bg-gray-100">
             Cancel
           </button>
         </div>

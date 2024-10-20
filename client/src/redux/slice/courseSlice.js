@@ -112,6 +112,11 @@ const courseSlice = createSlice({
       state.error = null;
       state.successMessage = null;
     },
+    clearState:(state)=>{
+       state.individualCourse={},
+        state.successMessage=null,
+        state.error=null
+    },
     deleteSingleCourse:(state,action)=>{
       state.course = state.course.filter(course => course._id !== action.payload);
     }
@@ -186,6 +191,6 @@ export const loadingStatus = (state) => state.course.loading;
 export const errorMessage = (state) => state.course.error;
 export const successMessage = (state) => state.course.successMessage;
 
-export const { clearMessages ,deleteSingleCourse} = courseSlice.actions;
+export const { clearMessages ,deleteSingleCourse,clearState} = courseSlice.actions;
 
 export default courseSlice.reducer;

@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserDetails, singleUser } from '../redux/slice/authenticationSlice';
+import { clearState } from '../redux/slice/courseSlice';
 
 const UserProfile = () => {
     const dispatch = useDispatch();
     const user = useSelector(singleUser);
+    console.log(user,"user")
 
     useEffect(() => {
         dispatch(fetchUserDetails()); 
@@ -13,7 +15,7 @@ const UserProfile = () => {
     if (!user) {
         return <div>Loading...</div>; 
     }
-
+//todo : for trainer show list of courses and trainer details course detail with user enrolled course analysis course review
     // Calculate total spend
     const totalSpend = user?.courses.reduce((total, course) => {
         return total + course.trainerId.averagePricePerHour;

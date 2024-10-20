@@ -1,7 +1,5 @@
 
 
-
-
 const express=require("express")
 const { adminAuth } = require("../middleware/auth")
 const { addModule, getModule, deleteCourseModule } = require("../controller/moduleController")

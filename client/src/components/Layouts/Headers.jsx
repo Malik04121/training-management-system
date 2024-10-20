@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import Banner from "../assets/logo.png";
+import Banner from "../../assets/logo.png";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { logoutUser, selectError, selectLoading, singleUser, clearUserState } from "../redux/slice/authenticationSlice";
-import { categoryData, fetchCategory } from "../redux/slice/categoriesSlice"; 
+import { logoutUser, selectError, selectLoading, singleUser, clearUserState } from "../../redux/slice/authenticationSlice";
+import { categoryData, fetchCategory } from "../../redux/slice/categoriesSlice"; 
 import { FaCaretDown } from "react-icons/fa"; 
-import SearchFunctionality from "./FormComponent/SearchFunctionality";
-import { fetchCourse } from "../redux/slice/courseSlice";
+import SearchFunctionality from "../FormComponent/SearchFunctionality";
+import { clearState, fetchCourse } from "../../redux/slice/courseSlice";
 
 const Header = () => {
   const userName = localStorage.getItem("username");
@@ -31,7 +31,9 @@ const Header = () => {
   const handleLogout = async () => {
     await dispatch(logoutUser());
     await dispatch(clearUserState());
-    navigate("/login");
+    // dispatch(clearState)
+
+    window.location.reload("/login");
   };
 
   const handleUserIconClick = () => {
@@ -113,13 +115,7 @@ const Header = () => {
           {/* User Information */}
           { login ? (
             <>
-              <div 
-                className="bg-lightGrey text-black border border-white rounded-full h-10 w-10 flex items-center justify-center cursor-pointer"
-                onClick={handleUserIconClick} 
-              >
-                {firstLetter}
-              </div>
-
+             
               {userRole === "Admin" && (
                 <Link
                   to={isDashboard ? "/" : "/dashboard"}
@@ -135,6 +131,13 @@ const Header = () => {
               >
                 Logout
               </button>
+              <div 
+                className="bg-lightGrey text-black border border-white rounded-full h-10 w-10 flex items-center justify-center cursor-pointer"
+                onClick={handleUserIconClick} 
+              >
+                {firstLetter}
+              </div>
+
             </>
           ) : (
             <>

@@ -15,7 +15,7 @@ const Trainer = () => {
   const MAX = 10000; 
 
   const [values, setValues] = useState([MIN, MAX]); 
-  const [rating, setRating] = useState(0); 
+  const [rating, setRating] = useState(null); 
 
   useEffect(() => {
     dispatch(fetchSingleCourse(id));

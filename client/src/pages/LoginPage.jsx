@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { clearUserState, loginUser, singleUser } from "../redux/slice/authenticationSlice";
+import { clearUserState, fetchUserDetails, loginUser, singleUser } from "../redux/slice/authenticationSlice";
 import { toast } from "react-toastify";
 
 const Login = () => {
@@ -38,6 +38,7 @@ const Login = () => {
       await dispatch(loginUser(formData)).unwrap();
       localStorage.setItem("isLogin", true);
       toast.success("Login successful! Welcome back!")
+      dispatch(fetchUserDetails())
       navigate("/"); 
     } catch (error) {
       toast.error(error)

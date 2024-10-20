@@ -3,17 +3,19 @@ import { useSelector } from 'react-redux';
 import { courseData } from '../redux/slice/courseSlice';
 import { Link } from 'react-router-dom';
 
-const Courses = () => {
+const Course = () => {
   const courses = useSelector(courseData);
-
+  
+//Todo: after search clear input field
   return (
-    <div className="p-6">
+    <div className="p-6 w-[85%] mx-auto min-h-screen">
+      <h3>Result For </h3>
       {courses.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {courses.map((course, index) => (
             <div
               key={index}
-              className="p-4 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-200 h-fit bg-lightGrey cursor-pointer"
+              className="p-4 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-200  bg-lightGrey cursor-pointer"
             >
               <div className="mb-2 h-32 w-full flex items-center justify-center overflow-hidden">
                 <img
@@ -54,4 +56,4 @@ const Courses = () => {
   );
 };
 
-export default Courses;
+export default Course;

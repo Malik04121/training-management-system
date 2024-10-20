@@ -91,7 +91,10 @@ const deleteCourse=async(req,res)=>{
    
     const id=req.params.id
     const deletedCourse=await Course.findByIdAndDelete(id)
-    return res.status(200).json({message:"Category Deleted Successfully"})
+    if (!deletedCourse) {
+      return res.status(404).json({ message: "Course not found" });
+    }
+    return res.status(200).json({message:"Course Deleted Successfully"})
   } catch (error) {
     res.status(500).json({error:error.message})
   }

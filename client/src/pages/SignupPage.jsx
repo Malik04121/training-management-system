@@ -59,8 +59,8 @@ const Register = () => {
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <h2 className="text-2xl font-semibold text-darkGrey mb-6 text-center">Sign Up</h2>
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block text-darkGrey">Name</label>
+          <div className="space-y-1">
+            <label className="block text-darkGrey">Name*</label>
             <input
               type="text"
               name="name"
@@ -72,8 +72,8 @@ const Register = () => {
             />
           </div>
 
-          <div>
-            <label className="block text-darkGrey">Email</label>
+         <div className="space-y-1">
+            <label className="block text-darkGrey">Email*</label>
             <input
               type="email"
               name="email"
@@ -85,8 +85,8 @@ const Register = () => {
             />
           </div>
 
-          <div>
-            <label className="block text-darkGrey">Password</label>
+      <div className="space-y-1">
+            <label className="block text-darkGrey">Password*</label>
             <input
               type="password"
               name="password"
@@ -98,8 +98,8 @@ const Register = () => {
             />
           </div>
 
-          <div>
-            <label className="block text-darkGrey">Confirm Password</label>
+     <div className="space-y-1">
+            <label className="block text-darkGrey">Confirm Password*</label>
             <input
               type="password"
               name="confirmPassword"
@@ -111,8 +111,8 @@ const Register = () => {
             />
           </div>
 
-          <div>
-            <label className="block text-darkGrey">Role</label>
+      <div className="space-y-1">
+            <label className="block text-darkGrey">Role*</label>
             <select
               name="role"
               value={formData.role}

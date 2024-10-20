@@ -136,23 +136,23 @@ const Categories = ({ setSelectedCategory }) => {
     };
 
     return (
-        <div className="py-8">
-            <h2 className="mb-5 font-bold text-primary text-4xl">Most Popular Courses</h2>
-            <div className="flex flex-wrap justify-center gap-4 ">
+        <div className="sticky top-20 py-8 basis-[20%]  bg-white px-5 rounded-md ">
+
+            <div className="space-y-3 ">
                 {categories.map((category) => (
-                    <button
+                    <div
                         key={category._id} // Use unique ID for key
-                        className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                        className={`px-4 py-2 rounded-lg font-medium transition-all duration-200  text-nowrap ${
                             loading 
-                                ? "bg-lightGrey" 
+                                ? "" 
                                 : selectedCategoryId === category._id // Check if this category is selected
                                 ? "bg-orange-500 text-white" // Use orange background for selected category
-                                : "bg-lightGrey text-darkGrey hover:bg-primary hover:text-white"
+                                : " text-darkGrey hover:bg-primary hover:text-white"
                         }`}
                         onClick={() => filterCategory(category)} // Pass the entire category object
                     >
                         {category.name}
-                    </button>
+                    </div>
                 ))}
             </div>
         </div>

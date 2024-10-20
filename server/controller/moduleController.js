@@ -1,8 +1,5 @@
 
-
-
 const CourseModule = require("../model/courseModuleModel");
-
 
 const getModule=async(req,res)=>{
   try {
@@ -37,6 +34,9 @@ const addModule=async(req,res)=>{
        
         const id=req.params.id
         const deletedModule=await CourseModule.findByIdAndDelete(id)
+        if (!deletedModule) {
+          return res.status(404).json({ message: "Module not found" });
+        }
         return res.status(200).json({message:"Module Deleted Successfully"})
       } catch (error) {
         res.status(500).json({error:error.message})
