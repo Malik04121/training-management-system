@@ -28,7 +28,11 @@ const userSchema = new mongoose.Schema({
         trainerId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User" 
-        }
+        },
+        enrollmentDate: {
+            type: Date,
+            default: Date.now  
+          }
     }],
     averagePricePerHour: {
         type: Number,
@@ -36,7 +40,9 @@ const userSchema = new mongoose.Schema({
     },
     trainerRating: {
         type: Number, 
-        default: 0  
+        default: 0  ,
+        min: 0,
+    max: 5 
     },
     trainerDescription: {
         type: String,

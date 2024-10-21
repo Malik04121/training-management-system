@@ -6,10 +6,10 @@ export const fetchModule = createAsyncThunk(
   async () => {
     try {
       const res = await axios.get("http://localhost:8500/api/module");
-      console.log(res,"res")
+
       return res.data;
     } catch (error) {
-      console.log(error, "error");
+
       throw new Error(error.response?.data?.message || error.message);
     }
   }
@@ -24,10 +24,10 @@ export const addModule = createAsyncThunk(
         moduleData,
         { withCredentials: true } 
       );
-      console.log(res)
+
       return res.data;
     } catch (error) {
-      console.log(error, "error");
+
       throw new Error(error.response?.data?.message || error.message);
     }
   }
@@ -40,7 +40,7 @@ export const deleteCourseModule=createAsyncThunk(
         `http://localhost:8500/api/module/${id}`,
         { withCredentials: true } 
       );
-    console.log(res,"res in delte thunk ")
+
       return res.message;
     } catch (error) {
 
@@ -85,7 +85,7 @@ const moduleSlice = createSlice({
     builder.addCase(addModule.fulfilled, (state, action) => {
       state.loading = false;
       state.successMessage = "Module added successfully!";
-      console.log(action.payload,"payload")
+
       state.module.push(action.payload); 
     });
     builder.addCase(addModule.rejected, (state, action) => {
@@ -100,7 +100,7 @@ const moduleSlice = createSlice({
     builder.addCase(deleteCourseModule.fulfilled, (state, action) => {
       state.loading = false;
       state.successMessage = action.message;
-      console.log(action.payload,"payload")
+
     });
     builder.addCase(deleteCourseModule.rejected, (state, action) => {
       state.loading = false;

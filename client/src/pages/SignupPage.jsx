@@ -50,7 +50,7 @@ const Register = () => {
       toast.success("Registered Successfully")
     } catch (error) {
       toast.error(error)
-      console.log(error);
+
     }
   };
 

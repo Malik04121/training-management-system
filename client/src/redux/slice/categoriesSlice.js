@@ -39,7 +39,7 @@ export const deleteCategory=createAsyncThunk(
         `http://localhost:8500/api/category/${id}`,
         { withCredentials: true } 
       );
-    console.log(res,"res in delte thunk ")
+
       return res.message;
     } catch (error) {
 

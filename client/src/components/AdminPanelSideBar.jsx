@@ -10,7 +10,7 @@ const Sidebar = ({ setActiveSection }) => {
   const toggleSection = (section) => {
     setOpenSection((prev) => (prev === section ? null : section));
   };
-//todo: sidebar active state
+
   return (
     <div className="w-64 h-screen bg-gray-200 shadow-md p-4">
       <div className="flex items-center mb-10">

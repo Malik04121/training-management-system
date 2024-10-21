@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { addCategory } from '../../redux/slice/categoriesSlice';
+import { toast } from 'react-toastify';
 
 const AddCategory = () => {
 
@@ -15,6 +16,7 @@ const AddCategory = () => {
         );
         setCategoryName("");
         setCategoryDescription("");
+        toast.success("Category Added Successfully")
       };
   return (
     <div>
@@ -44,10 +46,11 @@ const AddCategory = () => {
         ></textarea>
       </div>
       <button
-        className="bg-primary text-white px-4 py-2 rounded-lg"
+        className="text-primary bg-white hover:bg-primary hover:text-white border border-primary px-4 py-2 rounded-lg"
         type="submit"
+
       >
-        Save Category
+        Add Category
       </button>
     </form>
   </div>

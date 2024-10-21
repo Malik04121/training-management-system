@@ -9,6 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { trimText } from "../utills/textTrim";
 import { toast } from "react-toastify";
 import CourseCardSkeleton from "./Skeleton/CourseCardSkeleton";
+import noCourseImg from "../assets/upcomingProgram.jpg"
 
 
 const CourseCard = ({ selectedCategory }) => {
@@ -40,7 +41,20 @@ const CourseCard = ({ selectedCategory }) => {
                     Array.from({ length: 3 }, (_, index) => <CourseCardSkeleton key={index} />) 
                 ) : (
                     <>
-                        {filteredCourses.map((course, index) => (
+                     {filteredCourses.length === 0 ? (
+                            <div className="text-center mt-10">
+                                <img
+                                    src={noCourseImg}
+                                    alt="Upcoming Courses"
+                                    className="w-1/2 mx-auto mb-5"
+                                />
+                                <h2 className="text-xl font-bold">Stay Tuned!</h2>
+                                <p className="text-gray-600 mt-2">
+                                    We are preparing exciting new courses. Check back soon for upcoming content.
+                                </p>
+                            </div>
+                        ) : (
+                        (filteredCourses.map((course, index) => (
                             <div
                                 key={index}
                                 className="p-4 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-200  bg-white cursor-pointer group h-[400px]"
@@ -73,17 +87,14 @@ const CourseCard = ({ selectedCategory }) => {
                                     </button>
                                 </div>
                             </div>
-                        ))}
-
-
-                    </>
+                        )))
+                    )
+                }
+                 </>   
                 )}
 
             </div>
-            <button className="border border-black py-3 font-bold hover:bg-black hover:text-white transition-all w-56  mx-auto "><Link to="/courses">
-                Load More
-            </Link>
-            </button></div>
+            </div>
 
 
     );

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { addTrainer } from '../../redux/slice/authenticationSlice';
+import { toast } from 'react-toastify';
 
 const AddTrainer = () => {
   const dispatch = useDispatch();
@@ -53,6 +54,7 @@ const AddTrainer = () => {
           averagePricePerHour: "",
           rating: "",
         });
+        toast.success("Trainer Added Successfully")
       };
   return (
     <div>
@@ -132,11 +134,12 @@ const AddTrainer = () => {
                 />
               </div>
               <button
-                className="bg-blue-500 text-white px-4 py-2 rounded-lg"
-                type="submit"
-              >
-                Save Trainer
-              </button>
+        className="text-primary bg-white hover:bg-primary hover:text-white border border-primary px-4 py-2 rounded-lg"
+        type="submit"
+
+      >
+        Add Trainer
+      </button>
             </form>
           </div>
   )

@@ -29,7 +29,7 @@ const getCourse = async (req, res) => {
     }
 
   
-    const courses = await Course.find(filter).populate("category").populate("modules").populate("trainers"); 
+    const courses = await Course.find(filter).populate("category").populate("modules").populate("trainers").populate("enrolled_people"); 
     res.status(200).json(courses); 
   } catch (err) {
     res.status(500).json({ error: err.message }); 
@@ -54,20 +54,26 @@ const getIndividualCourse = async (req, res) => {
 const addCourse = async (req, res) => {
   try {
     const { name, description, duration,rating, trainers, category,modules } = req.body;
-    console.log("body",req.body)
+
 
     if (!name || !category) {
       return res.status(400).json({ message: "Name and category are required." });
     }
     let bannerUrl = "";
+   
     if (req.file) {
       const result = await cloudinary.uploader.upload(req.file.path, {
         folder: "course_banners",
       });
       bannerUrl = result.secure_url;
     }
-     bannerUrl="https://res.cloudinary.com/dxlctvoff/image/upload/v1728917833/bida0uuahwfgihduomx1.png"
-    const newCourse = new Course({
+
+
+    
+   
+
+
+     const newCourse = new Course({
       name,
       description,
       duration,
@@ -80,9 +86,10 @@ const addCourse = async (req, res) => {
 
     await newCourse.save();
 
-    res.status(201).json(newCourse);
+    res.status(201).json(savedCourses);
+    // res.status(201).json("response");
   } catch (error) {
-    console.log(error,"error inside add course")
+
     res.status(500).json({ error: error.message });
   }
 };

@@ -103,6 +103,7 @@ const TrainerCard = ({ trainers }) => {
         onConfirm={handleConfirmPayment} 
       />
     </div>
+    
   );
 };
 

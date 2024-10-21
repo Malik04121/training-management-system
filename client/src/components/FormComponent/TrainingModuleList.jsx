@@ -11,9 +11,9 @@ const TrainingModuleList = () => {
     const moduleErrorMessage=useSelector(moduleError)
     const moduleList=useSelector(moduleData)
     const dispatch=useDispatch()
-console.log(moduleList,"moduleList")
+
     const deleteModuleHandler=(id)=>{
-      console.log(id,"id")
+
        dispatch(deleteCourseModule(id))
        dispatch(deleteModule(id))
     }

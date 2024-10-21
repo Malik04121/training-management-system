@@ -30,7 +30,7 @@ export const fetchFillterCourse = createAsyncThunk(
       if (search) {
         params.append('search', search);
       }
-console.log(params.toString(),"params")
+
       const url = `http://localhost:8500/api/course?${params.toString()}`; // Build the URL with query parameters
       const res = await axios.get(url);
 
@@ -89,7 +89,7 @@ export const deleteCourse=createAsyncThunk(
         `http://localhost:8500/api/course/${id}`,
         { withCredentials: true } 
       );
-    console.log(res,"res in delte thunk ")
+
       return res.message;
     } catch (error) {
 

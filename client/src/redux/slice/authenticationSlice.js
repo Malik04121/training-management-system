@@ -10,10 +10,10 @@ export const registerUser = createAsyncThunk(
         "http://localhost:8500/api/users/signup",
         userData
       );
-      console.log(response,"response")
+
       return response.data;
     } catch (error) {
-      console.log(error,"error");
+
       if (error.response && error.response.status === 400) {
         return rejectWithValue(error.response.data.message);
       } else {
@@ -33,7 +33,7 @@ export const loginUser = createAsyncThunk(
         userData,
         { withCredentials: true }
       );
-      console.log(response.data,"datea ")
+
       const { role, name } = response.data.user;
 
 
@@ -43,7 +43,7 @@ export const loginUser = createAsyncThunk(
       return response.data;
     } catch (error) {
       if (error.response && error.response.status === 401) {
-        console.log(error,"error inside if ")
+
         return rejectWithValue(error.response.data.message);
       } else {
         return rejectWithValue("An unexpected error occurred. Please try again.");
@@ -79,7 +79,7 @@ export const fetchUsersByRole = createAsyncThunk(
   async (role, { rejectWithValue }) => {
     try {
       const response = await axios.get(`http://localhost:8500/api/users?role=${role}`);
-      console.log(response,"response from user",role)
+
       return {data:response.data,role};
     } catch (error) {
       if (error.response && error.response.data.message) {
@@ -97,8 +97,8 @@ export const verifyToken = createAsyncThunk(
         withCredentials: true,
       });
 
-      console.log(response.data,"data inside verify token");
-      console.log(response.data.user)
+
+
       // const { role, name } = response.data.user;
 
 
@@ -108,7 +108,7 @@ export const verifyToken = createAsyncThunk(
       return response.data;
     } catch (error) {
       if (error.response && error.response.status === 400) {
-        console.log(error,"error inside if ")
+
         return rejectWithValue(error.response.data.message);
       } else {
         return rejectWithValue("An unexpected error occurred. Please try again.");
@@ -122,7 +122,7 @@ export const logoutUser = createAsyncThunk(
   async () => {
     try {
       const response = await axios.get(`http://localhost:8500/api/users/logout`, { withCredentials: true });
-      console.log(response,"response")
+
       localStorage.removeItem("isLogin")
       localStorage.removeItem("username")
       localStorage.removeItem("role")
@@ -138,12 +138,12 @@ export const addCourseToUser = createAsyncThunk(
   'user/addCourse',
   async ({ userId, courseId, trainerId }, { rejectWithValue }) => {
     try {
-      console.log(userId,courseId,trainerId,"id")
+
       const response = await axios.patch(`http://localhost:8500/api/users/${userId}/courses`, { courseId, trainerId }, { withCredentials: true });
-      console.log(response,"response")
+
       return response.data;
     } catch (error) {
-      console.log(error,"error")
+
       return rejectWithValue(error.response.data);
     }
   }
@@ -156,7 +156,7 @@ export const fetchUserDetails = createAsyncThunk(
       const response = await axios.get("http://localhost:8500/api/users/loginUserData", {
         withCredentials: true,
       });
-      console.log(response.data,"inside fetchuser")
+
       return response.data;
     } catch (error) {
       return rejectWithValue("Failed to fetch user details.");
@@ -213,7 +213,7 @@ const userSlice = createSlice({
     });
     builder.addCase(loginUser.rejected, (state, action) => {
       state.loading = false;
-      console.log(action.payload,"payload error")
+
       state.error = action.payload; 
     });
 
@@ -245,7 +245,7 @@ const userSlice = createSlice({
       else{
         state.userList = action.payload.data;
       }
-      console.log(action.payload.role,"payload");
+
     });
     builder.addCase(fetchUsersByRole.rejected, (state, action) => {
       state.loading = false;
@@ -260,7 +260,7 @@ const userSlice = createSlice({
     });
     builder.addCase(verifyToken.fulfilled, (state, action) => {
       state.loading = false;
-      console.log(action.payload.data.user,"payload")
+
       state.user = action.payload.data.user;
     });
     builder.addCase(verifyToken.rejected, (state, action) => {

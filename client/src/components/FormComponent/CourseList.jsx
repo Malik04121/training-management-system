@@ -10,7 +10,7 @@ const CourseList = () => {
   const dispatch = useDispatch();
 
   const deleteCourseHandler = (id) => {
-    console.log(id, "id");
+
     dispatch(deleteCourse(id));
     dispatch(deleteSingleCourse(id));
   };

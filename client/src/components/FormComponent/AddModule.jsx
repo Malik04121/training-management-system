@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { addModule } from '../../redux/slice/moduleSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { categoryData, errorMessage, loadingStatus } from '../../redux/slice/categoriesSlice';
+import { toast } from 'react-toastify';
 
 const AddModule = () => {
     const categories = useSelector(categoryData);
@@ -44,6 +45,7 @@ const AddModule = () => {
       const addModuleData=(e)=>{
         e.preventDefault()
         dispatch(addModule(moduleData))
+        toast.success("Module Added Successfully")
       }
   return (
     <div>

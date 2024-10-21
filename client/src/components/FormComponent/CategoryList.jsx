@@ -8,10 +8,10 @@ const CategoryList = () => {
   const categoryError=useSelector(errorMessage)
   const categoryLoading=useSelector(loadingStatus)
   const dispatch=useDispatch()
-  console.log(categories,"categories")
+
 
   const deleteCategoryHandler=(id)=>{
-    console.log(id,"id")
+
      dispatch(deleteCategory(id))
      dispatch(deleteSingleCategory(id))
   }

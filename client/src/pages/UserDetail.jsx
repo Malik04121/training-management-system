@@ -2,11 +2,13 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserDetails, singleUser } from '../redux/slice/authenticationSlice';
 import { clearState } from '../redux/slice/courseSlice';
+import { Link } from 'react-router-dom';
+import convertDate from '../utills/DateConversion';
 
 const UserProfile = () => {
     const dispatch = useDispatch();
     const user = useSelector(singleUser);
-    console.log(user,"user")
+
 
     useEffect(() => {
         dispatch(fetchUserDetails()); 
@@ -37,7 +39,7 @@ const UserProfile = () => {
                 </div>
                 <div className="mt-4">
                     <p className="font-semibold">Joined On:</p>
-                    <p className="text-gray-600">January 1, 2023</p>
+                    <p className="text-gray-600">{convertDate(user.createdAt)}</p>
                 </div>
             </div>
 
@@ -48,12 +50,17 @@ const UserProfile = () => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                     {user.courses.length > 0 ? (
                         user.courses.map((course, index) => (
+                            // console.log(course.courseId._id,"course")
+                            
+                            <Link to={`/course/${course.courseId._id}`}>
+
                             <div key={index} className="border rounded-lg shadow-sm p-4 bg-gray-50">
                                 <img src={course.courseId.bannerUrl} alt={course.courseId.name} className="rounded-lg w-full h-32 object-cover mb-2" />
                                 <h4 className="text-lg font-semibold">{course.courseId.name}</h4>
                                 <p className="text-gray-500">Duration: {course.courseId.duration} minutes</p>
                                 <p className="text-gray-500">Course Price: ₹ {course.trainerId.averagePricePerHour}</p>
                             </div>
+                            </Link>
                         ))
                     ) : (
                         <p>No courses enrolled yet.</p>

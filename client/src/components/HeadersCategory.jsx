@@ -7,11 +7,9 @@ import { fetchCourse } from "../redux/slice/courseSlice";
 
 const Categories = ({ setSelectedCategory }) => {
     const categories = useSelector(categoryData);
-    console.log(categories,"categories")
     const dispatch = useDispatch();
     const loading = useSelector(loadingStatus); 
     const [selectedCategoryId, setSelectedCategoryId] = useState(null); 
-    const [showCategories, setShowCategories] = useState(false);
 
     useEffect(() => {
         dispatch(fetchCategory());
@@ -22,18 +20,27 @@ const Categories = ({ setSelectedCategory }) => {
         dispatch(fetchCourse(category._id)); 
         setSelectedCategoryId(category._id);
     };
-    const toggleCategories = () => {
-        dispatch(fetchCourse())
-        // setShowCategories((prev) => !prev); 
+
+    const filterPopularCourses = () => {
+        setSelectedCategory(null);  // This will show all categories
+        dispatch(fetchCourse());
     };
 
     return (
         <div className="sticky top-20 py-8 basis-[20%]  bg-white px-5 rounded-md ">
 
             <div className="space-y-3 ">
-            <div 
-                    className="text-xl font-bold mb-4 cursor-pointer"
-                    onClick={toggleCategories}
+                {/* "Most Popular" Button */}
+                
+
+                {/* All Categories */}
+                <div 
+                    className={`px-4 py-2  mb-4 cursor-pointer ${!selectedCategoryId ? 'bg-orange-500 text-white' : 'text-darkGrey'}`}
+                    onClick={() => {
+                        setSelectedCategory(null); 
+                        dispatch(fetchCourse());
+                        setSelectedCategoryId(null); 
+                    }}
                 >
                     All Categories
                 </div>

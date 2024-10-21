@@ -49,7 +49,7 @@ const Header = () => {
   };
 
   const handleCategorySelect = (categoryId) => {
-    console.log(categoryId,"categro")
+
     dispatch(fetchCourse(categoryId));
     setShowCategories(false); 
     navigate(`/courses`); 

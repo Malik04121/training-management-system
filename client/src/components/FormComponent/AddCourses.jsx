@@ -1,34 +1,35 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  fetchUsersByRole,
+  userLists,
+  selectLoading,
+  selectError,
+  trainerLists,
+} from "../../redux/slice/authenticationSlice";
+import {
   categoryData,
   errorMessage,
   loadingStatus,
 } from "../../redux/slice/categoriesSlice";
-import {
-  fetchUsersByRole,
-  selectError,
-  selectLoading,
-  userLists,
-} from "../../redux/slice/authenticationSlice";
 import { moduleData, moduleError, moduleLoading } from "../../redux/slice/moduleSlice";
-import { addCourse, courseData } from "../../redux/slice/courseSlice";
+import { addCourse } from "../../redux/slice/courseSlice";
+import { toast } from "react-toastify";
 
 const AddCourses = () => {
   const categories = useSelector(categoryData);
-  const trainerList = useSelector(userLists);
+  const trainerList = useSelector(trainerLists); 
+  console.log(trainerList,"trainerList");
   const trainerLoading = useSelector(selectLoading);
-  const moduleLoader = useSelector(moduleLoading);
-  const moduleErrorMessage = useSelector(moduleError);
-  //todo:
   const trainerError = useSelector(selectError);
   const moduleList = useSelector(moduleData);
+  const moduleLoader = useSelector(moduleLoading);
+  const moduleErrorMessage = useSelector(moduleError);
   const dispatch = useDispatch();
   const categoryError = useSelector(errorMessage);
   const categoryLoading = useSelector(loadingStatus);
+  const [module, setModule] = useState(moduleList);
 
-  const [module,setModule]=useState(moduleList)
-  
   const [courseDetail, setCourseDetail] = useState({
     name: "",
     description: "",
@@ -36,67 +37,65 @@ const AddCourses = () => {
     trainers: [],
     category: "",
     modules: [],
-    banner:null
+    banner: null,
   });
-  useEffect(async()=>{
-     await dispatch(fetchUsersByRole("Trainer"))
-     console.log(trainerList,"trainerlist");
-  },[dispatch])
-console.log(trainerList,"trainerList")
+
+  // Fetch trainers and other related data
+  useEffect(() => {
+    dispatch(fetchUsersByRole("Trainer")); 
+  }, [dispatch]);
+
   const handleCourseChange = (e) => {
     const { name, value } = e.target;
+    let values = value;
 
-    let values=e.target.value
-    if (name === "trainers") {
-        const options = [...e.target.selectedOptions];
-         values = options.map(option => option.value);
-    } 
-    if(name==="modules"){
-        const options=[...e.target.selectedOptions]
-        values = options.map(option => option.value);
-        
-    }
-    if(name==="category"){
-       console.log(value,"value",moduleList)
-      const filteredList=moduleList.filter((ele)=>ele.category._id==e.target.value)
-
-      setModule(filteredList)
+    if (name === "trainers" || name === "modules") {
+      const options = [...e.target.selectedOptions];
+      values = options.map(option => option.value);
     }
 
-      setCourseDetail((prevState) => ({
-        ...prevState,
-        [name]: values,
-      }));
-    
-  };
-  const handleBannerChange = (e) => {
-    const file = e.target.files[0];
-    setCourseDetail((prevState) => ({
+    if (name === "category") {
+      const filteredModules = moduleList.filter(module => module.category._id === value);
+      setModule(filteredModules);
+    }
+
+    setCourseDetail(prevState => ({
       ...prevState,
-      banner: file, 
+      [name]: values,
     }));
   };
+
+  const handleBannerChange = (e) => {
+    const file = e.target.files[0];
+    setCourseDetail(prevState => ({
+      ...prevState,
+      banner: file,
+    }));
+  };
+
   const handleCourse = (e) => {
     e.preventDefault();
 
     const formData = new FormData();
-  formData.append("name", courseDetail.name);
-  formData.append("description", courseDetail.description);
-  formData.append("duration", courseDetail.duration);
-  formData.append("category", courseDetail.category);
+    formData.append("name", courseDetail.name);
+    formData.append("description", courseDetail.description);
+    formData.append("duration", courseDetail.duration);
+    formData.append("category", courseDetail.category);
 
-  courseDetail.trainers.forEach((trainer) => {
-    formData.append("trainers[]", trainer); 
-  });
-  courseDetail.modules.forEach((module) => {
-    formData.append("modules[]", module); 
-  });
- 
-  if (courseDetail.banner) {
-    formData.append("banner", courseDetail.banner); 
-  }
+    courseDetail.trainers.forEach(trainer => {
+      formData.append("trainers[]", trainer);
+    });
 
-    dispatch(addCourse(formData))
+    courseDetail.modules.forEach(module => {
+      formData.append("modules[]", module);
+    });
+
+    if (courseDetail.banner) {
+      formData.append("banner", courseDetail.banner);
+    }
+
+    dispatch(addCourse(formData));
+    toast.success("Course Added Successfully");
   };
 
   return (
@@ -144,7 +143,6 @@ console.log(trainerList,"trainerList")
           <label className="block text-gray-700">Select Trainer</label>
           <select
             className="w-full px-4 py-2 border rounded-lg"
-            // defaultValue={["john"]}
             onChange={handleCourseChange}
             name="trainers"
             required
@@ -152,11 +150,13 @@ console.log(trainerList,"trainerList")
           >
             {trainerLoading && <p>Loading...</p>}
             {trainerError && <p className="text-red-500">{trainerError}</p>}
-            {trainerList?.map((trainer) => (
-              <option key={trainer._id} value={trainer._id}>
-                {trainer.name}
-              </option>
-            ))}
+            {trainerList
+              ?.filter(trainer => trainer.role === "Trainer") // Filter the users by the "Trainer" role in case the state contains both roles
+              .map(trainer => (
+                <option key={trainer._id} value={trainer._id}>
+                  {trainer.name}
+                </option>
+              ))}
           </select>
         </div>
         <div>
@@ -171,7 +171,7 @@ console.log(trainerList,"trainerList")
             <option value="">Select a category</option>
             {categoryLoading && <p>Loading...</p>}
             {categoryError && <p className="text-red-500">{categoryError}</p>}
-            {categories?.map((category) => (
+            {categories?.map(category => (
               <option key={category._id} value={category._id}>
                 {category.name}
               </option>
@@ -182,7 +182,6 @@ console.log(trainerList,"trainerList")
           <label className="block text-gray-700">Select Training Module</label>
           <select
             className="w-full px-4 py-2 border rounded-lg"
-            // defaultValue={["john"]}
             onChange={handleCourseChange}
             name="modules"
             required
@@ -190,7 +189,7 @@ console.log(trainerList,"trainerList")
           >
             {moduleLoader && <p>Loading...</p>}
             {moduleErrorMessage && <p className="text-red-500">{moduleErrorMessage}</p>}
-            {module?.map((module) => (
+            {module?.map(module => (
               <option key={module._id} value={module._id}>
                 {module.name}
               </option>
@@ -206,11 +205,12 @@ console.log(trainerList,"trainerList")
           />
         </div>
         <button
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg"
-          type="submit"
-        >
-          Save Category
-        </button>
+        className="text-primary bg-white hover:bg-primary hover:text-white border border-primary px-4 py-2 rounded-lg"
+        type="submit"
+
+      >
+        Add Course
+      </button>
       </form>
     </div>
   );

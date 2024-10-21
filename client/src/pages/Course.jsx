@@ -40,7 +40,7 @@ const Course = () => {
               </div>
               
               <button className="bg-primary p-2 w-full mt-3 text-white hover:bg-orange-600">
-                <Link to={`trainer/${course._id}`}>
+                <Link to={`/trainer/${course._id}`}>
                   View Detail of Course
                 </Link>
               </button>
