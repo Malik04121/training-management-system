@@ -66,6 +66,7 @@ const addCourse = async (req, res) => {
       });
       bannerUrl = result.secure_url;
     }
+     bannerUrl="https://res.cloudinary.com/dxlctvoff/image/upload/v1728917833/bida0uuahwfgihduomx1.png"
     const newCourse = new Course({
       name,
       description,

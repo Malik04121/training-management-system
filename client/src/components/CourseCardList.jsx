@@ -2,9 +2,9 @@
 
 
 
-import React from "react";
-import { useSelector } from "react-redux";
-import { courseData, loadingStatus } from "../redux/slice/courseSlice";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { courseData, fetchCourse, loadingStatus } from "../redux/slice/courseSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { trimText } from "../utills/textTrim";
 import { toast } from "react-toastify";
@@ -16,6 +16,7 @@ const CourseCard = ({ selectedCategory }) => {
     const loading = useSelector(loadingStatus);
     const role = localStorage.getItem("role");
     const navigate = useNavigate();
+    const dispatch=useDispatch()
 
     const submitHandler = (id) => {
         if (role && (role === "User" || role === "Admin")) {
@@ -24,6 +25,9 @@ const CourseCard = ({ selectedCategory }) => {
             toast.error("Access denied: Please log in as a User or Admin to proceed.");
         }
     };
+    useEffect(()=>{
+ dispatch(fetchCourse())
+    },[dispatch])
 
     const filteredCourses = selectedCategory
         ? courses.filter(course => course.category._id === selectedCategory._id)
@@ -33,10 +37,10 @@ const CourseCard = ({ selectedCategory }) => {
         <div className="flex flex-col justify-between item-center gap-10">
             <div className=" basis-[80%]  grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-6 items-center">
                 {loading ? (
-                    Array.from({ length: 3 }, (_, index) => <CourseCardSkeleton key={index} />) // Show skeleton loaders
+                    Array.from({ length: 3 }, (_, index) => <CourseCardSkeleton key={index} />) 
                 ) : (
                     <>
-                        {filteredCourses.slice(0, 6).map((course, index) => (
+                        {filteredCourses.map((course, index) => (
                             <div
                                 key={index}
                                 className="p-4 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-200  bg-white cursor-pointer group h-[400px]"

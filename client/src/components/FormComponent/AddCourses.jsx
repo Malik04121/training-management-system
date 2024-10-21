@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   categoryData,
@@ -6,6 +6,7 @@ import {
   loadingStatus,
 } from "../../redux/slice/categoriesSlice";
 import {
+  fetchUsersByRole,
   selectError,
   selectLoading,
   userLists,
@@ -27,6 +28,7 @@ const AddCourses = () => {
   const categoryLoading = useSelector(loadingStatus);
 
   const [module,setModule]=useState(moduleList)
+  
   const [courseDetail, setCourseDetail] = useState({
     name: "",
     description: "",
@@ -36,7 +38,11 @@ const AddCourses = () => {
     modules: [],
     banner:null
   });
-
+  useEffect(async()=>{
+     await dispatch(fetchUsersByRole("Trainer"))
+     console.log(trainerList,"trainerlist");
+  },[dispatch])
+console.log(trainerList,"trainerList")
   const handleCourseChange = (e) => {
     const { name, value } = e.target;
 
@@ -44,19 +50,15 @@ const AddCourses = () => {
     if (name === "trainers") {
         const options = [...e.target.selectedOptions];
          values = options.map(option => option.value);
-
-         
     } 
     if(name==="modules"){
         const options=[...e.target.selectedOptions]
         values = options.map(option => option.value);
-
-        
         
     }
     if(name==="category"){
-
-      const filteredList=moduleList.filter((ele)=>ele.category==e.target.value)
+       console.log(value,"value",moduleList)
+      const filteredList=moduleList.filter((ele)=>ele.category._id==e.target.value)
 
       setModule(filteredList)
     }

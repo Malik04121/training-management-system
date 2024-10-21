@@ -40,13 +40,11 @@ beforeEach(async () => {
           password: "password123",
           role: "User",
         });
-console.log("Response",res.body);
 
       expect(res.statusCode).toBe(201);
       expect(res.body).toHaveProperty("message", "User created successfully");
 
       const userInDb = await User.findOne({ email: "testuser@example.com" });
-      console.log("User in DB:", userInDb);
       expect(userInDb).not.toBeNull();
       expect(userInDb.name).toBe("Test User");
 
