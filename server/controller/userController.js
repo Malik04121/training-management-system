@@ -132,8 +132,9 @@ const getUsers = async (req, res) => {
             return res.status(400).json({ message: "Role parameter is required" });
         }
 
-        // Find users based on role
-        const users = await User.find({ role }).select('-password');  // Exclude password from the results
+
+        const users = await User.find({ role }).select('-password').populate("courses.courseId").populate("courses.trainerId"); 
+
 
         if (!users.length) {
             return res.status(404).json({ message: `No ${role}s found` });
@@ -157,7 +158,15 @@ const loginUserDetail = async (req, res) => {
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
-        res.status(200).json({ message: 'Login User Detail Fetched Successfully', data: user });
+        const filteredCourses = user.courses.filter(course => course.courseId !== null);
+
+        // Replace the user's courses with the filtered ones
+        const userWithFilteredCourses = {
+            ...user.toObject(),
+            courses: filteredCourses,
+        };
+
+        res.status(200).json({ message: 'Login User Detail Fetched Successfully', data: userWithFilteredCourses });
     } catch (error) {
 
         if (error.name === 'JsonWebTokenError') {

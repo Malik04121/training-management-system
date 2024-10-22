@@ -8,7 +8,7 @@ import convertDate from '../utills/DateConversion';
 const UserProfile = () => {
     const dispatch = useDispatch();
     const user = useSelector(singleUser);
-
+    console.log(user,"user")
 
     useEffect(() => {
         dispatch(fetchUserDetails()); 
@@ -19,10 +19,12 @@ const UserProfile = () => {
     }
 //todo : for trainer show list of courses and trainer details course detail with user enrolled course analysis course review
     // Calculate total spend
-    const totalSpend = user?.courses.reduce((total, course) => {
-        return total + course.trainerId.averagePricePerHour;
-    }, 0);
-
+    const totalSpend = user?.courses?.length > 0 
+    ? user.courses.reduce((total, course) => {
+        return total + (course.trainerId?.averagePricePerHour || 0); // Use a default value of 0 if averagePricePerHour is not available
+    }, 0)
+    : 0;
+console.log(totalSpend,"totalSpend",user.name,"username",user.email,"email")
     return (
         <div className="flex bg-gray-200 p-6">
             {/* Left Side: User Profile */}
@@ -48,11 +50,11 @@ const UserProfile = () => {
                 <h3 className="text-lg font-bold text-orange-600 mb-4">Enrolled Courses</h3>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                    {user.courses.length > 0 ? (
+                    {/* {user.courses.length > 0 ? (
                         user.courses.map((course, index) => (
                             // console.log(course.courseId._id,"course")
                             
-                            <Link to={`/course/${course.courseId._id}`}>
+                            // <Link to={`/course/${course.courseId._id}`}>
 
                             <div key={index} className="border rounded-lg shadow-sm p-4 bg-gray-50">
                                 <img src={course.courseId.bannerUrl} alt={course.courseId.name} className="rounded-lg w-full h-32 object-cover mb-2" />
@@ -60,11 +62,29 @@ const UserProfile = () => {
                                 <p className="text-gray-500">Duration: {course.courseId.duration} minutes</p>
                                 <p className="text-gray-500">Course Price: ₹ {course.trainerId.averagePricePerHour}</p>
                             </div>
-                            </Link>
+                            // </Link>
                         ))
                     ) : (
                         <p>No courses enrolled yet.</p>
-                    )}
+                    )} */}
+                        {user.courses.length > 0 ? (
+        user.courses.map((course, index) => (
+            course.courseId ? (
+                <div key={index} className="border rounded-lg shadow-sm p-4 bg-gray-50">
+                    <img src={course.courseId.bannerUrl || "https://via.placeholder.com/150"} alt={course.courseId.name} className="rounded-lg w-full h-32 object-cover mb-2" />
+                    <h4 className="text-lg font-semibold">{course.courseId.name}</h4>
+                    <p className="text-gray-500">Duration: {course.courseId.duration} minutes</p>
+                    <p className="text-gray-500">Course Price: ₹ {course.trainerId.averagePricePerHour}</p>
+                </div>
+            ) : (
+                <div key={index} className="border rounded-lg shadow-sm p-4 bg-gray-50">
+                    <p>Course details not available.</p>
+                </div>
+            )
+        ))
+    ) : (
+        <p>No courses enrolled yet.</p>
+    )}
                 </div>
 
                 <h3 className="text-lg font-bold text-orange-600 mb-4 mt-6">Trainers</h3>

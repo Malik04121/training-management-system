@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Banner from "../../assets/logo.png";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { logoutUser, selectError, selectLoading, singleUser, clearUserState } from "../../redux/slice/authenticationSlice";
+import { logoutUser, selectError, selectLoading, singleUser, clearUserState, fetchUserDetails } from "../../redux/slice/authenticationSlice";
 import { categoryData, fetchCategory } from "../../redux/slice/categoriesSlice"; 
 import { FaCaretDown } from "react-icons/fa"; 
 import SearchFunctionality from "../FormComponent/SearchFunctionality";
@@ -40,6 +40,8 @@ const Header = () => {
     if (userRole === "Admin") {
       navigate("/dashboard");
     } else {
+      console.log("fetching user details")
+      // dispatch(fetchUserDetails())
       navigate("/userInfo"); 
     }
   };

@@ -2,12 +2,12 @@ import React from "react";
 
 const CourseCardSkeleton = () => {
     return (
-        <div className="p-4 rounded-lg shadow-lg bg-white animate-pulse">
+        <div className="p-4 rounded-lg shadow-lg bg-white animate-pulse h-[400px]">
             <div className="mb-2 h-32 w-full bg-gray-300 rounded"></div>
             <h2 className="text-lg bg-gray-300 h-6 w-3/4 rounded mb-2"></h2>
             <p className="text-base bg-gray-300 h-4 w-full rounded mb-2"></p>
             <div className="mb-4">
-                <p className="text-sm bg-gray-300 h-4 w-1/2 rounded mb-1"></p>
+                <p className="text-sm bg-gray-300 h-4 w-3/4 rounded mb-1"></p>
                 <p className="bg-gray-300 h-4 w-2/4 rounded"></p>
             </div>
             <hr className="mt-1 bg-gray-300 h-px" />
@@ -24,3 +24,11 @@ const CourseCardSkeleton = () => {
 };
 
 export default CourseCardSkeleton;
+
+
+//todo:fixed above skeleoton
+//todo: add course start date in userInfo page
+//todo: redirect user to course/:id on clicking on course list 
+//todo: fixed logout issue which arise on course/:id page
+//todo:fixe dasborad page issue on first click
+//todo: to run server all the time use setTimout in index.js to print helllo world

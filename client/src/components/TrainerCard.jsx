@@ -48,9 +48,8 @@ const TrainerCard = ({ trainers }) => {
     // Correct way to handle async operations in useEffect
     const fetchData = async () => {
       try {
-        const response = await fetch('/your-api-endpoint');
-        const result = await response.json();
-        setData(result);
+        
+        await dispatch(fetchUserDetails());
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -105,7 +104,7 @@ const TrainerCard = ({ trainers }) => {
         onConfirm={handleConfirmPayment} 
       />
     </div>
-    
+
   );
 };
 
