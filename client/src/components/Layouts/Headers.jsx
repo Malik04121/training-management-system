@@ -32,8 +32,8 @@ const Header = () => {
     await dispatch(logoutUser());
     await dispatch(clearUserState());
     // dispatch(clearState)
-
-    window.location.reload("/login");
+     navigate("/login")
+    // window.location.reload("/login");
   };
 
   const handleUserIconClick = () => {
@@ -49,7 +49,6 @@ const Header = () => {
   };
 
   const handleCategorySelect = (categoryId) => {
-
     dispatch(fetchCourse(categoryId));
     setShowCategories(false); 
     navigate(`/courses`); 
@@ -63,14 +62,11 @@ const Header = () => {
   return (
     <header className="bg-darkGrey shadow-md p-5 sticky top-0 z-50">
       <div className="container mx-auto flex justify-between items-center">
-        {/* Left Side: Logo, Categories, and Search */}
         <div className="flex items-center space-x-4">
-          {/* Logo */}
           <Link to="/">
             <img src={Banner} alt="Logo" className="h-10" />
           </Link>
 
-          {/* Categories Icon */}
           <div className="relative">
             <button 
               onClick={toggleCategories} 
@@ -100,19 +96,16 @@ const Header = () => {
             )}
           </div>
 
-          {/* Search Bar */}
           <div className="flex items-center w-96">
             <SearchFunctionality />
           </div>
         </div>
 
-        {/* Right Side: About Us, User Info, Logout */}
         <div className="flex items-center space-x-4 gap-5">
           <div className="text-white text-xl hover:text-primary">
             <Link to="/about">About Us</Link>
           </div>
 
-          {/* User Information */}
           { login ? (
             <>
              

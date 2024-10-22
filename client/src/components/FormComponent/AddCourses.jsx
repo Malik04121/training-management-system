@@ -127,7 +127,7 @@ const AddCourses = () => {
         </div>
         <div>
           <label className="block text-gray-700">
-            Course Duration (in minutes)
+            Course Duration (in hour)
           </label>
           <input
             type="number"

@@ -1,11 +1,15 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+let baseURL = import.meta.env.VITE_BASE_URL;
+console.log(baseURL,"baseURL")
+
 
 export const fetchCategory = createAsyncThunk(
   "category/fetchCategory",
   async () => {
     try {
-      const res = await axios.get("http://localhost:8500/api/category");
+      const res = await axios.get(`${baseURL}/category`);
+      console.log(res,"res of fetchCategory")
       return res.data;
     } catch (error) {
 
@@ -19,7 +23,7 @@ export const addCategory = createAsyncThunk(
   async (categoryData) => {
     try {
       const res = await axios.post(
-        "http://localhost:8500/api/category/",
+        `${baseURL}/category/`,
         categoryData,
         { withCredentials: true } 
       );
@@ -36,7 +40,7 @@ export const deleteCategory=createAsyncThunk(
   async (id) => {
     try {
       const res = await axios.delete(
-        `http://localhost:8500/api/category/${id}`,
+        `${baseURL}/category/${id}`,
         { withCredentials: true } 
       );
 

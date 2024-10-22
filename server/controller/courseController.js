@@ -55,6 +55,7 @@ const addCourse = async (req, res) => {
   try {
     const { name, description, duration,rating, trainers, category,modules } = req.body;
 
+    console.log(req.body,"body")
 
     if (!name || !category) {
       return res.status(400).json({ message: "Name and category are required." });
@@ -67,11 +68,6 @@ const addCourse = async (req, res) => {
       });
       bannerUrl = result.secure_url;
     }
-
-
-    
-   
-
 
      const newCourse = new Course({
       name,

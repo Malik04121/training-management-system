@@ -1,13 +1,14 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-
+let baseURL = import.meta.env.VITE_BASE_URL;
+console.log(baseURL,"baseURL")
 
 export const registerUser = createAsyncThunk(
   "user/registerUser",
   async (userData, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        "http://localhost:8500/api/users/signup",
+        `${baseURL}/users/signup`,
         userData
       );
 
@@ -29,7 +30,7 @@ export const loginUser = createAsyncThunk(
   async (userData, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        "http://localhost:8500/api/users/login",
+        `${baseURL}/users/login`,
         userData,
         { withCredentials: true }
       );
@@ -58,7 +59,7 @@ export const addTrainer = createAsyncThunk(
   async (trainerData, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        "http://localhost:8500/api/users/addTrainer",
+        `${baseURL}/users/addTrainer`,
         trainerData,
         { withCredentials: true }
       );
@@ -78,7 +79,7 @@ export const fetchUsersByRole = createAsyncThunk(
   "user/fetchUsersByRole",
   async (role, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`http://localhost:8500/api/users?role=${role}`);
+      const response = await axios.get(`${baseURL}/users?role=${role}`);
 
       return {data:response.data,role};
     } catch (error) {
@@ -93,7 +94,7 @@ export const verifyToken = createAsyncThunk(
   "user/verifyToken",
   async (_,{ rejectWithValue }) => {
     try {
-      const response = await axios.get("http://localhost:8500/api/users/verify", {
+      const response = await axios.get(`${baseURL}/users/verify`, {
         withCredentials: true,
       });
 
@@ -121,7 +122,7 @@ export const logoutUser = createAsyncThunk(
   "user/logoutUser",
   async () => {
     try {
-      const response = await axios.get(`http://localhost:8500/api/users/logout`, { withCredentials: true });
+      const response = await axios.get(`${baseURL}/users/logout`, { withCredentials: true });
 
       localStorage.removeItem("isLogin")
       localStorage.removeItem("username")
@@ -139,7 +140,7 @@ export const addCourseToUser = createAsyncThunk(
   async ({ userId, courseId, trainerId }, { rejectWithValue }) => {
     try {
 
-      const response = await axios.patch(`http://localhost:8500/api/users/${userId}/courses`, { courseId, trainerId }, { withCredentials: true });
+      const response = await axios.patch(`${baseURL}/users/${userId}/courses`, { courseId, trainerId }, { withCredentials: true });
 
       return response.data;
     } catch (error) {
@@ -153,12 +154,13 @@ export const fetchUserDetails = createAsyncThunk(
   "user/fetchUserDetails",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("http://localhost:8500/api/users/loginUserData", {
+      const response = await axios.get(`${baseURL}/users/loginUserData`, {
         withCredentials: true,
       });
-
+      // console.log(response,"response")
       return response.data;
     } catch (error) {
+      console.log(error,"error");
       return rejectWithValue("Failed to fetch user details.");
     }
   }

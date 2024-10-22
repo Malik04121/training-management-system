@@ -77,7 +77,7 @@ const CourseCard = ({ selectedCategory }) => {
                                 <hr className="mt-1 font-light text-darkGrey border border-darkGrey" />
                                 <div className="flex justify-between mt-2">
                                     <p>{course.modules.length} Module</p>
-                                    <p>{(course.duration / 60).toFixed(2)} hour</p>
+                                    <p>{(course.duration ).toFixed(2)} hour</p>
                                 </div>
                                 <div className=" mt-3">
 

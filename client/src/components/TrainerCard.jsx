@@ -8,27 +8,10 @@ import Rating from "./Rating";
 import { trimText } from "../utills/textTrim";
 
 const TrainerCard = ({ trainers }) => {
-  // const { id } = useParams(); 
-  // const dispatch = useDispatch();
-  // const user = useSelector(userLists); 
-  // const role=localStorage.getItem("role")
-  // const loginUser = useSelector(singleUser); 
-  // const error=useSelector(selectError)
-
-  // const handleChooseTrainer = async(trainerId) => {
-  //   if (loginUser) {
-  //     dispatch(addCourseToUser({ userId: loginUser.userId, courseId: id, trainerId }))
-       
-  //   } else {
-  //     toast.warn('Please log in to choose a trainer.'); 
-  //   }
-  // };
-  // useEffect(()=>{
-  //   dispatch(fetchUserDetails())
-  // },[dispatch])
+ 
   const { id } = useParams(); 
   const dispatch = useDispatch();
-  const navigate = useNavigate(); // For navigation
+  const navigate = useNavigate(); 
   const loginUser = useSelector(singleUser); 
   const error = useSelector(selectError);
   
@@ -58,9 +41,28 @@ const TrainerCard = ({ trainers }) => {
     }
   };
 
+  // useEffect(async() => {
+  //   await dispatch(fetchUserDetails());
+  // }, [dispatch]);
   useEffect(() => {
-    dispatch(fetchUserDetails());
-  }, [dispatch]);
+    // Correct way to handle async operations in useEffect
+    const fetchData = async () => {
+      try {
+        const response = await fetch('/your-api-endpoint');
+        const result = await response.json();
+        setData(result);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+
+    // Cleanup function
+    return () => {
+      // Any cleanup code here
+    };
+  }, []);
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 p-6  w-full">

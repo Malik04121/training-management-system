@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchSingleCourse, singleCourseData } from '../redux/slice/courseSlice';
+import { fetchSingleCourse, loadingStatus, singleCourseData } from '../redux/slice/courseSlice';
 import TrainerCard from '../components/TrainerCard';
 import { useParams } from 'react-router-dom';
 import { Range, getTrackBackground } from 'react-range';
+import TrainerSkeleton from '../components/Skeleton/TrainerSkeleton';
+import TrainerCardSkeleton from '../components/Skeleton/TrainerCardSkeleton';
 
 const Trainer = () => {
   const dispatch = useDispatch();
   const singleCourse = useSelector(singleCourseData);
+  const loading=useSelector(loadingStatus)
   const { id } = useParams();
 
   const STEP = 1;
@@ -97,7 +100,11 @@ const Trainer = () => {
       </div>
 
       <div className='w-[75%] p-4'>
-        <TrainerCard trainers={filteredTrainers} />
+        {loading ? (
+          <TrainerCardSkeleton />
+        ) : (
+          <TrainerCard trainers={filteredTrainers} />
+        )}
       </div>
     </div>
   );

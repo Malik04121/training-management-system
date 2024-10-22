@@ -1,15 +1,18 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+let baseURL = import.meta.env.VITE_BASE_URL;
+
+console.log(baseURL,"baseURL")
 
 export const fetchCourse = createAsyncThunk(
   "category/fetchCourse",
   async (categoryId) => {
     try {
       const url = categoryId 
-      ? `http://localhost:8500/api/course?categoryId=${categoryId}`
-      : "http://localhost:8500/api/course";
+      ? `${baseURL}/course?categoryId=${categoryId}`
+      : `${baseURL}/course`;
       const res = await axios.get(url);
-
+// console.log(res,"fetchcou/rseData with category")
       
       return res.data;
     } catch (error) {
@@ -31,7 +34,7 @@ export const fetchFillterCourse = createAsyncThunk(
         params.append('search', search);
       }
 
-      const url = `http://localhost:8500/api/course?${params.toString()}`; // Build the URL with query parameters
+      const url = `${baseURL}/course?${params.toString()}`; // Build the URL with query parameters
       const res = await axios.get(url);
 
       return res.data;
@@ -45,12 +48,12 @@ export const fetchSingleCourse = createAsyncThunk(
   "category/fetchSingleCourse",
   async (courseId) => {
     try {
-      const url = `http://localhost:8500/api/course/${courseId}`;
+      const url = `${baseURL}/course/${courseId}`;
       const res = await axios.get(url,{
         withCredentials:true
       });
      
-      
+    console.log(res,"singleCourse ");
       return res.data;
     } catch (error) {
 
@@ -64,7 +67,7 @@ export const addCourse = createAsyncThunk(
   async (courseData) => {
     try {
       const res = await axios.post(
-        "http://localhost:8500/api/course/addCourse",
+        `${baseURL}/course/addCourse`,
         courseData,
         {
           withCredentials: true,
@@ -86,7 +89,7 @@ export const deleteCourse=createAsyncThunk(
   async (id) => {
     try {
       const res = await axios.delete(
-        `http://localhost:8500/api/course/${id}`,
+        `${baseURL}/course/${id}`,
         { withCredentials: true } 
       );
 

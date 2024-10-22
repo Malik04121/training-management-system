@@ -1,11 +1,14 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
+let baseURL = import.meta.env.VITE_BASE_URL;
+
+
 export const fetchModule = createAsyncThunk(
   "module/fetchModule",
   async () => {
     try {
-      const res = await axios.get("http://localhost:8500/api/module");
+      const res = await axios.get(`${baseURL}/module`);
 
       return res.data;
     } catch (error) {
@@ -20,7 +23,7 @@ export const addModule = createAsyncThunk(
   async (moduleData) => {
     try {
       const res = await axios.post(
-        "http://localhost:8500/api/module/addModule",
+        `${baseURL}/module/addModule`,
         moduleData,
         { withCredentials: true } 
       );
@@ -37,7 +40,7 @@ export const deleteCourseModule=createAsyncThunk(
   async (id) => {
     try {
       const res = await axios.delete(
-        `http://localhost:8500/api/module/${id}`,
+        `${baseURL}/module/${id}`,
         { withCredentials: true } 
       );
 

@@ -12,7 +12,7 @@ const Sidebar = ({ setActiveSection }) => {
   };
 
   return (
-    <div className="w-64 h-screen bg-gray-200 shadow-md p-4">
+    <div className="w-64 h-screen overflow-y-auto bg-gray-200 shadow-md p-4">
       <div className="flex items-center mb-10">
         <img
           className="w-12 h-12 rounded-full"

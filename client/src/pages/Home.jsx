@@ -11,16 +11,11 @@ const Home = () => {
   const dispatch = useDispatch();
   const [selectedCategory, setSelectedCategory] = useState(null); 
 
-  useEffect(() => {
-    dispatch(fetchCategory());
-    dispatch(fetchCourse());
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (selectedCategory) {
-      dispatch(fetchCourse(selectedCategory._id)); 
-    }
-  }, [selectedCategory, dispatch]);
+  // useEffect(() => {
+  //   if (selectedCategory) {
+  //     dispatch(fetchCourse(selectedCategory._id)); 
+  //   }
+  // }, [selectedCategory]);
 
   return (
     <>
