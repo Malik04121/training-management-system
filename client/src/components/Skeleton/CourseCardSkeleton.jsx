@@ -26,9 +26,9 @@ const CourseCardSkeleton = () => {
 export default CourseCardSkeleton;
 
 
-//todo:fixed above skeleoton
-//todo: add course start date in userInfo page
 //todo: redirect user to course/:id on clicking on course list 
 //todo: fixed logout issue which arise on course/:id page
 //todo:fixe dasborad page issue on first click
 //todo: to run server all the time use setTimout in index.js to print helllo world
+//todo: add course start date in userInfo page
+//todo:fixed above skeleoton

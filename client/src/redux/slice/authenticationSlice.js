@@ -157,7 +157,7 @@ export const fetchUserDetails = createAsyncThunk(
       const response = await axios.get(`${baseURL}/users/loginUserData`, {
         withCredentials: true,
       });
-      // console.log(response,"response")
+      console.log(response,"response")
       return response.data;
     } catch (error) {
       console.log(error,"error");
@@ -170,7 +170,7 @@ export const fetchUserDetails = createAsyncThunk(
 const userSlice = createSlice({
   name: "user",
   initialState: {
-    user: null,
+    user: {},
     userList: [],
     trainerList:[],
     userName:localStorage.getItem("username")||"",
@@ -288,6 +288,7 @@ const userSlice = createSlice({
 
     builder.addCase(addCourseToUser.pending, (state) => {
       state.loading = true;
+      
       state.error = null;
     });
     builder.addCase(addCourseToUser.fulfilled, (state, action) => {
@@ -306,6 +307,7 @@ const userSlice = createSlice({
     });
     
     builder.addCase(fetchUserDetails.fulfilled, (state, action) => {
+      
       state.loading = false;
       state.user = action.payload.data; 
     });

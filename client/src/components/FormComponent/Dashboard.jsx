@@ -85,7 +85,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchUsersByRole, trainerLists, userLists } from '../../redux/slice/authenticationSlice';
 import { categoryData, fetchCategory } from '../../redux/slice/categoriesSlice';
 
-// Import and register the required Chart.js components
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -94,19 +93,18 @@ import {
   Title,
   Tooltip,
   Legend,
-  ArcElement, // Import ArcElement for Pie charts
+  ArcElement,
 } from 'chart.js';
 import { Bar, Pie } from 'react-chartjs-2';
 import { FaChalkboardTeacher, FaDollarSign, FaUser, FaWallet } from 'react-icons/fa';
 
-// Register the necessary Chart.js components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 
 const Dashboard = () => {
   const users = useSelector(userLists);
   const trainers = useSelector(trainerLists);
   
-  const categories = useSelector(categoryData); // Correct reference here
+  const categories = useSelector(categoryData); 
   const dispatch = useDispatch();
   const [totalRevenue, setTotalRevenue] = useState(0);
   const [trainerEarnings, setTrainerEarnings] = useState({});
@@ -121,11 +119,10 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (users.length > 0 && trainers.length > 0 && categories.length > 0) {
-      calculateMetrics(); // Call only when data is available
+      calculateMetrics();
     }
   }, [users, trainers, categories]);
 
-  // Calculate total revenue, trainer earnings, user spending, and category distribution
   const calculateMetrics = () => {
     let total = 0;
     const trainerEarningMap = {};
@@ -139,16 +136,15 @@ const Dashboard = () => {
           const trainerId = course.trainerId._id;
           const courseCost = course.trainerId.averagePricePerHour;
 
-          // Add to total revenue
           total += courseCost;
 
-          // Add to trainer's earnings
+        
           trainerEarningMap[trainerId] = (trainerEarningMap[trainerId] || 0) + courseCost;
 
-          // Add to user spending
+         
           userTotal += courseCost;
 
-          // Track category distribution based on courses
+      
           if (course.courseId && course.courseId.category) {
             const categoryId = course.courseId.category;
             categoryMap[categoryId] = (categoryMap[categoryId] || 0) + 1;
@@ -158,14 +154,14 @@ const Dashboard = () => {
       userSpendingMap[user._id] = userTotal;
     });
 
-    // Update state only if values have changed
+    
     if (total !== totalRevenue) setTotalRevenue(total);
     if (JSON.stringify(trainerEarnings) !== JSON.stringify(trainerEarningMap)) setTrainerEarnings(trainerEarningMap);
     if (JSON.stringify(userSpending) !== JSON.stringify(userSpendingMap)) setUserSpending(userSpendingMap);
     if (JSON.stringify(categoryDistribution) !== JSON.stringify(categoryMap)) setCategoryDistribution(categoryMap);
   };
 
-  // Prepare data for the trainer earnings graph
+  
   const trainerEarningsData = {
     labels: Object.keys(trainerEarnings).map(trainerId => {
       const trainer = trainers.find(t => t._id === trainerId);
@@ -180,7 +176,7 @@ const Dashboard = () => {
     ],
   };
 
-  // Prepare data for user spending pie chart
+  
   const userSpendingData = {
     labels: Object.keys(userSpending).map(userId => {
       const user = users.find(u => u._id === userId);
@@ -195,7 +191,7 @@ const Dashboard = () => {
     ],
   };
 
-  // Prepare data for category distribution pie chart
+  
   const categoryDataForChart = {
     labels: Object.keys(categoryDistribution).map(categoryId => {
       const category = categories.find(c => c._id === categoryId);
@@ -235,21 +231,21 @@ const Dashboard = () => {
         ))}
       </div>
     
-      {/* Charts Section */}
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-        {/* User Spending Pie Chart */}
+       
         <div className="bg-white p-6 shadow-lg rounded-lg">
           <h2 className="text-lg font-bold mb-4">User Spending Distribution</h2>
           <Pie data={userSpendingData} />
         </div>
 
-        {/* Trainer Earnings Bar Chart */}
+        
         <div className="bg-white p-6 shadow-lg rounded-lg">
           <h2 className="text-lg font-bold mb-4">Trainer Earnings</h2>
           <Bar data={trainerEarningsData} />
         </div>
 
-        {/* Category Distribution Pie Chart */}
+
         <div className="bg-white p-6 shadow-lg rounded-lg">
           <h2 className="text-lg font-bold mb-4">Category Distribution</h2>
           <Pie data={categoryDataForChart} />

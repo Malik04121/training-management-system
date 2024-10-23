@@ -45,7 +45,6 @@ const TrainerCard = ({ trainers }) => {
   //   await dispatch(fetchUserDetails());
   // }, [dispatch]);
   useEffect(() => {
-    // Correct way to handle async operations in useEffect
     const fetchData = async () => {
       try {
         
@@ -57,9 +56,8 @@ const TrainerCard = ({ trainers }) => {
 
     fetchData();
 
-    // Cleanup function
     return () => {
-      // Any cleanup code here
+    
     };
   }, []);
 

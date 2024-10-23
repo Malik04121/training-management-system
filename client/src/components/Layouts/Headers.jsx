@@ -28,12 +28,24 @@ const Header = () => {
     dispatch(fetchCategory()); 
   }, [dispatch]);
 
+  // const handleLogout = async () => {
+  //   await dispatch(logoutUser());
+  //   await dispatch(clearUserState());
+  //   // dispatch(clearState)
+  //    navigate("/login")
+    
+  // };
+
+  // useEffect(() => {
+  //   if (!login) {
+  //     navigate("/login");
+  //   }
+  // }, [login, navigate]);
+
   const handleLogout = async () => {
-    await dispatch(logoutUser());
-    await dispatch(clearUserState());
-    // dispatch(clearState)
-     navigate("/login")
-    // window.location.reload("/login");
+     dispatch(logoutUser());
+     dispatch(clearUserState());
+    navigate("/login"); 
   };
 
   const handleUserIconClick = () => {

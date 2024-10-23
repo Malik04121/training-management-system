@@ -38,7 +38,7 @@ const Login = () => {
       await dispatch(loginUser(formData)).unwrap();
       localStorage.setItem("isLogin", true);
       toast.success("Login successful! Welcome back!")
-      // await dispatch(fetchUserDetails())
+       dispatch(fetchUserDetails())
       navigate("/"); 
     } catch (error) {
       toast.error(error)

@@ -27,4 +27,14 @@ if (process.env.NODE_ENV !== 'test') {
   start();
 }
 
+const hotStartServer = () => {
+  const startServer = setTimeout(() => {
+    // console.log("Server started!");
+  }, 5000); 
+
+  return startServer;
+};
+
+hotStartServer();
+
 module.exports = {  start }; 

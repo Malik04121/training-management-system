@@ -13,6 +13,7 @@ const SearchFunctionality = () => {
 
   const searchCourse=async()=>{
     await dispatch(fetchFillterCourse({search:searchInput}))
+    setSearchInput("")
     navigate("/courses")  
   }
   return (
@@ -23,6 +24,7 @@ const SearchFunctionality = () => {
                 placeholder="Search For Courses"
                 className="px-4 py-2 rounded-full focus:outline-none  w-full"
                 onChange={(e)=>setSearchInput(e.target.value)}
+                value={searchInput}
               />
               <button className="text-gray-600 hover:text-blue-500" onClick={searchCourse}>
               <MdSearch className="text-4xl text-primary" />

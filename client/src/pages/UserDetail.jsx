@@ -1,33 +1,51 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchUserDetails, singleUser } from '../redux/slice/authenticationSlice';
+import { fetchUserDetails, selectLoading, singleUser } from '../redux/slice/authenticationSlice';
 import { clearState } from '../redux/slice/courseSlice';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import convertDate from '../utills/DateConversion';
+import UserProfileSkeleton from '../components/Skeleton/UserProfileSkeleton';
 
 const UserProfile = () => {
     const dispatch = useDispatch();
     const user = useSelector(singleUser);
+    const loading = useSelector(selectLoading);
+    const navigate=useNavigate()
     console.log(user,"user")
 
+    const clickHandler=(id)=>{
+        console.log(id,"id")
+        navigate(`/course/${id}`)
+    }
+  
     useEffect(() => {
-        dispatch(fetchUserDetails()); 
-    }, [dispatch]);
+        const fetchData = async () => {
+          try {
+            await dispatch(fetchUserDetails());
+          } catch (error) {
+            console.error('Error fetching data:', error);
+          }
+        };
+    
+        fetchData();
+        return () => {
+        };
+      }, []);
 
-    if (!user) {
-        return <div>Loading...</div>; 
+    if (loading) {
+        return <UserProfileSkeleton/>; 
     }
 //todo : for trainer show list of courses and trainer details course detail with user enrolled course analysis course review
-    // Calculate total spend
+    
     const totalSpend = user?.courses?.length > 0 
     ? user.courses.reduce((total, course) => {
-        return total + (course.trainerId?.averagePricePerHour || 0); // Use a default value of 0 if averagePricePerHour is not available
+        return total + (course.trainerId?.averagePricePerHour || 0);
     }, 0)
     : 0;
 console.log(totalSpend,"totalSpend",user.name,"username",user.email,"email")
     return (
         <div className="flex bg-gray-200 p-6">
-            {/* Left Side: User Profile */}
+            
             <div className="w-1/4 bg-white rounded-lg shadow-md p-4">
                 <h2 className="text-center text-xl font-semibold">{user.name}</h2>
                 <p className="text-center text-gray-600">{user.email}</p>
@@ -45,32 +63,16 @@ console.log(totalSpend,"totalSpend",user.name,"username",user.email,"email")
                 </div>
             </div>
 
-            {/* Right Side: Enrolled Courses and Trainers */}
+           
             <div className="w-3/4 ml-4 bg-white rounded-lg shadow-md p-4">
                 <h3 className="text-lg font-bold text-orange-600 mb-4">Enrolled Courses</h3>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                    {/* {user.courses.length > 0 ? (
-                        user.courses.map((course, index) => (
-                            // console.log(course.courseId._id,"course")
-                            
-                            // <Link to={`/course/${course.courseId._id}`}>
-
-                            <div key={index} className="border rounded-lg shadow-sm p-4 bg-gray-50">
-                                <img src={course.courseId.bannerUrl} alt={course.courseId.name} className="rounded-lg w-full h-32 object-cover mb-2" />
-                                <h4 className="text-lg font-semibold">{course.courseId.name}</h4>
-                                <p className="text-gray-500">Duration: {course.courseId.duration} minutes</p>
-                                <p className="text-gray-500">Course Price: ₹ {course.trainerId.averagePricePerHour}</p>
-                            </div>
-                            // </Link>
-                        ))
-                    ) : (
-                        <p>No courses enrolled yet.</p>
-                    )} */}
-                        {user.courses.length > 0 ? (
-        user.courses.map((course, index) => (
+                   
+                        {user?.courses?.length > 0 ? (
+        user?.courses?.map((course, index) => (
             course.courseId ? (
-                <div key={index} className="border rounded-lg shadow-sm p-4 bg-gray-50">
+                <div key={index} className="border rounded-lg shadow-sm p-4 bg-gray-50 cursor-pointer hover:shadow-2xl " onClick={()=>clickHandler(course.courseId._id)}>
                     <img src={course.courseId.bannerUrl || "https://via.placeholder.com/150"} alt={course.courseId.name} className="rounded-lg w-full h-32 object-cover mb-2" />
                     <h4 className="text-lg font-semibold">{course.courseId.name}</h4>
                     <p className="text-gray-500">Duration: {course.courseId.duration} minutes</p>
@@ -89,7 +91,7 @@ console.log(totalSpend,"totalSpend",user.name,"username",user.email,"email")
 
                 <h3 className="text-lg font-bold text-orange-600 mb-4 mt-6">Trainers</h3>
                 <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4'>
-                    {user.courses.length > 0 ? (
+                    {user?.courses?.length > 0 ? (
                         user.courses.map((course, index) => (
                             <div key={index} className="flex items-center border-b py-4">
                                 <div className='border rounded-lg shadow-sm p-4 bg-gray-50'>
