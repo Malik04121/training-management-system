@@ -41,9 +41,7 @@ const TrainerCard = ({ trainers }) => {
     }
   };
 
-  // useEffect(async() => {
-  //   await dispatch(fetchUserDetails());
-  // }, [dispatch]);
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -63,7 +61,7 @@ const TrainerCard = ({ trainers }) => {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 p-6  w-full">
-      {/* {error&& toast.error(error.message)} */}
+     
       {trainers?.map((element) => (
         <div key={element._id} className="bg-gray-200 text-darkGrey p-4 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-200 flex flex-col justify-between items-left h-[430px]">
           <div className=" flex items-center justify-center">

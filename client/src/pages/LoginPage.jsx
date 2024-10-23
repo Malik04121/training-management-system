@@ -6,12 +6,13 @@ import { toast } from "react-toastify";
 
 const Login = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const user = useSelector(singleUser);
   const role = localStorage.getItem("role");
+  const isLogin = localStorage.getItem("isLogin");
   const loading = useSelector((state) => state.user.loading);
   const errorMessage = useSelector((state) => state.user.error);
-  
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -24,6 +25,7 @@ const Login = () => {
       }, 3000);
     }
   }, [errorMessage, dispatch]);
+
 
   const handleChange = (e) => {
     setFormData({
@@ -38,8 +40,8 @@ const Login = () => {
       await dispatch(loginUser(formData)).unwrap();
       localStorage.setItem("isLogin", true);
       toast.success("Login successful! Welcome back!")
-       dispatch(fetchUserDetails())
-      navigate("/"); 
+      dispatch(fetchUserDetails())
+      navigate("/");
     } catch (error) {
       toast.error(error)
       console.error("Login failed:", error);
@@ -50,7 +52,7 @@ const Login = () => {
     <div className="min-h-screen bg-lightGrey flex justify-center items-center">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <h2 className="text-2xl font-semibold text-darkGrey mb-6 text-center">Login</h2>
-        
+
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="block text-darkGrey">Email</label>
@@ -78,14 +80,12 @@ const Login = () => {
             />
           </div>
 
-          {/* {errorMessage && <p className="text-red-500">{errorMessage}</p>} */}
 
           <div>
             <button
               type="submit"
-              className={`w-full hover:bg-primary hover:text-white px-4 py-2 rounded-lg bg-white text-primary border border-primary font-bold transition-colors ${
-                loading ? 'opacity-50 cursor-not-allowed' : ''
-              }`}
+              className={`w-full hover:bg-primary hover:text-white px-4 py-2 rounded-lg bg-white text-primary border border-primary font-bold transition-colors ${loading ? 'opacity-50 cursor-not-allowed' : ''
+                }`}
               disabled={loading}
             >
               {loading ? "Logging in..." : "Login"}

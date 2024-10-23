@@ -40,7 +40,7 @@ const AddCourses = () => {
     banner: null,
   });
 
-  // Fetch trainers and other related data
+
   useEffect(() => {
     dispatch(fetchUsersByRole("Trainer")); 
   }, [dispatch]);
@@ -151,7 +151,8 @@ const AddCourses = () => {
             {trainerLoading && <p>Loading...</p>}
             {trainerError && <p className="text-red-500">{trainerError}</p>}
             {trainerList
-              ?.filter(trainer => trainer.role === "Trainer") // Filter the users by the "Trainer" role in case the state contains both roles
+              ?.filter(trainer => trainer.role === "Trainer") 
+
               .map(trainer => (
                 <option key={trainer._id} value={trainer._id}>
                   {trainer.name}

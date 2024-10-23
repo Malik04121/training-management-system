@@ -32,7 +32,7 @@ import TrainerList from "./FormComponent/TrainerList";
 const FormSection = ({ activeSection }) => {
   const dispatch = useDispatch();
  
-  // const categorySuccess = useSelector(successMessage);
+
 
   const users = useSelector(userLists);
 
@@ -75,14 +75,6 @@ const FormSection = ({ activeSection }) => {
   }, [activeSection, dispatch]);
 
 
-  // useEffect(() => {
-  //   if (categorySuccess || error) {
-  //     setTimeout(() => {
-  //       dispatch(clearMessages());
-  //       dispatch(clearUserState());
-  //     }, 3000);
-  //   }
-  // }, [categorySuccess, error, dispatch]);
 
  
 
