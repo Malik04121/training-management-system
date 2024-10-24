@@ -42,11 +42,13 @@ import { selectLoading, singleUser, verifyToken } from '../redux/slice/authentic
 const ProtectedRoute = ({ children }) => {
   const dispatch = useDispatch();
   const role=localStorage.getItem("role")
+  // const user=useSelector(singleUser)||{role:localStorage.getItem("role")}
   
-
-  useEffect(() => {
-    dispatch(verifyToken());
-  }, [dispatch]);
+  
+  // console.log(user,"userlist in middleware")
+  // useEffect(() => {
+  //   dispatch(verifyToken());
+  // }, [dispatch]);
 
   if (role && role !== "Admin") {
     return <Navigate to="/login" />;

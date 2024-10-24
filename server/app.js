@@ -17,11 +17,11 @@ const app = express();
 
 app.use(cors({
   origin: function (origin, callback) {
-
     callback(null, origin);
   },
   credentials: true,  
 }));
+
 app.use(express.json());
 app.use(cookieParser());
 

@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Course = require("../model/courseModel")
 
-// User registration
+
 const registerUser = async (req, res) => {
     try {
         const { name, email, password, role } = req.body;
@@ -33,7 +33,7 @@ const registerUser = async (req, res) => {
     }
 };
 
-// User login
+
 const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -121,7 +121,7 @@ const getUserDetails = async (req, res) => {
     }
 };
 
-// Get users based on role (user or trainer)
+
 const getUsers = async (req, res) => {
     try {
         const { role } = req.query;
@@ -160,7 +160,7 @@ const loginUserDetail = async (req, res) => {
         }
         const filteredCourses = user.courses.filter(course => course.courseId !== null);
 
-        // Replace the user's courses with the filtered ones
+      
         const userWithFilteredCourses = {
             ...user.toObject(),
             courses: filteredCourses,
@@ -186,8 +186,6 @@ const verifyTokenAndRole = async (req, res) => {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-
         if (decoded.role !== 'Admin') {
             return res.status(403).json({ message: 'Access denied: Not an admin' });
         }
@@ -198,6 +196,22 @@ const verifyTokenAndRole = async (req, res) => {
         return res.status(403).json({ message: 'Invalid token' });
     }
 };
+const verifyToken=async(req,res)=>{
+    const token=req.cookies.token
+    console.log(token,"token")
+    if (!token) {
+        return res.status(401).json({ message: 'No token provided' });
+    }
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        
+        res.status(200).json({ message: 'Token Validated', data: decoded });
+    } catch (error) {
+        console.log(error,"error")
+        return res.status(403).json({ message: 'Invalid token' });
+        
+    }
+}
 
 const addCourseToUser = async (req, res) => {
     try {
@@ -244,5 +258,6 @@ module.exports = {
     getUsers,
     verifyTokenAndRole,
     addCourseToUser,
-    loginUserDetail
+    loginUserDetail,
+    verifyToken
 };

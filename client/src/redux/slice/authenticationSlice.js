@@ -118,6 +118,22 @@ export const verifyToken = createAsyncThunk(
     }
   }
 );
+export const checkToken = createAsyncThunk(
+  "user/checkToken",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${baseURL}/users/verifyToken`,{withCredentials:true});
+console.log(response,"responsefrom token")
+      return response.data
+    } catch (error) {
+      console.log(error,"errror")
+      if (error.response && error.response.data.message) {
+        return rejectWithValue(error.response.data.message);
+      }
+      return rejectWithValue(`Fetching ${role}s failed. Please try again.`);
+    }
+  }
+);
 export const logoutUser = createAsyncThunk(
   "user/logoutUser",
   async () => {
@@ -315,6 +331,24 @@ const userSlice = createSlice({
     builder.addCase(fetchUserDetails.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
+    });
+
+    builder.addCase(checkToken.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+      state.successMessage = null;
+    });
+    builder.addCase(checkToken.fulfilled, (state, action) => {
+      state.loading = false;
+      localStorage.setItem("role",action.payload.data.user.role)
+      localStorage.setItem("userName",action.payload.data.user.name)
+      localStorage.setItem("isLogin",true)
+      state.user = action.payload.data.user;
+      console.log(action.payload.data.user,"user")
+    });
+    builder.addCase(checkToken.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload; 
     });
 
   },

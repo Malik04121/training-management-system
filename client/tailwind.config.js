@@ -12,12 +12,15 @@ export default {
       beige: "#E6C9A8", // Light beige for subtle backgrounds and highlights
       lightGrey: "#F5F5F5", // Light grey for clean background sections
       darkGrey: "#2B2B2B", // Secondary dark grey for navbar or text
+      green: {
+        500: "#22c55e",
+      },
       blue: {
         100: "#ebf8ff",
         200: "#bee3f8",
         300: "#90cdf4",
         400: "#63b3ed",
-        500: "#4299e1", // Secondary blue
+        500: "#4299e1", 
         600: "#3182ce",
         700: "#2b6cb0",
         800: "#2c5282",
@@ -28,8 +31,8 @@ export default {
         200: "#ffedd5",
         300: "#fed7aa",
         400: "#fdba74",
-        500: "#FF6D2C", // Updated primary orange for CTA
-        600: "#f97316", // Slightly darker orange
+        500: "#FF6D2C", 
+        600: "#f97316", 
         700: "#ea580c",
         800: "#c2410c",
         900: "#9a3412",
