@@ -76,10 +76,10 @@ export const addCourse = createAsyncThunk(
           },
         }
       );
-
+console.log(res,"courseData")
       return res.data;
     } catch (error) {
-
+console.log(error,"error inside add course")
       throw new Error(error.response?.data?.message || error.message);
     }
   }

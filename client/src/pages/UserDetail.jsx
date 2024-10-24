@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import convertDate from '../utills/DateConversion';
 import UserProfileSkeleton from '../components/Skeleton/UserProfileSkeleton';
 import Rating from '../components/Rating';
+import calculateRemainingTime from '../utills/calculateRemainingtime';
 
 const UserProfile = () => {
     const dispatch = useDispatch();
@@ -82,6 +83,7 @@ console.log(totalSpend,"totalSpend",user.name,"username",user.email,"email")
                     <p className="text-gray-500"><span className='font-semibold text-black'>Duration:</span> {course.courseId.duration} hour</p>
                     <p className="text-gray-500"><span className='font-semibold text-black'>Course Price: </span> ₹ {course.trainerId.averagePricePerHour}</p>
                     <p className="text-gray-500"><span className='font-semibold text-black'>Course Start Date:</span> ₹ {course.enrollmentDate?convertDate(course.enrollmentDate):""}</p>
+                    <p className="text-gray-500"><span className='font-semibold text-black'>Course Start Date:</span> ₹ {calculateRemainingTime({startDate:course.courseStartDate,duration:course.courseId.duration})}</p>
                 </div>
             ) : (
                 <div key={index} className="border rounded-lg shadow-sm p-4 bg-gray-50">
@@ -94,7 +96,7 @@ console.log(totalSpend,"totalSpend",user.name,"username",user.email,"email")
     )}
                 </div>
 
-                <h3 className="text-lg font-bold text-orange-600  mt-6">Trainers</h3>
+                <h3 className="text-lg font-bold text-orange-600  mt-10">Trainers</h3>
                 <div className='flex  md:grid-cols-5 flex-wrap  gap-5 justify-center'>
                     {user?.courses?.length > 0 ? (
                         user.courses.map((course, index) => (
@@ -106,7 +108,7 @@ console.log(totalSpend,"totalSpend",user.name,"username",user.email,"email")
                                     </div>
                                     <p className="font-semibold">{course.trainerId.name}</p>
                                     <p className="text-gray-500">{course.trainerId.email}</p>
-                                    <p className="text-yellow-500 flex">Rating: <p><Rating rating={course.trainerId.trainerRating}/></p></p>
+                                    <p className="text-black flex align-middle text-center">Rating: <p><Rating rating={course.trainerId.trainerRating}/></p></p>
                                 </div>
                             </div>
                         ))

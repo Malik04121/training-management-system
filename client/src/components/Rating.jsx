@@ -9,7 +9,7 @@ const Rating = ({ rating }) => {
     rating >= 4.5
       ? "text-green-500"
       : rating >= 3.5
-      ? "text-yellow-300"
+      ? "text-yellow-400"
       : rating >= 2.5
       ? "text-orange-500"
       : "text-red-500";

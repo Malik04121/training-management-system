@@ -19,6 +19,10 @@ const courseSchema=new mongoose.Schema({
    bannerUrl:{
       type:String
    },
+   courseStartDate:{
+      type:Date,
+      required:true
+   },
    trainers:[
     {
        type:mongoose.Types.ObjectId,

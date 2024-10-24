@@ -53,7 +53,7 @@ const getIndividualCourse = async (req, res) => {
 
 const addCourse = async (req, res) => {
   try {
-    const { name, description, duration,rating, trainers, category,modules } = req.body;
+    const { name, description, duration,rating, trainers, category,modules,startDate } = req.body;
 
     console.log(req.body,"body")
 
@@ -77,14 +77,16 @@ const addCourse = async (req, res) => {
       trainers, 
       category, 
       modules,
+      courseStartDate:startDate,
       bannerUrl
     });
 
     await newCourse.save();
 
-    res.status(201).json(savedCourses);
+    res.status(201).json(newCourse);
     // res.status(201).json("response");
   } catch (error) {
+console.log(error,"error");
 
     res.status(500).json({ error: error.message });
   }

@@ -38,6 +38,7 @@ const AddCourses = () => {
     category: "",
     modules: [],
     banner: null,
+    startDate:""
   });
 
 
@@ -48,7 +49,7 @@ const AddCourses = () => {
   const handleCourseChange = (e) => {
     const { name, value } = e.target;
     let values = value;
-
+console.log(e.target,"inside courseChange")
     if (name === "trainers" || name === "modules") {
       const options = [...e.target.selectedOptions];
       values = options.map(option => option.value);
@@ -81,6 +82,7 @@ const AddCourses = () => {
     formData.append("description", courseDetail.description);
     formData.append("duration", courseDetail.duration);
     formData.append("category", courseDetail.category);
+    formData.append("startDate", courseDetail.startDate);
 
     courseDetail.trainers.forEach(trainer => {
       formData.append("trainers[]", trainer);
@@ -136,6 +138,21 @@ const AddCourses = () => {
             name="duration"
             value={courseDetail.duration}
             onChange={handleCourseChange}
+            required
+          />
+        </div>
+        <div>
+          <label className="block text-gray-700">
+            Course Start Date
+          </label>
+          <input
+            type="date"
+            className="w-full px-4 py-2 border rounded-lg"
+            // placeholder="Enter Course dura
+            name="startDate"
+            value={courseDetail.date}
+            onChange={handleCourseChange}
+            min={new Date().toISOString().split("T")[0]}
             required
           />
         </div>

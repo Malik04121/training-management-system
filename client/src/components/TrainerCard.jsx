@@ -80,8 +80,8 @@ const TrainerCard = ({ trainers }) => {
           </div>
          <div className="flex">
 
-          <p className="text-sm ">Rating:</p>
-            <p> <Rating rating={element.trainerRating}/></p>
+          <p className="text-sm ">Rating:
+            <p> <Rating rating={element.trainerRating}/></p></p>
          </div>
           <p className="text-sm ">Rate: ₹ {element.averagePricePerHour} /hr</p>
           <button 

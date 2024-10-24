@@ -2,7 +2,7 @@ import React from "react";
 
 const CourseCardSkeleton = () => {
     return (
-        <div className="p-4 rounded-lg shadow-lg bg-white animate-pulse h-[400px]">
+        <div className="p-4 rounded-lg shadow-lg bg-white animate-pulse h-[400px] min-w-72">
             <div className="mb-2 h-32 w-full bg-gray-300 rounded"></div>
             <h2 className="text-lg bg-gray-300 h-6 w-3/4 rounded mb-2"></h2>
             <p className="text-base bg-gray-300 h-4 w-full rounded mb-2"></p>
