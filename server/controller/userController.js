@@ -154,7 +154,6 @@ const loginUserDetail = async (req, res) => {
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const user = await User.findById(decoded.userId).populate('courses.courseId').populate('courses.trainerId');
-
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }

@@ -82,7 +82,6 @@ const addCourse = async (req, res) => {
     });
 
     await newCourse.save();
-
     res.status(201).json(newCourse);
     // res.status(201).json("response");
   } catch (error) {

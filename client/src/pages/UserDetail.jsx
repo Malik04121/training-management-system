@@ -83,7 +83,7 @@ console.log(totalSpend,"totalSpend",user.name,"username",user.email,"email")
                     <p className="text-gray-500"><span className='font-semibold text-black'>Duration:</span> {course.courseId.duration} hour</p>
                     <p className="text-gray-500"><span className='font-semibold text-black'>Course Price: </span> ₹ {course.trainerId.averagePricePerHour}</p>
                     <p className="text-gray-500"><span className='font-semibold text-black'>Course Start Date:</span> ₹ {course.enrollmentDate?convertDate(course.enrollmentDate):""}</p>
-                    <p className="text-gray-500"><span className='font-semibold text-black'>Course Start Date:</span> ₹ {calculateRemainingTime({startDate:course.courseStartDate,duration:course.courseId.duration})}</p>
+                    <p className="text-gray-500"><span className='font-semibold text-black'>Course Start Date:</span> {calculateRemainingTime({startDate:course.courseId.courseStartDate,duration:course.courseId.duration})} hour</p>
                 </div>
             ) : (
                 <div key={index} className="border rounded-lg shadow-sm p-4 bg-gray-50">
