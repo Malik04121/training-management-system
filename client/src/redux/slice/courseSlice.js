@@ -34,7 +34,7 @@ export const fetchFillterCourse = createAsyncThunk(
         params.append('search', search);
       }
 
-      const url = `${baseURL}/course?${params.toString()}`; // Build the URL with query parameters
+      const url = `${baseURL}/course?${params.toString()}`; 
       const res = await axios.get(url);
 
       return res.data;

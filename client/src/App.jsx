@@ -15,8 +15,8 @@ function App() {
   const [username, setUsername] = useState(localStorage.getItem("username")); 
   const [role, setRole] = useState(localStorage.getItem("role")); 
 
- //Todo:correct code for  reamaining Time
-//Todo:show status of course for userInfo page (ongoing,upcoming,completed)
+//Todo:trainer remove button not working
+//Todo:give edit option whenever necessary
 //Todo:if course is completed then dont show on home page or any other section only show in trainer section 
   //Todo:push notification
   //Todo:email service

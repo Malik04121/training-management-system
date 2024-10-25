@@ -1,19 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { courseData, deleteCourse, deleteSingleCourse, errorMessage, loadingStatus } from '../../redux/slice/courseSlice';
+import { courseData, deleteCourse, deleteSingleCourse, errorMessage, fetchCourse, loadingStatus } from '../../redux/slice/courseSlice';
 import { MdDelete } from 'react-icons/md';
+import Pagination from '../PaginationComponent';
 
 const CourseList = () => {
   const courses = useSelector(courseData);
   const courseLoading = useSelector(loadingStatus);
   const courseError = useSelector(errorMessage);
   const dispatch = useDispatch();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   const deleteCourseHandler = (id) => {
 
     dispatch(deleteCourse(id));
     dispatch(deleteSingleCourse(id));
   };
+  useEffect(() => {
+    const fetchPaginatedCourses = async () => {
+      const result = await dispatch(fetchCourse({ page: currentPage, limit: 10 }));
+      if (result.meta.requestStatus === 'fulfilled') {
+        setTotalPages(result.payload.totalPages);
+      }
+    };
+    fetchPaginatedCourses();
+  }, [dispatch, currentPage]);
 
   return (
     <div className="p-6 bg-gray-50">
@@ -57,6 +69,11 @@ const CourseList = () => {
           </div>
         ))}
       </div>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage} 
+      />
     </div>
   );
 };

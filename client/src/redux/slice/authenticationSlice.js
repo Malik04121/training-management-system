@@ -75,13 +75,27 @@ export const addTrainer = createAsyncThunk(
 );
 
 
+// export const fetchUsersByRole = createAsyncThunk(
+//   "user/fetchUsersByRole",
+//   async (role, { rejectWithValue }) => {
+//     try {
+//       const response = await axios.get(`${baseURL}/users?role=${role}`);
+
+//       return {data:response.data,role};
+//     } catch (error) {
+//       if (error.response && error.response.data.message) {
+//         return rejectWithValue(error.response.data.message);
+//       }
+//       return rejectWithValue(`Fetching ${role}s failed. Please try again.`);
+//     }
+//   }
+// );
 export const fetchUsersByRole = createAsyncThunk(
   "user/fetchUsersByRole",
-  async (role, { rejectWithValue }) => {
+  async ({ role, page, limit }, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${baseURL}/users?role=${role}`);
-
-      return {data:response.data,role};
+      const response = await axios.get(`${baseURL}/users?role=${role}&page=${page}&limit=${limit}`);
+      return { data: response.data.data, role, currentPage: response.data.currentPage, totalPages: response.data.totalPages };
     } catch (error) {
       if (error.response && error.response.data.message) {
         return rejectWithValue(error.response.data.message);
@@ -90,6 +104,7 @@ export const fetchUsersByRole = createAsyncThunk(
     }
   }
 );
+
 export const verifyToken = createAsyncThunk(
   "user/verifyToken",
   async (_,{ rejectWithValue }) => {
