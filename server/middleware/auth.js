@@ -13,7 +13,7 @@ const auth = (req, res, next) => {
         if (!verified) {
             return res.status(401).json({ message: "Token verification failed, access denied" });
         }
-        // console.log(verified,"verified") 
+      
         req.user = verified;
         next();
     } catch (err) {

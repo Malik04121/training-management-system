@@ -123,25 +123,53 @@ const getUserDetails = async (req, res) => {
 
 
 const getUsers = async (req, res) => {
-    try {
-        const { role } = req.query;
-        const user = req.user
+    // try {
+    //     const { role } = req.query;
+    //     const user = req.user
 
+
+    //     if (!role) {
+    //         return res.status(400).json({ message: "Role parameter is required" });
+    //     }
+
+
+    //     const users = await User.find({ role }).select('-password').populate("courses.courseId").populate("courses.trainerId"); 
+
+
+    //     if (!users.length) {
+    //         return res.status(404).json({ message: `No ${role}s found` });
+    //     }
+
+    //     res.status(200).json(users);
+    // }
+    try {
+        const { role, page = 1, limit = 10 } = req.query;
+        const skip = (page - 1) * limit;
 
         if (!role) {
             return res.status(400).json({ message: "Role parameter is required" });
         }
 
-
-        const users = await User.find({ role }).select('-password').populate("courses.courseId").populate("courses.trainerId"); 
-
+        const totalUsers = await User.countDocuments({ role });
+        const users = await User.find({ role })
+            .select('-password')
+            .populate("courses.courseId")
+            .populate("courses.trainerId")
+            .skip(skip)
+            .limit(parseInt(limit));
 
         if (!users.length) {
             return res.status(404).json({ message: `No ${role}s found` });
         }
 
-        res.status(200).json(users);
-    } catch (err) {
+        res.status(200).json({
+            data: users,
+            currentPage: parseInt(page),
+            totalPages: Math.ceil(totalUsers / limit),
+            totalUsers
+        });
+    } 
+     catch (err) {
         res.status(500).json({ error: err.message });
     }
 };
@@ -153,6 +181,8 @@ const loginUserDetail = async (req, res) => {
     }
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+
         const user = await User.findById(decoded.userId).populate('courses.courseId').populate('courses.trainerId');
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
@@ -197,7 +227,7 @@ const verifyTokenAndRole = async (req, res) => {
 };
 const verifyToken=async(req,res)=>{
     const token=req.cookies.token
-    console.log(token,"token")
+   
     if (!token) {
         return res.status(401).json({ message: 'No token provided' });
     }
@@ -206,7 +236,7 @@ const verifyToken=async(req,res)=>{
         
         res.status(200).json({ message: 'Token Validated', data: decoded });
     } catch (error) {
-        console.log(error,"error")
+      
         return res.status(403).json({ message: 'Invalid token' });
         
     }
