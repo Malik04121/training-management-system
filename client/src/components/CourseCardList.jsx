@@ -36,10 +36,13 @@ const CourseCard = ({ selectedCategory }) => {
             .catch(() => setIsLoading(false));
     }, [dispatch, selectedCategory]);
 
-
+    const today = new Date();
     const filteredCourses = selectedCategory
-        ? courses.filter(course => course.category._id === selectedCategory._id)
-        : courses;
+        ? courses.filter(course => 
+            course.category._id === selectedCategory._id &&
+            new Date(course.courseStartDate) > today
+          )
+        : courses.filter(course => new Date(course.courseStartDate) > today);
      
         
     // Todo : convert time formate to 2:00 hours

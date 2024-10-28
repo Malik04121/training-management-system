@@ -65,10 +65,7 @@ const addTrainerByAdmin = async (req, res) => {
         if (existingUser) {
             return res.status(400).json({ message: "User with this email already exists" });
         }
-     
-              const hashedPassword = await bcrypt.hash(ele.password, 10);
-     
-      
+              const hashedPassword = await bcrypt.hash(password, 10);
               const newTrainer = new User({
                   name,
                   email,
@@ -78,14 +75,10 @@ const addTrainerByAdmin = async (req, res) => {
                   averagePricePerHour,
                   trainerRating
               });
-      
               await newTrainer.save();
-          
-          
-
-        res.status(201).json({ message: "Trainer created successfully", trainer: { email, name, password, trainerDescription, averagePricePerHour, trainerRating } });
+              res.status(201).json({ message: "Trainer created successfully", trainer: { email, name, password, trainerDescription, averagePricePerHour, trainerRating } });
     } catch (err) {
-
+        console.log(err,"err")
         res.status(500).json({ error: err.message });
     }
 };

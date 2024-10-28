@@ -86,7 +86,7 @@ const AddModule = () => {
         />
       </div>
       <div>
-        <label className="block text-gray-700">Module Duration (in minutes)</label>
+        <label className="block text-gray-700">Module Duration (in Hours)</label>
         <input
           type="number"
           className="w-full px-4 py-2 border rounded-lg"
@@ -112,7 +112,7 @@ const AddModule = () => {
             <input
               type="number"
               className="flex-1 px-4 py-2 border rounded-lg"
-              placeholder="Duration (minutes)"
+              placeholder="Duration (Hours)"
               value={content.duration}
               onChange={(e) => handleModuleContentChange(index, "duration", e.target.value)}
               required
@@ -149,7 +149,6 @@ const AddModule = () => {
       <button
         className="text-primary bg-white hover:bg-primary hover:text-white border border-primary px-4 py-2 rounded-lg"
         type="submit"
-
       >
         Save Module
       </button>
