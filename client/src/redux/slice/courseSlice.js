@@ -2,42 +2,20 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 let baseURL = import.meta.env.VITE_BASE_URL;
 
-console.log(baseURL,"baseURL")
 
-// export const fetchCourse = createAsyncThunk(
-//   "category/fetchCourse",
-//   async (categoryId) => {
-//     console.log(categoryId,"categoryId in slice");
-    
-//     try {
-//       const url = categoryId 
-//       ? `${baseURL}/course?categoryId=${categoryId}`
-//       : `${baseURL}/course`;
-//       const res = await axios.get(url);
-// // console.log(res,"fetchcou/rseData with category")
-      
-//       return res.data.courses;
-//     } catch (error) {
 
-//       throw new Error(error.response?.data?.message || error.message);
-//     }
-//   }
-// );
 export const fetchCourse = createAsyncThunk(
   "category/fetchCourse",
-  async ({ categoryId, search, page, limit }) => {
+  async ({ categoryId, search, page, limit }={}) => {
     try {
-      // Build query parameters
-      const query = new URLSearchParams();
-      if (categoryId) query.append("categoryId", categoryId);
-      if (search) query.append("search", search);
-      if (page) query.append("page", page);
-      if (limit) query.append("limit", limit);
+    console.log(page,"page inside slice")
+      const response = await axios.get(`${baseURL}/course`, {
+        params: { categoryId, search, page, limit },
+      });
+      console.log(response,"response from course")
+      return { data: response.data.courses,  currentPage: response.data.currentPage, totalPages: response.data.totalPages };
 
-      const url = `${baseURL}/course?${query.toString()}`;
-      const res = await axios.get(url);
-
-      return res.data.courses;
+      // return response.data.courses;
     } catch (error) {
       throw new Error(error.response?.data?.message || error.message);
     }
@@ -47,6 +25,7 @@ export const fetchCourse = createAsyncThunk(
 export const fetchFillterCourse = createAsyncThunk(
   "category/fetchFillterCourse",
   async ({ categoryId, search }) => { 
+   
     try {
       const params = new URLSearchParams();
 
@@ -59,8 +38,9 @@ export const fetchFillterCourse = createAsyncThunk(
 
       const url = `${baseURL}/course?${params.toString()}`; 
       const res = await axios.get(url);
+      
 
-      return res.data;
+      return res.data.courses;
     } catch (error) {
       throw new Error(error.response?.data?.message || error.message);
     }
@@ -76,7 +56,7 @@ export const fetchSingleCourse = createAsyncThunk(
         withCredentials:true
       });
      
-    console.log(res,"singleCourse ");
+    // console.log(res,"singleCourse ");
       return res.data;
     } catch (error) {
 
@@ -99,10 +79,10 @@ export const addCourse = createAsyncThunk(
           },
         }
       );
-console.log(res,"courseData")
+// console.log(res,"courseData")
       return res.data;
     } catch (error) {
-console.log(error,"error inside add course")
+// console.log(error,"error inside add course")
       throw new Error(error.response?.data?.message || error.message);
     }
   }
@@ -153,7 +133,7 @@ const courseSlice = createSlice({
     });
     builder.addCase(fetchCourse.fulfilled, (state, action) => {
       state.loading = false;
-      state.course = action.payload;
+      state.course = action.payload.data;
     });
     builder.addCase(fetchCourse.rejected, (state, action) => {
       state.loading = false;

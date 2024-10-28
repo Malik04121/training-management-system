@@ -16,10 +16,13 @@ const CourseList = () => {
 
     dispatch(deleteCourse(id));
     dispatch(deleteSingleCourse(id));
+    toast.success("Course Deleted Successfully")
+
   };
   useEffect(() => {
     const fetchPaginatedCourses = async () => {
-      const result = await dispatch(fetchCourse({ page: currentPage, limit: 10 }));
+      console.log(currentPage,"page")
+      const result = await dispatch(fetchCourse({ page: currentPage, limit: 6 }));
       if (result.meta.requestStatus === 'fulfilled') {
         setTotalPages(result.payload.totalPages);
       }

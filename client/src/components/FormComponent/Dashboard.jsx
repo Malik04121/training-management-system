@@ -77,9 +77,6 @@
 // export default Dashboard
 
 
-
-
-
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUsersByRole, trainerLists, userLists } from '../../redux/slice/authenticationSlice';
@@ -97,13 +94,14 @@ import {
 } from 'chart.js';
 import { Bar, Pie } from 'react-chartjs-2';
 import { FaChalkboardTeacher, FaDollarSign, FaUser, FaWallet } from 'react-icons/fa';
+import { fetchModule } from '../../redux/slice/moduleSlice';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 
 const Dashboard = () => {
   const users = useSelector(userLists);
   const trainers = useSelector(trainerLists);
-  
+  console.log(users,"users list",trainers,"trainers")
   const categories = useSelector(categoryData); 
   const dispatch = useDispatch();
   const [totalRevenue, setTotalRevenue] = useState(0);
@@ -112,9 +110,10 @@ const Dashboard = () => {
   const [categoryDistribution, setCategoryDistribution] = useState({});
 
   useEffect(() => {
-    dispatch(fetchUsersByRole('User'));
-    dispatch(fetchUsersByRole('Trainer'));
+    dispatch(fetchUsersByRole({ role: 'User' }));
+  dispatch(fetchUsersByRole({ role: 'Trainer' }));
     dispatch(fetchCategory());
+    // dispatch(fetchModule())
   }, [dispatch]);
 
   useEffect(() => {
@@ -236,9 +235,19 @@ const Dashboard = () => {
        
         <div className="bg-white p-6 shadow-lg rounded-lg">
           <h2 className="text-lg font-bold mb-4">User Spending Distribution</h2>
-          <Pie data={userSpendingData} />
+          <div className=' '>
+
+          <Pie data={userSpendingData} className='w-6 ' />
+          </div>
         </div>
 
+        <div className="bg-white p-6 shadow-lg rounded-lg">
+          <h2 className="text-lg font-bold mb-4">Category Distribution</h2>
+          <div className='w-[90%] align-bottom'>
+
+          <Pie data={categoryDataForChart} />
+          </div>
+        </div>
         
         <div className="bg-white p-6 shadow-lg rounded-lg">
           <h2 className="text-lg font-bold mb-4">Trainer Earnings</h2>
@@ -246,10 +255,6 @@ const Dashboard = () => {
         </div>
 
 
-        <div className="bg-white p-6 shadow-lg rounded-lg">
-          <h2 className="text-lg font-bold mb-4">Category Distribution</h2>
-          <Pie data={categoryDataForChart} />
-        </div>
       </div>
     </div>
   );

@@ -6,17 +6,21 @@ let baseURL = import.meta.env.VITE_BASE_URL;
 
 export const fetchModule = createAsyncThunk(
   "module/fetchModule",
-  async () => {
+  async (params = {}) => {
+    const { search = "", page = 1, limit = 10 } = params;
     try {
-      const res = await axios.get(`${baseURL}/module`);
-
-      return res.data;
+      const res = await axios.get(`${baseURL}/module`,{
+        params:{search,page,limit}
+      });
+        console.log(res,"res")
+      return {data:res.data.moduleList,currentPage: res.data.currentPage, totalPages: res.data.totalPages};
     } catch (error) {
-
+         console.log(error,"error")
       throw new Error(error.response?.data?.message || error.message);
     }
   }
 );
+
 
 export const addModule = createAsyncThunk(
   "module/addModule",
@@ -75,7 +79,7 @@ const moduleSlice = createSlice({
     });
     builder.addCase(fetchModule.fulfilled, (state, action) => {
       state.loading = false;
-      state.module = action.payload;
+      state.module = action.payload.data;
     });
     builder.addCase(fetchModule.rejected, (state, action) => {
       state.loading = false;

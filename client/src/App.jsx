@@ -30,13 +30,13 @@ function App() {
 
   useEffect(() => {
     const verifyToken = async () => {
-      console.log("inside verifyToken");
+      // console.log("inside verifyToken");
        dispatch(checkToken());
     };
     verifyToken()
     const handleStorageChange = (event) => {
       if (["isLogin", "username", "role"].includes(event.key)) {
-        console.log(`Field changed: ${event.key} = ${event.newValue}`);
+        // console.log(`Field changed: ${event.key} = ${event.newValue}`);
         if (event.key === "isLogin") setLogin(event.newValue);
         if (event.key === "username") setUsername(event.newValue);
         if (event.key === "role") setRole(event.newValue);

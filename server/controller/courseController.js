@@ -1,6 +1,7 @@
 const Course = require("../model/courseModel");
 const cloudinary=require("cloudinary")
 const multer=require("multer")
+const mongoose=require('mongoose')
 
 
 cloudinary.config({
@@ -74,9 +75,8 @@ const getCourse = async (req, res) => {
   try {
     const { categoryId, search, page, limit } = req.query;
     const filter = {};
-
+    
     if (categoryId) {
-      // Validate and cast categoryId to ObjectId
       if (mongoose.Types.ObjectId.isValid(categoryId)) {
         filter.category = new mongoose.Types.ObjectId(categoryId);
       } else {
@@ -93,18 +93,12 @@ const getCourse = async (req, res) => {
     if (page && limit) {
       const skip = (page - 1) * limit;
       courses = await Course.find(filter)
-        .populate("category")
-        .populate("modules")
-        .populate("trainers")
-        .populate("enrolled_people")
+      .populate("category modules trainers enrolled_people")
         .skip(skip)
         .limit(parseInt(limit));
     } else {
       courses = await Course.find(filter)
-        .populate("category")
-        .populate("modules")
-        .populate("trainers")
-        .populate("enrolled_people");
+        .populate("category modules trainers enrolled_people")
     }
 
     res.status(200).json({

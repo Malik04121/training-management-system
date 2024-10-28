@@ -61,16 +61,11 @@ const loginUser = async (req, res) => {
 const addTrainerByAdmin = async (req, res) => {
     try {
         const { name, email, password, trainerDescription, averagePricePerHour, trainerRating } = req.body;
-
-
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ message: "User with this email already exists" });
         }
      
-
-      
-
               const hashedPassword = await bcrypt.hash(ele.password, 10);
      
       
@@ -123,29 +118,15 @@ const getUserDetails = async (req, res) => {
 
 
 const getUsers = async (req, res) => {
-    // try {
-    //     const { role } = req.query;
-    //     const user = req.user
-
-
-    //     if (!role) {
-    //         return res.status(400).json({ message: "Role parameter is required" });
-    //     }
-
-
-    //     const users = await User.find({ role }).select('-password').populate("courses.courseId").populate("courses.trainerId"); 
-
-
-    //     if (!users.length) {
-    //         return res.status(404).json({ message: `No ${role}s found` });
-    //     }
-
-    //     res.status(200).json(users);
-    // }
+   
     try {
-        const { role, page = 1, limit = 10 } = req.query;
-        const skip = (page - 1) * limit;
+        const { role, page , limit  } = req.query;
+        const paginationEnabled = page && limit;
+    const parsedPage = paginationEnabled ? parseInt(page) : 1;
+    const parsedLimit = paginationEnabled ? parseInt(limit) : 0; 
+    const skip = paginationEnabled ? (parsedPage - 1) * parsedLimit : 0;
 
+console.log(role,"role")
         if (!role) {
             return res.status(400).json({ message: "Role parameter is required" });
         }
@@ -277,6 +258,27 @@ const addCourseToUser = async (req, res) => {
     
     }
 };
+const deleteUser = async (req, res) => {
+    try {
+      const  userId  = req.params.id;
+  
+    console.log(userId,"userId")
+      const user = await User.findById(userId);
+      console.log(user,"user")
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+  
+    
+      await User.findByIdAndDelete(userId);
+  
+      res.status(200).json({ message: "User deleted successfully" });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  };
+  
+  
 
 module.exports = {
     registerUser,
@@ -288,5 +290,6 @@ module.exports = {
     verifyTokenAndRole,
     addCourseToUser,
     loginUserDetail,
-    verifyToken
+    verifyToken,
+    deleteUser
 };

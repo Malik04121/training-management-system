@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 let baseURL = import.meta.env.VITE_BASE_URL;
-console.log(baseURL,"baseURL")
+// console.log(baseURL,"baseURL")
 
 export const registerUser = createAsyncThunk(
   "user/registerUser",
@@ -75,28 +75,19 @@ export const addTrainer = createAsyncThunk(
 );
 
 
-// export const fetchUsersByRole = createAsyncThunk(
-//   "user/fetchUsersByRole",
-//   async (role, { rejectWithValue }) => {
-//     try {
-//       const response = await axios.get(`${baseURL}/users?role=${role}`);
-
-//       return {data:response.data,role};
-//     } catch (error) {
-//       if (error.response && error.response.data.message) {
-//         return rejectWithValue(error.response.data.message);
-//       }
-//       return rejectWithValue(`Fetching ${role}s failed. Please try again.`);
-//     }
-//   }
-// );
 export const fetchUsersByRole = createAsyncThunk(
   "user/fetchUsersByRole",
-  async ({ role, page, limit }, { rejectWithValue }) => {
+  async ({ role, page, limit }={}, { rejectWithValue }) => {
+    console.log(role,page,"userrole")
     try {
-      const response = await axios.get(`${baseURL}/users?role=${role}&page=${page}&limit=${limit}`);
+      const response = await axios.get(`${baseURL}/users`,{
+        params:{role,page,limit}
+      })
+        // ?role=${role}&page=${page}&limit=${limit}`);
+        console.log(response.data.data,"response in role authentication")
       return { data: response.data.data, role, currentPage: response.data.currentPage, totalPages: response.data.totalPages };
     } catch (error) {
+      console.log(error,"error")
       if (error.response && error.response.data.message) {
         return rejectWithValue(error.response.data.message);
       }
@@ -138,10 +129,10 @@ export const checkToken = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(`${baseURL}/users/verifyToken`,{withCredentials:true});
-console.log(response,"responsefrom token")
+// console.log(response,"responsefrom token")
       return response.data
     } catch (error) {
-      console.log(error,"errror")
+      // console.log(error,"errror")
       if (error.response && error.response.data.message) {
         return rejectWithValue(error.response.data.message);
       }
@@ -188,14 +179,30 @@ export const fetchUserDetails = createAsyncThunk(
       const response = await axios.get(`${baseURL}/users/loginUserData`, {
         withCredentials: true,
       });
-      console.log(response,"response")
+      // console.log(response,"response")
       return response.data;
     } catch (error) {
-      console.log(error,"error");
+      // console.log(error,"error");
       return rejectWithValue("Failed to fetch user details.");
     }
   }
 );
+export const deleteUser=createAsyncThunk(
+  "category/deleteUser",
+  async (id) => {
+    try {
+      const res = await axios.delete(
+        `${baseURL}/users/${id}`,
+        { withCredentials: true } 
+      );
+
+      return res.message;
+    } catch (error) {
+
+      throw new Error(error.response?.data?.message || error.message);
+    }
+  }
+)
 
 
 const userSlice = createSlice({
@@ -218,6 +225,9 @@ const userSlice = createSlice({
       state.userName=""
       state.role=""
     },
+    deleteSingleUser:(state,action)=>{
+      state.userList = state.userList.filter(user => user._id !== action.payload);
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(registerUser.pending, (state) => {
@@ -359,20 +369,33 @@ const userSlice = createSlice({
       localStorage.setItem("userName",action.payload.data.user.name)
       localStorage.setItem("isLogin",true)
       state.user = action.payload.data.user;
-      console.log(action.payload.data.user,"user")
+      // console.log(action.payload.data.user,"user")
     });
     builder.addCase(checkToken.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload; 
     });
 
+    builder.addCase(deleteUser.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    
+    builder.addCase(deleteUser.fulfilled, (state, action) => {
+      
+      state.loading = false;
+      state.message = action.payload; 
+    });
+    
+    builder.addCase(deleteUser.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+
   },
 });
 
 export const userSuccessMessage = (state) => state.user?.successMessage || null;
-
-
-
 
 export const userLists = (state) => state.user.userList;
 export const trainerLists = (state) => state.user.trainerList;
@@ -384,5 +407,5 @@ export const role=(state)=>state.user.role;
 export const selectLoading = (state) => state.user.loading ;
 export const selectError = (state) => state.user.error ;
 
-export const { clearUserState } = userSlice.actions;
+export const { clearUserState,deleteSingleUser } = userSlice.actions;
 export default userSlice.reducer;

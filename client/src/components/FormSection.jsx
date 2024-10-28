@@ -57,6 +57,10 @@ const FormSection = ({ activeSection }) => {
     if(activeSection==="showCourses"){
       dispatch(fetchCourse())
     }
+    if(activeSection==="dashboard"){
+      dispatch(fetchUsersByRole("User"))
+      dispatch(fetchUsersByRole("Trainer"))
+    }
   }, [activeSection, dispatch]);
 
   useEffect(()=>{

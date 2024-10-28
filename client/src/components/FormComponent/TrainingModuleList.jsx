@@ -1,22 +1,36 @@
 
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {  deleteCourseModule, deleteModule, moduleData, moduleError, moduleLoading } from '../../redux/slice/moduleSlice'
+import {  deleteCourseModule, deleteModule, fetchModule, moduleData, moduleError, moduleLoading } from '../../redux/slice/moduleSlice'
 import { MdDelete } from 'react-icons/md'
+import Pagination from '../PaginationComponent'
 
 const TrainingModuleList = () => {
 
     const moduleLoader=useSelector(moduleLoading)
     const moduleErrorMessage=useSelector(moduleError)
     const moduleList=useSelector(moduleData)
+    const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+    console.log(moduleList,"moduleList")
+
     const dispatch=useDispatch()
 
     const deleteModuleHandler=(id)=>{
-
        dispatch(deleteCourseModule(id))
        dispatch(deleteModule(id))
     }
+    useEffect(() => {
+      const fetchPaginatedModule = async () => {
+        const result = await dispatch(fetchModule({  page: currentPage, limit: 6 }));
+        if (result.meta.requestStatus === 'fulfilled') {
+          const { totalPages } = result.payload;
+          setTotalPages(totalPages);
+        }
+      };
+      fetchPaginatedModule();
+    }, [dispatch, currentPage]);
   return (
     <div className="p-6 bg-gray-50">
     <h1 className="text-3xl font-bold mb-6 text-gray-800">List of All Training Modules</h1>
@@ -47,12 +61,17 @@ const TrainingModuleList = () => {
               aria-label="Delete Course"
             >
               Delete
-              {/* <MdDelete className='text-2xl' /> */}
+            
             </button>
             </div>
         </div>
       ))}
     </div>
+    <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage} 
+      />
   </div>
   )
 }
