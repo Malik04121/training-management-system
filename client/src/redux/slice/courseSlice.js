@@ -4,23 +4,46 @@ let baseURL = import.meta.env.VITE_BASE_URL;
 
 console.log(baseURL,"baseURL")
 
+// export const fetchCourse = createAsyncThunk(
+//   "category/fetchCourse",
+//   async (categoryId) => {
+//     console.log(categoryId,"categoryId in slice");
+    
+//     try {
+//       const url = categoryId 
+//       ? `${baseURL}/course?categoryId=${categoryId}`
+//       : `${baseURL}/course`;
+//       const res = await axios.get(url);
+// // console.log(res,"fetchcou/rseData with category")
+      
+//       return res.data.courses;
+//     } catch (error) {
+
+//       throw new Error(error.response?.data?.message || error.message);
+//     }
+//   }
+// );
 export const fetchCourse = createAsyncThunk(
   "category/fetchCourse",
-  async (categoryId) => {
+  async ({ categoryId, search, page, limit }) => {
     try {
-      const url = categoryId 
-      ? `${baseURL}/course?categoryId=${categoryId}`
-      : `${baseURL}/course`;
-      const res = await axios.get(url);
-// console.log(res,"fetchcou/rseData with category")
-      
-      return res.data;
-    } catch (error) {
+      // Build query parameters
+      const query = new URLSearchParams();
+      if (categoryId) query.append("categoryId", categoryId);
+      if (search) query.append("search", search);
+      if (page) query.append("page", page);
+      if (limit) query.append("limit", limit);
 
+      const url = `${baseURL}/course?${query.toString()}`;
+      const res = await axios.get(url);
+
+      return res.data.courses;
+    } catch (error) {
       throw new Error(error.response?.data?.message || error.message);
     }
   }
 );
+
 export const fetchFillterCourse = createAsyncThunk(
   "category/fetchFillterCourse",
   async ({ categoryId, search }) => { 

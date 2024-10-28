@@ -33,6 +33,8 @@ const CourseCard = ({ selectedCategory }) => {
     const filteredCourses = selectedCategory
         ? courses.filter(course => course.category._id === selectedCategory._id)
         : courses;
+        console.log(filteredCourses,"filteredCourses");
+        
     // Todo : convert time formate to 2:00 hours
     return (
         <div className="flex flex-col justify-between item-center gap-10">
