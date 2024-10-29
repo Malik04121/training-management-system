@@ -8,11 +8,9 @@ export const fetchCourse = createAsyncThunk(
   "category/fetchCourse",
   async ({ categoryId, search, page, limit }={}) => {
     try {
-    console.log(page,"page inside slice")
       const response = await axios.get(`${baseURL}/course`, {
         params: { categoryId, search, page, limit },
       });
-      console.log(response,"response from course")
       return { data: response.data.courses,  currentPage: response.data.currentPage, totalPages: response.data.totalPages };
 
       // return response.data.courses;
@@ -56,7 +54,6 @@ export const fetchSingleCourse = createAsyncThunk(
         withCredentials:true
       });
      
-    // console.log(res,"singleCourse ");
       return res.data;
     } catch (error) {
 

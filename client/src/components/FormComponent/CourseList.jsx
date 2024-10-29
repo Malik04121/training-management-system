@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { courseData, deleteCourse, deleteSingleCourse, errorMessage, fetchCourse, loadingStatus } from '../../redux/slice/courseSlice';
 import { MdDelete } from 'react-icons/md';
 import Pagination from '../PaginationComponent';
+import { toast } from 'react-toastify';
 
 const CourseList = () => {
   const courses = useSelector(courseData);
@@ -21,7 +22,6 @@ const CourseList = () => {
   };
   useEffect(() => {
     const fetchPaginatedCourses = async () => {
-      console.log(currentPage,"page")
       const result = await dispatch(fetchCourse({ page: currentPage, limit: 6 }));
       if (result.meta.requestStatus === 'fulfilled') {
         setTotalPages(result.payload.totalPages);

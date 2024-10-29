@@ -25,7 +25,6 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend,
 const Dashboard = () => {
   const users = useSelector(userLists);
   const trainers = useSelector(trainerLists);
-  console.log(users,"users list",trainers,"trainers")
   const categories = useSelector(categoryData); 
   const dispatch = useDispatch();
   const [totalRevenue, setTotalRevenue] = useState(0);

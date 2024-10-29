@@ -78,7 +78,6 @@ const addTrainerByAdmin = async (req, res) => {
               await newTrainer.save();
               res.status(201).json({ message: "Trainer created successfully", trainer: { email, name, password, trainerDescription, averagePricePerHour, trainerRating } });
     } catch (err) {
-        console.log(err,"err")
         res.status(500).json({ error: err.message });
     }
 };
@@ -119,7 +118,6 @@ const getUsers = async (req, res) => {
     const parsedLimit = paginationEnabled ? parseInt(limit) : 0; 
     const skip = paginationEnabled ? (parsedPage - 1) * parsedLimit : 0;
 
-console.log(role,"role")
         if (!role) {
             return res.status(400).json({ message: "Role parameter is required" });
         }
@@ -255,9 +253,7 @@ const deleteUser = async (req, res) => {
     try {
       const  userId  = req.params.id;
   
-    console.log(userId,"userId")
       const user = await User.findById(userId);
-      console.log(user,"user")
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }

@@ -7,15 +7,13 @@ let baseURL = import.meta.env.VITE_BASE_URL;
 export const fetchModule = createAsyncThunk(
   "module/fetchModule",
   async (params = {}) => {
-    const { search = "", page = 1, limit = 10 } = params;
+    const { search , page , limit } = params;
     try {
       const res = await axios.get(`${baseURL}/module`,{
         params:{search,page,limit}
       });
-        console.log(res,"res")
       return {data:res.data.moduleList,currentPage: res.data.currentPage, totalPages: res.data.totalPages};
     } catch (error) {
-         console.log(error,"error")
       throw new Error(error.response?.data?.message || error.message);
     }
   }

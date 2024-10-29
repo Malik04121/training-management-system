@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 let baseURL = import.meta.env.VITE_BASE_URL;
-// console.log(baseURL,"baseURL")
 
 export const registerUser = createAsyncThunk(
   "user/registerUser",
@@ -78,16 +77,12 @@ export const addTrainer = createAsyncThunk(
 export const fetchUsersByRole = createAsyncThunk(
   "user/fetchUsersByRole",
   async ({ role, page, limit }={}, { rejectWithValue }) => {
-    console.log(role,page,"userrole")
     try {
       const response = await axios.get(`${baseURL}/users`,{
         params:{role,page,limit}
       })
-        // ?role=${role}&page=${page}&limit=${limit}`);
-        console.log(response.data.data,"response in role authentication")
       return { data: response.data.data, role, currentPage: response.data.currentPage, totalPages: response.data.totalPages };
     } catch (error) {
-      console.log(error,"error")
       if (error.response && error.response.data.message) {
         return rejectWithValue(error.response.data.message);
       }
@@ -103,14 +98,6 @@ export const verifyToken = createAsyncThunk(
       const response = await axios.get(`${baseURL}/users/verify`, {
         withCredentials: true,
       });
-
-
-
-      // const { role, name } = response.data.user;
-
-
-      // localStorage.setItem("role", response.data.user?.role);
-      // localStorage.setItem("username", response.data.user?.name);
 
       return response.data;
     } catch (error) {
@@ -129,10 +116,8 @@ export const checkToken = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(`${baseURL}/users/verifyToken`,{withCredentials:true});
-// console.log(response,"responsefrom token")
       return response.data
     } catch (error) {
-      // console.log(error,"errror")
       if (error.response && error.response.data.message) {
         return rejectWithValue(error.response.data.message);
       }
@@ -179,10 +164,8 @@ export const fetchUserDetails = createAsyncThunk(
       const response = await axios.get(`${baseURL}/users/loginUserData`, {
         withCredentials: true,
       });
-      // console.log(response,"response")
       return response.data;
     } catch (error) {
-      // console.log(error,"error");
       return rejectWithValue("Failed to fetch user details.");
     }
   }
@@ -369,7 +352,6 @@ const userSlice = createSlice({
       localStorage.setItem("userName",action.payload.data.user.name)
       localStorage.setItem("isLogin",true)
       state.user = action.payload.data.user;
-      // console.log(action.payload.data.user,"user")
     });
     builder.addCase(checkToken.rejected, (state, action) => {
       state.loading = false;

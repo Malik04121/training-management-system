@@ -45,7 +45,6 @@ const CourseCard = ({ selectedCategory }) => {
         : courses.filter(course => new Date(course.courseStartDate) > today);
      
         
-    // Todo : convert time formate to 2:00 hours
     return (
         <div className="flex flex-col justify-between item-center gap-10">
             <div className=" basis-[80%]  grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-6 items-center">

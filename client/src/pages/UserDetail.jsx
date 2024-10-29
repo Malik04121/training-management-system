@@ -26,7 +26,6 @@ const UserProfile = () => {
     };
 
     const clickHandler = (course) => {
-        console.log(course,"course inside click handler")
         const status = getStatus(course);
         if (status === 'Started') {
             navigate(`/course/${course.courseId._id}`);

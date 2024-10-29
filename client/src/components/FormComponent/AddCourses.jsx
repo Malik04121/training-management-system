@@ -19,7 +19,6 @@ import { toast } from "react-toastify";
 const AddCourses = () => {
   const categories = useSelector(categoryData);
   const trainerList = useSelector(trainerLists); 
-  // console.log(trainerList,"trainerList");
   const trainerLoading = useSelector(selectLoading);
   const trainerError = useSelector(selectError);
   const moduleList = useSelector(moduleData);
@@ -49,7 +48,6 @@ const AddCourses = () => {
   const handleCourseChange = (e) => {
     const { name, value } = e.target;
     let values = value;
-// console.log(e.target,"inside courseChange")
     if (name === "trainers" || name === "modules") {
       const options = [...e.target.selectedOptions];
       values = options.map(option => option.value);

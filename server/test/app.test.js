@@ -60,7 +60,7 @@ describe("Category API Tests", () => {
       expect(res.statusCode).toBe(500);
       expect(res.body).toHaveProperty("error", "Server error");
 
-      Category.find.mockRestore(); // Restore original method
+      Category.find.mockRestore();
     });
   });
 
@@ -150,7 +150,7 @@ describe("Category API Tests", () => {
       expect(res.statusCode).toBe(500);
       expect(res.body).toHaveProperty("error", "Server error");
 
-      Category.findByIdAndDelete.mockRestore(); // Restore original method
+      Category.findByIdAndDelete.mockRestore(); 
     });
   });
 });
@@ -291,7 +291,6 @@ describe("User API Tests", () => {
     });
 
     it("should handle server error during logout", async () => {
-      // Mock the clearCookie method to throw an error
       const originalClearCookie = app.response.clearCookie;
       app.response.clearCookie = jest.fn(() => {
         throw new Error("Server error");
@@ -304,7 +303,6 @@ describe("User API Tests", () => {
       expect(res.statusCode).toBe(500);
       expect(res.body).toHaveProperty("error", "Server error");
 
-      // Restore the original clearCookie method
       app.response.clearCookie = originalClearCookie;
     });
   });
@@ -373,7 +371,7 @@ describe("User API Tests", () => {
           trainerRating: 4.5,
         });
 
-      expect(res.statusCode).toBe(403); // Assuming your middleware returns 403 for forbidden access
+      expect(res.statusCode).toBe(403);
       expect(res.body).toHaveProperty("message", "Access denied. Admins only.");
     });
 
@@ -394,7 +392,7 @@ describe("User API Tests", () => {
         .set("Cookie", `token=${adminToken}`)
         .send({
           name: "New Trainer",
-          email: "trainer@example.com", // Same email as existing trainer
+          email: "trainer@example.com", 
           password: "newtrainerpassword",
           trainerDescription: "New trainer",
           averagePricePerHour: 60,
@@ -494,7 +492,7 @@ describe("User API Tests", () => {
       expect(res.statusCode).toBe(500);
       expect(res.body).toHaveProperty("error", "Server error");
 
-      User.find.mockRestore(); // Restore original method
+      User.find.mockRestore(); 
     });
   });
 
@@ -562,7 +560,7 @@ describe("User API Tests", () => {
       expect(res.statusCode).toBe(500);
       expect(res.body).toHaveProperty("error", "Server error");
 
-      User.findById.mockRestore(); // Restore original method
+      User.findById.mockRestore(); 
     });
   });
 
@@ -583,7 +581,7 @@ describe("User API Tests", () => {
       const course = await Course.create({
         name: "Test Course",
         description: "Test Course Description",
-        courseStartDate: new Date(), // Add courseStartDate field
+        courseStartDate: new Date(), 
         enrolled_people: [],
       });
   
@@ -632,7 +630,6 @@ describe("User API Tests", () => {
       });
     
       it("should return 400 if user is already enrolled in the course", async () => {
-        // Enroll the user in the course first
         await User.findByIdAndUpdate(userId, { $push: { courses: { courseId, trainerId } } });
     
         const res = await request(app)
@@ -656,7 +653,7 @@ describe("User API Tests", () => {
           expect(res.statusCode).toBe(500);
           expect(res.body).toHaveProperty("error", "Server error");
       
-          User.prototype.save.mockRestore(); // Restore original method
+          User.prototype.save.mockRestore(); 
         });
       });
 
@@ -1024,7 +1021,7 @@ describe("Course API Tests", () => {
       expect(res.statusCode).toBe(500);
       expect(res.body).toHaveProperty("error", "Server error");
 
-      Course.findById.mockRestore(); // Restore original method
+      Course.findById.mockRestore(); 
     });
   });
 
@@ -1120,7 +1117,7 @@ describe("Course API Tests", () => {
       expect(res.statusCode).toBe(500);
       expect(res.body).toHaveProperty("error", "Server error");
 
-      Course.prototype.save.mockRestore(); // Restore original method
+      Course.prototype.save.mockRestore(); 
     });
   });
 
@@ -1198,7 +1195,7 @@ describe("Course API Tests", () => {
       expect(res.statusCode).toBe(500);
       expect(res.body).toHaveProperty("error", "Server error");
 
-      Course.findByIdAndDelete.mockRestore(); // Restore original method
+      Course.findByIdAndDelete.mockRestore(); 
     });
   });
 });
