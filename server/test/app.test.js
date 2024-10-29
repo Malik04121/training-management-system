@@ -100,7 +100,7 @@ describe("Category API Tests", () => {
       expect(res.statusCode).toBe(500);
       expect(res.body).toHaveProperty("error", "Server error");
 
-      Category.prototype.save.mockRestore(); // Restore original method
+      Category.prototype.save.mockRestore(); 
     });
   });
 
@@ -922,7 +922,7 @@ describe("Course Module API Tests", () => {
 });
 
 describe("Course API Tests", () => {
-  describe("GET /api/course", () => {
+  describe("Get All Courses Successfully", () => {
     it("should return courses", async () => {
       const category = await Category.create({ name: "Test Category" });
       const module = await CourseModule.create({
@@ -968,7 +968,7 @@ describe("Course API Tests", () => {
     });
   });
 
-  describe("GET /api/course/:id", () => {
+  describe("Get Perticular Course by id", () => {
     it("should return an individual course", async () => {
       const category = await Category.create({ name: "Test Category" });
       const module = await CourseModule.create({
@@ -1025,7 +1025,7 @@ describe("Course API Tests", () => {
     });
   });
 
-  describe("POST /api/course/addCourse", () => {
+  describe("add new course ", () => {
     beforeEach(async () => {
       jest.spyOn(cloudinary.uploader, 'upload').mockImplementation((path, options) => {
         return Promise.resolve({ secure_url: "http://example.com/banner.jpg" });
@@ -1121,7 +1121,7 @@ describe("Course API Tests", () => {
     });
   });
 
-  describe("DELETE /api/course/:id", () => {
+  describe("delete course by id", () => {
     it("should delete a course by admin", async () => {
       const course = await Course.create({
         name: "Course to Delete",

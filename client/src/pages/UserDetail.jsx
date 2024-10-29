@@ -50,7 +50,6 @@ const UserProfile = () => {
     if (loading) {
         return <UserProfileSkeleton/>; 
     }
-//todo : for trainer show list of courses and trainer details course detail with user enrolled course analysis course review
     
     const totalSpend = user?.courses?.length > 0 
     ? user.courses.reduce((total, course) => {
