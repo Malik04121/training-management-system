@@ -2,7 +2,7 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../model/userModel");
-const { registerUser, loginUser, getUserDetails, getUsers, addTrainerByAdmin, verifyTokenAndRole, logoutUser, addCourseToUser, loginUserDetail, verifyToken } = require("../controller/userController");
+const { registerUser, loginUser, getUserDetails, getUsers, addTrainerByAdmin, verifyTokenAndRole, logoutUser, addCourseToUser, loginUserDetail, verifyToken, deleteUser } = require("../controller/userController");
 const { auth, adminAuth } = require("../middleware/auth");
 
 const router = express.Router();
@@ -19,6 +19,7 @@ router.get("/userDetail",auth,getUserDetails)
 router.get("/", getUsers); 
 router.get("/logout",logoutUser)
 router.post("/addTrainer",adminAuth,addTrainerByAdmin)
+router.delete("/:id",adminAuth,deleteUser)
 router.get("/verify",verifyTokenAndRole)
 router.get("/verifyToken",verifyToken)
 router.get("/loginUserData",loginUserDetail)

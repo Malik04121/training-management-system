@@ -52,8 +52,7 @@ const Header = () => {
     if (userRole === "Admin") {
       navigate("/dashboard");
     } else {
-      console.log("fetching user details")
-      // dispatch(fetchUserDetails())
+    
       navigate("/userInfo"); 
     }
   };

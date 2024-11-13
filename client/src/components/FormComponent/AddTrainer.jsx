@@ -33,7 +33,6 @@ const AddTrainer = () => {
           averagePricePerHour,
           rating: trainerRating,
         } = trainerData;
-    
         dispatch(
           addTrainer({
             name,

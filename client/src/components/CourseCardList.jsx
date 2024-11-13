@@ -2,7 +2,7 @@
 
 
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { courseData, fetchCourse, loadingStatus } from "../redux/slice/courseSlice";
 import { Link, useNavigate } from "react-router-dom";
@@ -14,7 +14,7 @@ import noCourseImg from "../assets/upcomingProgram.jpg"
 
 const CourseCard = ({ selectedCategory }) => {
     const courses = useSelector(courseData);
-    const loading = useSelector(loadingStatus);
+    const globalLoading = useSelector(loadingStatus);
     const role = localStorage.getItem("role");
     const navigate = useNavigate();
     const dispatch=useDispatch()
@@ -26,18 +26,29 @@ const CourseCard = ({ selectedCategory }) => {
             toast.error("Access denied: Please log in as a User or Admin to proceed.");
         }
     };
-    useEffect(()=>{
- dispatch(fetchCourse())
-    },[dispatch])
+    
+    const [isLoading, setIsLoading] = useState(false);
 
+    useEffect(() => {
+        setIsLoading(true);
+        dispatch(fetchCourse({ categoryId: selectedCategory?._id }))
+            .then(() => setIsLoading(false))
+            .catch(() => setIsLoading(false));
+    }, [dispatch, selectedCategory]);
+
+    const today = new Date();
     const filteredCourses = selectedCategory
-        ? courses.filter(course => course.category._id === selectedCategory._id)
-        : courses;
-    // Todo : convert time formate to 2:00 hours
+        ? courses.filter(course => 
+            course.category._id === selectedCategory._id &&
+            new Date(course.courseStartDate) > today
+          )
+        : courses.filter(course => new Date(course.courseStartDate) > today);
+     
+        
     return (
         <div className="flex flex-col justify-between item-center gap-10">
             <div className=" basis-[80%]  grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-6 items-center">
-                {loading ? (
+                {(globalLoading || isLoading) ? (
                     Array.from({ length: 3 }, (_, index) => <CourseCardSkeleton key={index} />) 
                 ) : (
                     <>

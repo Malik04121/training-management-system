@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 let baseURL = import.meta.env.VITE_BASE_URL;
-console.log(baseURL,"baseURL")
+// console.log(baseURL,"baseURL")
 
 
 export const fetchCategory = createAsyncThunk(
@@ -9,7 +9,7 @@ export const fetchCategory = createAsyncThunk(
   async () => {
     try {
       const res = await axios.get(`${baseURL}/category`);
-      console.log(res,"res of fetchCategory")
+      // console.log(res,"res of fetchCategory")
       return res.data;
     } catch (error) {
 

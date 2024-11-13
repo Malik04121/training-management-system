@@ -1,14 +1,44 @@
 
 const CourseModule = require("../model/courseModuleModel");
 
-const getModule=async(req,res)=>{
+
+const getModule = async (req, res) => {
   try {
-      const module=await CourseModule.find().populate("category")
-      res.status(200).json(module);
+    const { search, page, limit } = req.query; 
+    const filter = {};
+
+    if (search) {
+      filter.name = { $regex: search, $options: "i" };
+    }
+
+    const totalModule = await CourseModule.countDocuments(filter);
+
+    const totalPages = Math.ceil(totalModule / limit);
+    let currentPage = parseInt(page);
+
+    
+    if (currentPage > totalPages && totalPages > 0) {
+      currentPage = 1;
+    }
+
+    const skip = (currentPage - 1) * limit;
+    const moduleList = await CourseModule.find(filter)
+      .populate("category")
+      .skip(skip)
+      .limit(parseInt(limit));
+
+
+    res.status(200).json({
+      moduleList,
+      totalPages,
+      totalModule,
+      currentPage,
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-}
+};
+
 
 const addModule=async(req,res)=>{
     try {
@@ -266,7 +296,7 @@ const addModule=async(req,res)=>{
     
   const newModule = new CourseModule({ name,description,moduleNumber,moduleDuration,moduleContent,category });
     await newModule.save();
-  // })
+  
 
     res.status(201).json(newModule);
     } catch (error) {

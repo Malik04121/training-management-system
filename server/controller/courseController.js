@@ -1,6 +1,7 @@
 const Course = require("../model/courseModel");
 const cloudinary=require("cloudinary")
 const multer=require("multer")
+const mongoose=require('mongoose')
 
 
 cloudinary.config({
@@ -9,32 +10,46 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-
-
-
 const getCourse = async (req, res) => {
   try {
-
-    
-    const { categoryId, search } = req.query; 
-
+    const { categoryId, search, page, limit } = req.query;
     const filter = {};
     
     if (categoryId) {
-      filter.category = categoryId;
+      if (mongoose.Types.ObjectId.isValid(categoryId)) {
+        filter.category = new mongoose.Types.ObjectId(categoryId);
+      } else {
+        return res.status(400).json({ error: "Invalid category ID" });
+      }
     }
 
     if (search) {
       filter.name = { $regex: search, $options: "i" };
     }
 
-  
-    const courses = await Course.find(filter).populate("category").populate("modules").populate("trainers").populate("enrolled_people"); 
-    res.status(200).json(courses); 
+    const totalCourses = await Course.countDocuments(filter);
+    let courses;
+    if (page && limit) {
+      const skip = (page - 1) * limit;
+      courses = await Course.find(filter)
+      .populate("category modules trainers enrolled_people")
+        .skip(skip)
+        .limit(parseInt(limit));
+    } else {
+      courses = await Course.find(filter)
+        .populate("category modules trainers enrolled_people")
+    }
+
+    res.status(200).json({
+      courses,
+      totalPages: page && limit ? Math.ceil(totalCourses / limit) : 1,
+      totalCourses,
+      currentPage: page ? parseInt(page) : 1,
+    });
   } catch (err) {
-    res.status(500).json({ error: err.message }); 
+    res.status(500).json({ error: err.message });
+  }
 };
-}
 
 const getIndividualCourse = async (req, res) => {
   try {
@@ -55,7 +70,7 @@ const addCourse = async (req, res) => {
   try {
     const { name, description, duration,rating, trainers, category,modules,startDate } = req.body;
 
-    console.log(req.body,"body")
+
 
     if (!name || !category) {
       return res.status(400).json({ message: "Name and category are required." });
@@ -83,9 +98,8 @@ const addCourse = async (req, res) => {
 
     await newCourse.save();
     res.status(201).json(newCourse);
-    // res.status(201).json("response");
   } catch (error) {
-console.log(error,"error");
+
 
     res.status(500).json({ error: error.message });
   }

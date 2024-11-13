@@ -15,7 +15,7 @@ const start = async () => {
     await connectDb(process.env.NODE_ENV === 'test' ? process.env.MONGO_URL_TEST : process.env.MONGO_URL);
     const PORT = process.env.PORT || 8500; 
     const server = app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
+      // console.log(`Server is running on port ${PORT}`);
     });
     return server; 
   } catch (error) {

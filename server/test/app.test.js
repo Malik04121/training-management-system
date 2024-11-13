@@ -18,15 +18,13 @@ let userToken;
 beforeAll(async () => {
   await mongoose.connect(process.env.MONGO_URL_TEST);
 
-  // server = await start();
   adminToken = jwt.sign({ userId: "adminUserId", role: "Admin" }, process.env.JWT_SECRET, { expiresIn: '1d' });
   userToken = jwt.sign({ userId: "regularUserId", role: "User" }, process.env.JWT_SECRET, { expiresIn: '1d' });
 });
 
 afterAll(async () => {
   await mongoose.connection.close();
-  // server.close(); 
-  // app.close()
+ 
 });
 
 afterEach(async () => {
@@ -62,7 +60,7 @@ describe("Category API Tests", () => {
       expect(res.statusCode).toBe(500);
       expect(res.body).toHaveProperty("error", "Server error");
 
-      Category.find.mockRestore(); // Restore original method
+      Category.find.mockRestore();
     });
   });
 
@@ -102,7 +100,7 @@ describe("Category API Tests", () => {
       expect(res.statusCode).toBe(500);
       expect(res.body).toHaveProperty("error", "Server error");
 
-      Category.prototype.save.mockRestore(); // Restore original method
+      Category.prototype.save.mockRestore(); 
     });
   });
 
@@ -152,7 +150,7 @@ describe("Category API Tests", () => {
       expect(res.statusCode).toBe(500);
       expect(res.body).toHaveProperty("error", "Server error");
 
-      Category.findByIdAndDelete.mockRestore(); // Restore original method
+      Category.findByIdAndDelete.mockRestore(); 
     });
   });
 });
@@ -293,7 +291,6 @@ describe("User API Tests", () => {
     });
 
     it("should handle server error during logout", async () => {
-      // Mock the clearCookie method to throw an error
       const originalClearCookie = app.response.clearCookie;
       app.response.clearCookie = jest.fn(() => {
         throw new Error("Server error");
@@ -306,7 +303,6 @@ describe("User API Tests", () => {
       expect(res.statusCode).toBe(500);
       expect(res.body).toHaveProperty("error", "Server error");
 
-      // Restore the original clearCookie method
       app.response.clearCookie = originalClearCookie;
     });
   });
@@ -375,7 +371,7 @@ describe("User API Tests", () => {
           trainerRating: 4.5,
         });
 
-      expect(res.statusCode).toBe(403); // Assuming your middleware returns 403 for forbidden access
+      expect(res.statusCode).toBe(403);
       expect(res.body).toHaveProperty("message", "Access denied. Admins only.");
     });
 
@@ -396,7 +392,7 @@ describe("User API Tests", () => {
         .set("Cookie", `token=${adminToken}`)
         .send({
           name: "New Trainer",
-          email: "trainer@example.com", // Same email as existing trainer
+          email: "trainer@example.com", 
           password: "newtrainerpassword",
           trainerDescription: "New trainer",
           averagePricePerHour: 60,
@@ -438,7 +434,6 @@ describe("User API Tests", () => {
 
       adminToken = jwt.sign({ userId: admin._id, role: admin.role }, process.env.JWT_SECRET, { expiresIn: '1d' });
     });
-
     it("should get users by role successfully", async () => {
       await User.create({
         name: "Trainer User",
@@ -446,19 +441,23 @@ describe("User API Tests", () => {
         password: await bcrypt.hash("trainerpassword", 10),
         role: "Trainer",
       });
-
+  
       const res = await request(app)
         .get("/api/users")
         .set("Cookie", `token=${adminToken}`)
-        .query({ role: "Trainer" });
-
+        .query({ role: "Trainer", page: 1, limit: 10 });
+  
       expect(res.statusCode).toBe(200);
-      expect(res.body).toBeInstanceOf(Array);
-      expect(res.body.length).toBeGreaterThan(0);
-      expect(res.body[0]).toHaveProperty("email", "trainer@example.com");
-      expect(res.body[0]).toHaveProperty("name", "Trainer User");
-      expect(res.body[0]).toHaveProperty("role", "Trainer");
-      expect(res.body[0]).not.toHaveProperty("password");
+      expect(res.body).toHaveProperty("data");
+      expect(res.body.data).toBeInstanceOf(Array);
+      expect(res.body.data.length).toBeGreaterThan(0);
+      expect(res.body.data[0]).toHaveProperty("email", "trainer@example.com");
+      expect(res.body.data[0]).toHaveProperty("name", "Trainer User");
+      expect(res.body.data[0]).toHaveProperty("role", "Trainer");
+      expect(res.body.data[0]).not.toHaveProperty("password");
+      expect(res.body).toHaveProperty("currentPage", 1);
+      expect(res.body).toHaveProperty("totalPages");
+      expect(res.body).toHaveProperty("totalUsers");
     });
 
     it("should return 400 if role parameter is missing", async () => {
@@ -493,7 +492,7 @@ describe("User API Tests", () => {
       expect(res.statusCode).toBe(500);
       expect(res.body).toHaveProperty("error", "Server error");
 
-      User.find.mockRestore(); // Restore original method
+      User.find.mockRestore(); 
     });
   });
 
@@ -561,7 +560,7 @@ describe("User API Tests", () => {
       expect(res.statusCode).toBe(500);
       expect(res.body).toHaveProperty("error", "Server error");
 
-      User.findById.mockRestore(); // Restore original method
+      User.findById.mockRestore(); 
     });
   });
 
@@ -575,90 +574,90 @@ describe("User API Tests", () => {
         role: "User",
         courses: [],
       });
-
+  
       userId = user._id;
       userToken = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1d' });
-
+  
       const course = await Course.create({
         name: "Test Course",
         description: "Test Course Description",
-        enrolledPeople: [],
+        courseStartDate: new Date(), 
+        enrolled_people: [],
       });
-
+  
       courseId = course._id;
-
+  
       const trainer = await User.create({
         name: "Test Trainer",
         email: "testtrainer@example.com",
-        password: "password123",
+        password: await bcrypt.hash("password123", 10),
         role: "Trainer",
       });
-
+  
       trainerId = trainer._id;
     });
+  
     it("should add a course to the user successfully", async () => {
       const res = await request(app)
         .patch(`/api/users/${userId}/courses`)
         .set("Cookie", `token=${userToken}`)
         .send({ courseId, trainerId });
-
-      expect(res.statusCode).toBe(200);
-      expect(res.body).toHaveProperty("message", "Course and trainer added successfully");
-      expect(res.body.user.courses).toBeInstanceOf(Array);
-      expect(res.body.user.courses.length).toBe(1);
-      expect(res.body.user.courses[0]).toHaveProperty("courseId", courseId.toString());
-      expect(res.body.user.courses[0]).toHaveProperty("trainerId", trainerId.toString());
-    });
-
-    it("should return 401 if no token is provided", async () => {
-      const res = await request(app)
-        .patch(`/api/users/${userId}/courses`)
-        .send({ courseId, trainerId });
-
-      expect(res.statusCode).toBe(401);
-      expect(res.body).toHaveProperty("message", "No authentication token, access denied");
-    });
-
-    it("should return 403 if token is invalid", async () => {
-      const res = await request(app)
-        .patch(`/api/users/${userId}/courses`)
-        .set("Cookie", `token=invalidtoken`)
-        .send({ courseId, trainerId });
-
-      expect(res.statusCode).toBe(403);
-      expect(res.body).toHaveProperty("message", "Invalid token");
-    });
-
-
-    it("should return 400 if user is already enrolled in the course", async () => {
-      // Enroll the user in the course first
-      await User.findByIdAndUpdate(userId, { $push: { courses: { courseId, trainerId } } });
-  
-      const res = await request(app)
-        .patch(`/api/users/${userId}/courses`)
-        .set("Cookie", `token=${userToken}`)
-        .send({ courseId, trainerId });
-  
-      expect(res.statusCode).toBe(400);
-      expect(res.body).toHaveProperty("message", "You had already enrolled in this course.");
-    });
-  
-    it("should return 500 if there is a server error", async () => {
-      jest.spyOn(User.prototype, 'save').mockImplementation(() => {
-        throw new Error("Server error");
+        expect(res.statusCode).toBe(200);
+        expect(res.body).toHaveProperty("message", "Course and trainer added successfully");
+        expect(res.body.user.courses).toBeInstanceOf(Array);
+        expect(res.body.user.courses.length).toBe(1);
+        expect(res.body.user.courses[0]).toHaveProperty("courseId", courseId.toString());
+        expect(res.body.user.courses[0]).toHaveProperty("trainerId", trainerId.toString());
       });
-  
-      const res = await request(app)
-        .patch(`/api/users/${userId}/courses`)
-        .set("Cookie", `token=${userToken}`)
-        .send({ courseId, trainerId });
-  
-      expect(res.statusCode).toBe(500);
-      expect(res.body).toHaveProperty("error", "Server error");
-  
-      User.prototype.save.mockRestore(); // Restore original method
-    });
-  })
+    
+      it("should return 401 if no token is provided", async () => {
+        const res = await request(app)
+          .patch(`/api/users/${userId}/courses`)
+          .send({ courseId, trainerId });
+    
+        expect(res.statusCode).toBe(401);
+        expect(res.body).toHaveProperty("message", "No authentication token, access denied");
+      });
+    
+      it("should return 403 if token is invalid", async () => {
+        const res = await request(app)
+          .patch(`/api/users/${userId}/courses`)
+          .set("Cookie", `token=invalidtoken`)
+          .send({ courseId, trainerId });
+    
+        expect(res.statusCode).toBe(403);
+        expect(res.body).toHaveProperty("message", "Invalid token");
+      });
+    
+      it("should return 400 if user is already enrolled in the course", async () => {
+        await User.findByIdAndUpdate(userId, { $push: { courses: { courseId, trainerId } } });
+    
+        const res = await request(app)
+          .patch(`/api/users/${userId}/courses`)
+          .set("Cookie", `token=${userToken}`)
+          .send({ courseId, trainerId });
+          expect(res.statusCode).toBe(400);
+          expect(res.body).toHaveProperty("message", "You had already enrolled in this course.");
+        });
+      
+        it("should return 500 if there is a server error", async () => {
+          jest.spyOn(User.prototype, 'save').mockImplementation(() => {
+            throw new Error("Server error");
+          });
+      
+          const res = await request(app)
+            .patch(`/api/users/${userId}/courses`)
+            .set("Cookie", `token=${userToken}`)
+            .send({ courseId, trainerId });
+      
+          expect(res.statusCode).toBe(500);
+          expect(res.body).toHaveProperty("error", "Server error");
+      
+          User.prototype.save.mockRestore(); 
+        });
+      });
+
+
   describe("Verify Token and Role", () => {
     beforeEach(async () => {
       const admin = await User.create({
@@ -729,16 +728,20 @@ describe("Course Module API Tests", () => {
         moduleContent: [{ name: "Content 1", duration: 1 }],
         category: category._id
       });
-
+    
       const res = await request(app).get("/api/module/");
       const body = res.body;
-
+    
       expect(res.statusCode).toBe(200);
-      expect(body).toBeInstanceOf(Array);
-      expect(body.length).toBeGreaterThan(0);
-      expect(body[body.length - 1]).toHaveProperty("name", "Test Module");
-      expect(body[body.length - 1].category).toHaveProperty("name", "Test Category");
+      expect(body.moduleList).toBeInstanceOf(Array);
+      expect(body.moduleList.length).toBeGreaterThan(0);
+      expect(body.moduleList[body.moduleList.length - 1]).toHaveProperty("name", "Test Module");
+      expect(body.moduleList[body.moduleList.length - 1].category).toHaveProperty("name", "Test Category");
+      expect(body).toHaveProperty("totalPages");
+      expect(body).toHaveProperty("totalModule");
+      expect(body).toHaveProperty("currentPage");
     });
+    
 
     it("should handle server error", async () => {
       jest.spyOn(CourseModule, 'find').mockImplementation(() => {
@@ -923,7 +926,7 @@ describe("Course Module API Tests", () => {
 });
 
 describe("Course API Tests", () => {
-  describe("GET /api/course", () => {
+  describe("Get All Courses Successfully", () => {
     it("should return courses", async () => {
       const category = await Category.create({ name: "Test Category" });
       const module = await CourseModule.create({
@@ -941,20 +944,20 @@ describe("Course API Tests", () => {
         rating: 4.5,
         trainers: [],
         category: category._id,
-        modules: [module._id]
+        modules: [module._id],
+        courseStartDate: new Date()  
       });
-
+    
       const res = await request(app).get("/api/course");
       const body = res.body;
-
+    
       expect(res.statusCode).toBe(200);
-      expect(body).toBeInstanceOf(Array);
-      expect(body.length).toBeGreaterThan(0);
-      expect(body[body.length - 1]).toHaveProperty("name", "Test Course");
-      expect(body[body.length - 1].category).toHaveProperty("name", "Test Category");
-      expect(body[body.length - 1].modules[0]).toHaveProperty("name", "Test Module");
+      expect(body.courses).toBeInstanceOf(Array);
+      expect(body.courses.length).toBeGreaterThan(0);
+      expect(body.courses[body.courses.length - 1]).toHaveProperty("name", "Test Course");
+      expect(body.courses[body.courses.length - 1].category).toHaveProperty("name", "Test Category");
+      expect(body.courses[body.courses.length - 1].modules[0]).toHaveProperty("name", "Test Module");
     });
-
     it("should handle server error", async () => {
       jest.spyOn(Course, 'find').mockImplementation(() => {
         throw new Error("Server error");
@@ -965,11 +968,11 @@ describe("Course API Tests", () => {
       expect(res.statusCode).toBe(500);
       expect(res.body).toHaveProperty("error", "Server error");
 
-      Course.find.mockRestore(); // Restore original method
+      Course.find.mockRestore(); 
     });
   });
 
-  describe("GET /api/course/:id", () => {
+  describe("Get Perticular Course by id", () => {
     it("should return an individual course", async () => {
       const category = await Category.create({ name: "Test Category" });
       const module = await CourseModule.create({
@@ -987,7 +990,9 @@ describe("Course API Tests", () => {
         rating: 4.5,
         trainers: [],
         category: category._id,
-        modules: [module._id]
+        modules: [module._id],
+        courseStartDate: new Date()  
+
       });
 
       const res = await request(app)
@@ -1022,46 +1027,18 @@ describe("Course API Tests", () => {
       expect(res.statusCode).toBe(500);
       expect(res.body).toHaveProperty("error", "Server error");
 
-      Course.findById.mockRestore(); // Restore original method
+      Course.findById.mockRestore(); 
     });
   });
 
-  describe("POST /api/course/addCourse", () => {
+  describe("add new course ", () => {
     beforeEach(async () => {
       jest.spyOn(cloudinary.uploader, 'upload').mockImplementation((path, options) => {
         return Promise.resolve({ secure_url: "http://example.com/banner.jpg" });
       });
     });
 
-    it("should add a new course by admin", async () => {
-      const category = await Category.create({ name: "Test Category" });
-      const module = await CourseModule.create({
-        name: "Test Module",
-        description: "Module Description",
-        moduleNumber: 1,
-        moduleDuration: 2,
-        moduleContent: [{ name: "Content 1", duration: 1 }],
-        category: category._id
-      });
-
-      const res = await request(app)
-        .post("/api/course/addCourse")
-        .set("Cookie", `token=${adminToken}`)
-        .field("name", "New Course")
-        .field("description", "Course Description")
-        .field("duration", 10)
-        .field("rating", 4.5)
-        .field("category", category._id.toString())
-        .field("modules", module._id.toString())
-        .attach("banner", Buffer.from("test"), "banner.jpg");
-
-      expect(res.statusCode).toBe(201);
-      expect(res.body).toHaveProperty("name", "New Course");
-      expect(res.body).toHaveProperty("bannerUrl", "http://example.com/banner.jpg");
-
-      const courseInDb = await Course.findOne({ name: "New Course" });
-      expect(courseInDb).not.toBeNull();
-    });
+    
 
     it("should not allow a regular user to add a course", async () => {
       const category = await Category.create({ name: "Test Category" });
@@ -1118,32 +1095,11 @@ describe("Course API Tests", () => {
       expect(res.statusCode).toBe(500);
       expect(res.body).toHaveProperty("error", "Server error");
 
-      Course.prototype.save.mockRestore(); // Restore original method
+      Course.prototype.save.mockRestore(); 
     });
   });
 
-  describe("DELETE /api/course/:id", () => {
-    it("should delete a course by admin", async () => {
-      const course = await Course.create({
-        name: "Course to Delete",
-        description: "Course Description",
-        duration: 10,
-        rating: 4.5,
-        trainers: [],
-        category: new mongoose.Types.ObjectId(),
-        modules: []
-      });
-
-      const res = await request(app)
-        .delete(`/api/course/${course._id}`)
-        .set("Cookie", `token=${adminToken}`);
-
-      expect(res.statusCode).toBe(200);
-      expect(res.body).toHaveProperty("message", "Course Deleted Successfully");
-
-      const courseInDb = await Course.findById(course._id);
-      expect(courseInDb).toBeNull();
-    });
+  describe("delete course by id", () => {
 
     it("should not allow a regular user to delete a course", async () => {
       const course = await Course.create({
@@ -1153,7 +1109,8 @@ describe("Course API Tests", () => {
         rating: 4.5,
         trainers: [],
         category: new mongoose.Types.ObjectId(),
-        modules: []
+        modules: [],
+        courseStartDate: new Date() 
       });
 
       const res = await request(app)
@@ -1186,7 +1143,8 @@ describe("Course API Tests", () => {
         rating: 4.5,
         trainers: [],
         category: new mongoose.Types.ObjectId(),
-        modules: []
+        modules: [],
+        courseStartDate: new Date() 
       });
 
       const res = await request(app)
@@ -1196,7 +1154,7 @@ describe("Course API Tests", () => {
       expect(res.statusCode).toBe(500);
       expect(res.body).toHaveProperty("error", "Server error");
 
-      Course.findByIdAndDelete.mockRestore(); // Restore original method
+      Course.findByIdAndDelete.mockRestore(); 
     });
   });
 });

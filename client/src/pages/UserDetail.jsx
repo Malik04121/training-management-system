@@ -13,12 +13,25 @@ const UserProfile = () => {
     const user = useSelector(singleUser);
     const loading = useSelector(selectLoading);
     const navigate=useNavigate()
-    console.log(user,"user")
 
-    const clickHandler=(id)=>{
-        console.log(id,"id")
-        navigate(`/course/${id}`)
-    }
+    const getStatus = (course) => {
+        const startDate = new Date(course?.courseId.courseStartDate);
+        
+        const endDate = new Date(startDate.getTime() + course.courseId.duration * 60 * 60 * 1000); 
+        const currentDate = new Date();
+
+        if (currentDate < startDate) return 'Not Started';
+        if (currentDate >= startDate && currentDate <= endDate) return 'Started';
+        return 'Completed';
+    };
+
+    const clickHandler = (course) => {
+        const status = getStatus(course);
+        if (status === 'Started') {
+            navigate(`/course/${course.courseId._id}`);
+        }
+    };
+   
   
     useEffect(() => {
         const fetchData = async () => {
@@ -37,14 +50,12 @@ const UserProfile = () => {
     if (loading) {
         return <UserProfileSkeleton/>; 
     }
-//todo : for trainer show list of courses and trainer details course detail with user enrolled course analysis course review
     
     const totalSpend = user?.courses?.length > 0 
     ? user.courses.reduce((total, course) => {
         return total + (course.trainerId?.averagePricePerHour || 0);
     }, 0)
     : 0;
-console.log(totalSpend,"totalSpend",user.name,"username",user.email,"email")
     return (
         <div className="flex bg-gray-200 p-4">
             
@@ -77,13 +88,28 @@ console.log(totalSpend,"totalSpend",user.name,"username",user.email,"email")
                         {user?.courses?.length > 0 ? (
         user?.courses?.map((course, index) => (
             course.courseId ? (
-                <div key={index} className="border rounded-lg shadow-sm p-4 bg-gray-100  cursor-pointer hover:shadow-2xl transform hover:scale-105 transition duration-300 ease-in-out" onClick={()=>clickHandler(course.courseId._id)}>
+                <div key={index} className="border rounded-lg shadow-sm p-4 bg-gray-100  cursor-pointer hover:shadow-2xl transform hover:scale-105 transition duration-300 ease-in-out" onClick={()=>clickHandler(course)}>
                     <img src={course.courseId.bannerUrl || "https://via.placeholder.com/150"} alt={course.courseId.name} className="rounded-lg w-full h-32 object-cover mb-2" />
                     <h4 className="text-lg font-semibold">{course.courseId.name}</h4>
                     <p className="text-gray-500"><span className='font-semibold text-black'>Duration:</span> {course.courseId.duration} hour</p>
                     <p className="text-gray-500"><span className='font-semibold text-black'>Course Price: </span> ₹ {course.trainerId.averagePricePerHour}</p>
-                    <p className="text-gray-500"><span className='font-semibold text-black'>Course Start Date:</span> ₹ {course.enrollmentDate?convertDate(course.enrollmentDate):""}</p>
-                    <p className="text-gray-500"><span className='font-semibold text-black'>Course Start Date:</span> {calculateRemainingTime({startDate:course.courseId.courseStartDate,duration:course.courseId.duration})} hour</p>
+                    <p className="text-gray-500"><span className='font-semibold text-black'>Course Start Date:</span>  {course.enrollmentDate?convertDate(course.courseId.courseStartDate):""}</p>
+                    <p className="text-gray-500"><span className='font-semibold text-black'>Course will End In:</span> {calculateRemainingTime({startDate:course.courseId.courseStartDate,duration:course.courseId.duration})===0?"Already Completed":(calculateRemainingTime({startDate:course.courseId.courseStartDate,duration:course.courseId.duration}))+" hour"} </p>
+                   
+                    <div className="mt-4">
+                        <button
+                            className={`px-4 py-2  text-white font-semibold ${
+                                getStatus(course)=== 'Started'
+                                    ? 'bg-green-500'
+                                    : getStatus(course) === 'Not Started'
+                                    ? 'bg-orange-500'
+                                    : 'bg-gray-500'
+                            }`}
+                            disabled={getStatus(course) !== 'Started'}
+                        >
+                            {getStatus(course)}
+                        </button>
+                    </div>
                 </div>
             ) : (
                 <div key={index} className="border rounded-lg shadow-sm p-4 bg-gray-50">

@@ -15,8 +15,8 @@ function App() {
   const [username, setUsername] = useState(localStorage.getItem("username")); 
   const [role, setRole] = useState(localStorage.getItem("role")); 
 
- //Todo:correct code for  reamaining Time
-//Todo:show status of course for userInfo page (ongoing,upcoming,completed)
+
+//Todo:give edit option whenever necessary
 //Todo:if course is completed then dont show on home page or any other section only show in trainer section 
   //Todo:push notification
   //Todo:email service
@@ -30,13 +30,13 @@ function App() {
 
   useEffect(() => {
     const verifyToken = async () => {
-      console.log("inside verifyToken");
+      // console.log("inside verifyToken");
        dispatch(checkToken());
     };
     verifyToken()
     const handleStorageChange = (event) => {
       if (["isLogin", "username", "role"].includes(event.key)) {
-        console.log(`Field changed: ${event.key} = ${event.newValue}`);
+        // console.log(`Field changed: ${event.key} = ${event.newValue}`);
         if (event.key === "isLogin") setLogin(event.newValue);
         if (event.key === "username") setUsername(event.newValue);
         if (event.key === "role") setRole(event.newValue);
